@@ -1,0 +1,74 @@
+{
+    "frames": {
+        "0": {
+            "index": 0,
+            "imagePaths": [
+                "WorkDir\\temp1/frame0_0.png"
+            ],
+            "data": {}
+        },
+        "1": {
+            "index": 1,
+            "imagePaths": [
+                "WorkDir\\temp1/frame1_0.png"
+            ],
+            "data": {}
+        },
+        "2": {
+            "index": 2,
+            "imagePaths": [
+                "WorkDir\\temp1/frame2_0.png"
+            ],
+            "data": {}
+        },
+        "3": {
+            "index": 3,
+            "imagePaths": [
+                "WorkDir\\temp1/frame3_0.png"
+            ],
+            "data": {}
+        },
+        "4": {
+            "index": 4,
+            "imagePaths": [
+                "WorkDir\\temp1/frame4_0.png"
+            ],
+            "data": {}
+        },
+        "5": {
+            "index": 5,
+            "imagePaths": [
+                "WorkDir\\temp1/frame5_0.png"
+            ],
+            "data": {}
+        },
+        "6": {
+            "index": 6,
+            "imagePaths": [
+                "WorkDir\\temp1/frame6_0.png"
+            ],
+            "data": {}
+        },
+        "7": {
+            "index": 7,
+            "imagePaths": [
+                "WorkDir\\temp1/frame7_0.png"
+            ],
+            "data": {}
+        },
+        "8": {
+            "index": 8,
+            "imagePaths": [
+                "WorkDir\\temp1/frame8_0.png"
+            ],
+            "data": {}
+        },
+        "9": {
+            "index": 9,
+            "imagePaths": [
+                "WorkDir\\temp1/frame9_0.png"
+            ],
+            "data": {}
+        }
+    }
+}
