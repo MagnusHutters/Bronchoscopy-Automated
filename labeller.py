@@ -4,12 +4,16 @@ import os
 import shutil
 import TestImageGenerator as tig
 import json
+import time
+
+
 
 class ImageLabeler:
     def __init__(self):
         self.unlabelledPath = "training_data/unlabelled"
         self.labelledPath = "training_data/labelled"
         self.inProgressPath = "training_data/inProgress"
+        self.dataBasePath = "Database"
         self.episodePaths = []
         self.currentEpisodePath = None
         self.currentEpisodeName = None
@@ -29,11 +33,15 @@ class ImageLabeler:
         for folder in os.listdir(self.unlabelledPath):
             shutil.rmtree(f"{self.unlabelledPath}/{folder}")
 
-        # Generate images for the unlabelled folder
-        tig.generate_images(100, (480, 480), self.unlabelledPath + "/episode1")
-        tig.generate_images(100, (480, 480), self.unlabelledPath + "/episode2")
-        tig.generate_images(100, (480, 480), self.unlabelledPath + "/episode3")
-        tig.generate_images(100, (480, 480), self.unlabelledPath + "/episode4")
+        #unzip all episode zip files from the database to the unlabelled folder
+        for episode in os.listdir(self.dataBasePath):
+            #get name of episode without extension
+            episodeName = episode.split(".")[0]
+            #unzip the episode to new folder in unlabelled
+            shutil.unpack_archive(f"{self.dataBasePath}/{episode}", f"{self.unlabelledPath}/{episodeName}")
+
+            #shutil.unpack_archive(f"{self.dataBasePath}/{episode}", self.unlabelledPath)        
+        
 
         # Find all episodes in the unlabelled folder
         for episode in os.listdir(self.unlabelledPath):
@@ -63,7 +71,7 @@ class ImageLabeler:
                     
 
             data = {"images": self.dataPoints}
-            with open(f"{self.currentEpisodePath}/data.json", 'w') as f:
+            with open(f"{self.currentEpisodePath}/labels.json", 'w') as f:
                 json.dump(data, f, indent=4)
 
             # Move the episode to the labelled folder
@@ -85,8 +93,21 @@ class ImageLabeler:
 
         self.images = []
         self.dataPoints = []
-        for image in os.listdir(self.currentEpisodePath):
-            
+
+
+        images = os.listdir(self.currentEpisodePath)
+        #extract number from name and sort by number
+        #remove all files that are not images
+        images = [image for image in images if image.endswith(".png") or image.endswith(".jpg")]
+
+
+        images.sort(key=lambda x: int(x.split("_")[0].split("e")[-1]))
+
+
+        for image in images:
+            #extract number from name
+
+            #print(image)
 
             #if image is jpg or png
             if image.endswith(".png") or image.endswith(".jpg"):
@@ -119,7 +140,8 @@ class ImageLabeler:
         #print(f"Drawing image {index} of {len(self.images)}")
 
         if index < 0 or index >= len(self.images):
-            return np.zeros((480, 480, 3), dtype=np.uint8)
+            dimensions = (self.imageRes[1], self.imageRes[0], 3)
+            return np.zeros(dimensions, dtype=np.uint8)
 
         image = self.images[index].copy()
         # Draw the data points
@@ -160,7 +182,7 @@ class ImageLabeler:
                 for key, dataPoint in self.dataPoints[imageIndex].items():
                     x0 = dataPoint["x"]
                     y0 = dataPoint["y"]
-                    if abs(x - x0) < 30 and abs(y - y0) < 30:
+                    if abs(x - x0) < 60 and abs(y - y0) < 60:
                         itemToDelete = key
                 if itemToDelete is not None:
                     del self.dataPoints[imageIndex][itemToDelete]
@@ -182,7 +204,7 @@ class ImageLabeler:
                 for key, dataPoint in self.dataPoints[imageIndex].items():
                     x0 = dataPoint["x"]
                     y0 = dataPoint["y"]
-                    if abs(x - x0) < 30 and abs(y - y0) < 30:
+                    if abs(x - x0) < 60 and abs(y - y0) < 60:
                         self.dragedItem = key
                         self.dragedIndex = imageIndex
                         
@@ -246,6 +268,10 @@ class ImageLabeler:
             self.currentImageIndex -= 1
             if self.currentImageIndex < 0:
                 self.currentImageIndex = 0
+            if self.dragedItem is not None:
+                self.dragedIndex = self.currentImageIndex
+                #move the draged item to the new image
+                self.dataPoints[self.currentImageIndex][self.dragedItem] = self.dataPoints[self.currentImageIndex + 1][self.dragedItem].copy()
         elif key == 100:  # Right arrow key (D in WASD)
             self.currentImageIndex += 1
             if self.currentImageIndex >= len(self.images):
@@ -254,6 +280,23 @@ class ImageLabeler:
                 #if datapoints of new image is empty, copy from previous image
                 if len(self.dataPoints[self.currentImageIndex]) == 0:
                     self.dataPoints[self.currentImageIndex] = self.dataPoints[self.currentImageIndex - 1].copy()
+                
+                #move the draged item to the new image
+            if self.dragedItem is not None:
+                self.dragedIndex = self.currentImageIndex
+                #move the draged item to the new image
+                self.dataPoints[self.currentImageIndex][self.dragedItem] = self.dataPoints[self.currentImageIndex - 1][self.dragedItem].copy()
+
+        #if delete key is pressed, delete all datapoint after current image
+        elif key == 8:
+            for i in range(self.currentImageIndex+1, len(self.dataPoints)):
+                self.dataPoints[i] = {}
+
+            
+        
+
+
+
 
     def main(self):
         self.initialize()
@@ -262,12 +305,17 @@ class ImageLabeler:
         cv2.setMouseCallback('frame', self.click_event)
 
         while not self.doExit:
+            start_time = time.time()  # Record start time
 
             key = cv2.waitKey(1)
 
             self.handle_key(key)
             self.show_images()
 
+            end_time = time.time()
+            elapsed_time = end_time - start_time
+
+            minimum_time = 1 / 10  # 10 FPS
 
         cv2.destroyAllWindows()
 

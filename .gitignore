@@ -10,3 +10,5 @@
 *.zip
 
 __pycache__/
+
+venv/
