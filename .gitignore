@@ -4,7 +4,10 @@
 *.jpeg
 *.gif
 *.bmp
+*.ico
+*.webp
 *.tiff
+*.tif
 
 # Ignore all zip files
 *.zip
