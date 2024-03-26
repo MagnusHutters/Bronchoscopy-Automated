@@ -14,7 +14,7 @@ def saveToDiskThreadSafe(images, paths):
         images[i].save(paths[i])
     
     
-
+ 
 class Frame:
     def __init__(self, index, dirPath, imagePaths, data, images=[], storedOnDisk=True):
         self.index = index
