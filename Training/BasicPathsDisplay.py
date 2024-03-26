@@ -15,7 +15,7 @@ def main():
 
     #Load validation data
 
-    path="Data/PathData"
+    path="Training/Data/PathData"
     
     model = tf.keras.models.load_model("Training/model.keras")
     index = 0
