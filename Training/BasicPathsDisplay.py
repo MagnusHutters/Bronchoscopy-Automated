@@ -15,9 +15,9 @@ def main():
 
     #Load validation data
 
-    path="Data/PathData"
+    path="Training/Data/PathData"
     
-    model = tf.keras.models.load_model("model.keras")
+    model = tf.keras.models.load_model("Training/model.keras")
     index = 0
 
     #find input shape of the model
