@@ -260,21 +260,41 @@ def loadEpisodeFull(path):
     paths = []
     predictions = []
 
+    #print status
+    print(f"Loading episode {path}")
+
+
+    i=0
     for frame in data["frames"]:
         frameData = data["frames"][frame]
         image = cv2.imread(os.path.join(path, frameData["image"][0]))
         image = image / 255.0
         images.append(image)
         inputs.append(frameData["inputs"])
-        states.append(frameData["states"])
+        state=frameData["states"]
+        if state == []:
+            state = [0, 0]
+        states.append([state])
         paths.append(frameData["paths"])
         predictions.append(frameData["predictions"])
 
+
+        i+=1
+
+        #print status - with return to overwrite the line
+        print(f"Loading frame {i}/{len(data['frames'])}", end="\r")
+
+
+
     #to numpy arrays
+    images = np.array(images)
     inputs = np.array(inputs)
     states = np.array(states)
     paths = np.array(paths)
     predictions = np.array(predictions)
+
+    print(f"Loaded {len(data['frames'])} frames")
+    print(images.shape)
     
 
     return images, inputs, states, paths, predictions

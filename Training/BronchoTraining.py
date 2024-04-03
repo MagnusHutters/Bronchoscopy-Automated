@@ -44,20 +44,26 @@ def create_model():
     pathDense = Dense(16, activation='relu')(pathInput)
     statesDense = Dense(4, activation='relu')(statesInput)
 
+    #statesDense = Reshape((4,1))(statesDense)
+
 
     #predictionsDense = Dense(16, activation='relu')(predictionsInput)
     #flatten the dense layers
-    #pathDense = Flatten()(pathDense)
-    #statesDense = Flatten()(statesDense)
+    pathDense = Flatten()(pathDense)
+    statesDense = Flatten()(statesDense)
     #predictionsDense = Flatten()(predictionsDense)
 
 
     concatenatedArrays = concatenate([pathDense, statesDense])
     #another dense
-    dense_array1 = Dense(64, activation='relu')(concatenatedArrays)
+    other = Dense(64, activation='relu')(concatenatedArrays)
+
+    #other = Flatten(input_shape=(4,64))(other)
+    #other = Reshape((256,))(other)
+
 
     # Concatenate all inputs
-    concatenated_inputs = concatenate([flattenCNN, dense_array1])
+    concatenated_inputs = concatenate([flattenCNN, other])
 
     # Dense layer to combine features
     combined_features = Dense(128, activation='relu')(concatenated_inputs)
@@ -70,6 +76,7 @@ def create_model():
 
     # Define the model
     model = tf.keras.Model(inputs=[image_input, pathInput, statesInput], outputs=output)
+    #model = tf.keras.Model(inputs=image_input, outputs=output)
 
     # Compile the model
     model.compile(optimizer='adam', loss='mean_squared_error', metrics=['accuracy'])
@@ -103,7 +110,7 @@ def train():
 
     for episode in episodes:
         episodePath = os.path.join(path, episode)
-        episodeImages, episodeInputs, episodeStates, episodePaths, episodePredictions = loadEpisode(episodePath)
+        episodeImages, episodeInputs, episodeStates, episodePaths, episodePredictions = loadEpisodeFull(episodePath)
         images.extend(episodeImages)
         inputs.extend(episodeInputs)
         states.extend(episodeStates)
@@ -142,22 +149,29 @@ def train():
     labelInput = tf.data.Dataset.from_tensor_slices(inputs)
 
     combined_dataset = tf.data.Dataset.zip((imageDataset, pathDataset, stateDataset, labelInput))
+    #combined_dataset = tf.data.Dataset.zip((imageDataset, labelInput))
 
     combined_dataset = combined_dataset.map(
-        lambda img_path, arr1, arr2, label: (
-            (imageLoader(img_path), arr1, arr2), label
+        lambda img, arr1, arr2, label: (
+            (img, arr1, arr2), label
             )
     )
 
+    # combined_dataset = combined_dataset.map(
+    #     lambda img_path, label: (
+    #         img_path, label
+    #         )
+    # )
+
     buffer_size = 1000  # This is just an example; adjust based on your dataset size and memory constraints
-    batch_size = 32
+    batch_size = 4
 
     combined_dataset = combined_dataset.shuffle(buffer_size).batch(batch_size).prefetch(tf.data.AUTOTUNE)
 
 
     model = create_model()
 
-    model.fit(combined_dataset, epochs=10)
+    model.fit(combined_dataset, epochs=20)
 
     model.save("BronchoModel.keras")
 
