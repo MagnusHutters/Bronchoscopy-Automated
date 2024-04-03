@@ -35,6 +35,9 @@ class ImageLabeler:
 
         #unzip all episode zip files from the database to the unlabelled folder
         for episode in os.listdir(self.dataBasePath):
+            #skip if not zip file
+            if not episode.endswith(".zip"):
+                continue
             #get name of episode without extension
             episodeName = episode.split(".")[0]
             #unzip the episode to new folder in unlabelled

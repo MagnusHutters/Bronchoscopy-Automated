@@ -14,6 +14,7 @@ databasePath = "Database"
 BronchoPath = "Training\Data\BronchoData"
 
 
+from SETTINGS import *
 
 
 

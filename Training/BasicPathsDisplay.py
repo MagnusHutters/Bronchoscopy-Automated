@@ -10,6 +10,10 @@ from tensorflow.keras.layers import Input, Conv2D, MaxPooling2D, Flatten, Dense,
 from tensorflow.keras.preprocessing.image import img_to_array
 import tensorflow as tf
 
+
+from SETTINGS import *
+
+
 def main():
 
 
@@ -44,8 +48,8 @@ def main():
                 
         #draw ground truth holes
         for hole in val_labels[index]:
-            x = int((hole[0] + 1) / 2 * imagesSize[0])
-            y = int((hole[1] + 1) / 2 * imagesSize[1])
+            x = int((hole[0] + 1) / 2 * IMAGE_SIZE[0])
+            y = int((hole[1] + 1) / 2 * IMAGE_SIZE[1])
             print(hole)
 
             exist = hole[2]
@@ -59,8 +63,8 @@ def main():
 
         i=1
         for hole in prediction:
-            x = int((hole[0] + 1) / 2 * imagesSize[0])
-            y = int((hole[1] + 1) / 2 * imagesSize[1])
+            x = int((hole[0] + 1) / 2 * IMAGE_SIZE[0])
+            y = int((hole[1] + 1) / 2 * IMAGE_SIZE[1])
             exist = hole[2]
             #draw holes with opacity based on existence
 

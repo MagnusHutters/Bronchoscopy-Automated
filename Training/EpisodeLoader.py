@@ -11,6 +11,7 @@ import tensorflow as tf
 from PathTracker import PathTracker
 
 
+from SETTINGS import *
 
 
 def doObjectTracking(predictions, imageSize=(256, 256)):
@@ -119,8 +120,8 @@ def compilePaths(objectsList, chosenKeys):
 
 
 
-def prepEpisode(episodePath, imageSize=(256, 256)):
-
+def prepEpisode(episodePath):
+    imageSize = IMAGE_SIZE
 
     #create a temporary directory to extract the episode
     with tempfile.TemporaryDirectory() as tempDir:

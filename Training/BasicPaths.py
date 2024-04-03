@@ -8,7 +8,8 @@ import os
 import cv2
 import json
 
-imagesSize = (256, 256)
+from SETTINGS import *
+
 
 def createModel(inputShape):
     # Input layer
@@ -21,15 +22,15 @@ def createModel(inputShape):
     x = MaxPooling2D(pool_size=(2, 2))(x)
     x = Conv2D(filters=32, kernel_size=(3, 3), activation='relu')(x)
     x = MaxPooling2D(pool_size=(2, 2))(x)
-    x = Conv2D(filters=64, kernel_size=(3, 3), activation='relu')(x)
-    x = MaxPooling2D(pool_size=(2, 2))(x)
-    x = Conv2D(filters=128, kernel_size=(3, 3), activation='relu')(x)
-    x = MaxPooling2D(pool_size=(2, 2))(x)
+    #x = Conv2D(filters=64, kernel_size=(3, 3), activation='relu')(x)
+    #x = MaxPooling2D(pool_size=(2, 2))(x)
+    #x = Conv2D(filters=128, kernel_size=(3, 3), activation='relu')(x)
+    #x = MaxPooling2D(pool_size=(2, 2))(x)
     x = Flatten()(x)
 
     # Shared dense layers
-    x = Dense(128, activation='relu')(x)
     x = Dense(64, activation='relu')(x)
+    x = Dense(32, activation='relu')(x)
 
     # Single output layer for all holes
     output = Dense(4 * 3, activation='linear')(x)  # 4 holes * (x, y, existence)
@@ -38,6 +39,8 @@ def createModel(inputShape):
     model = Model(inputs=input_img, outputs=output)
 
     model.compile(optimizer='adam', loss='mse', metrics=['accuracy'])
+
+    model.summary()
 
     return model
 
@@ -195,7 +198,7 @@ def train_model(model, images, labels, epochs=20):
 
 def main():
     
-    path="Data/PathData"
+    path="Training/Data/PathData"
     
     #extract episodes from path
     episodes = os.listdir(path)
@@ -207,7 +210,7 @@ def main():
 
 
     
-    images, realImageSize = load_images(path, imagesSize)
+    images, realImageSize = load_images(path, IMAGE_SIZE)
 
     labels = load_labels(path, realImageSize[0], realImageSize[1])
 
@@ -235,7 +238,7 @@ def main():
     model = train_model(model, train_images, train_labels)
 
     #save the model
-    model.save("model.keras")
+    model.save("Training/model.keras")
 
 
 

@@ -2,12 +2,13 @@
 
 import cv2
 import tensorflow as tf
-from tensorflow.keras.layers import Input, Conv2D, MaxPooling2D, Flatten, Dense, concatenate
+from tensorflow.keras.layers import Input, Conv2D, MaxPooling2D, Flatten, Dense, concatenate, Reshape
 
 
 
 from EpisodeLoader import *
 
+from SETTINGS import *
 
 
 def imageLoader(image_path):
@@ -18,10 +19,10 @@ def imageLoader(image_path):
     return img
 
 def create_model():
-    image_input_shape = (256, 256, 3)  # Assuming RGB images
+
+    image_input_shape = (IMAGE_SIZE[0], IMAGE_SIZE[1], 3)
     pathInputShape = (4, 4)
     statesInputShape = (1,2)
-    #predictionsInputShape = (4, 3)
 
 
 
@@ -30,7 +31,6 @@ def create_model():
     image_input = Input(shape=image_input_shape, name='image_input')
     pathInput = Input(shape=pathInputShape, name='pathInput')
     statesInput = Input(shape=statesInputShape, name='statesInput')
-    #predictionsInput = Input(shape=statesInputShape, name='predictionsInput')
 
     # Define the CNN model for image input
     conv1 = Conv2D(32, kernel_size=(3, 3), activation='relu')(image_input)
@@ -39,17 +39,16 @@ def create_model():
     pool2 = MaxPooling2D(pool_size=(2, 2))(conv2)
     flattenCNN = Flatten()(pool2)
 
-    #flatten first
-    pathDense = Flatten()(pathInput)
-    statesDense = Flatten()(statesInput)
 
     # Define Dense layers for other inputs
-    pathDense = Dense(16, activation='relu')(pathDense)
-    statesDense = Dense(4, activation='relu')(statesDense)
+    pathDense = Dense(16, activation='relu')(pathInput)
+    statesDense = Dense(4, activation='relu')(statesInput)
+
+
     #predictionsDense = Dense(16, activation='relu')(predictionsInput)
     #flatten the dense layers
-    pathDense = Flatten()(pathDense)
-    statesDense = Flatten()(statesDense)
+    #pathDense = Flatten()(pathDense)
+    #statesDense = Flatten()(statesDense)
     #predictionsDense = Flatten()(predictionsDense)
 
 
@@ -73,7 +72,7 @@ def create_model():
     model = tf.keras.Model(inputs=[image_input, pathInput, statesInput], outputs=output)
 
     # Compile the model
-    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+    model.compile(optimizer='adam', loss='mean_squared_error', metrics=['accuracy'])
 
     # Print model summary
     model.summary()
@@ -110,6 +109,32 @@ def train():
         states.extend(episodeStates)
         paths.extend(episodePaths)
         #predictions.extend(episodePredictions)
+
+
+    #check if the data is loaded correctly and the shapes are correct
+    #to numpy array
+    images = np.array(images)
+    inputs = np.array(inputs)
+    states = np.array(states)
+    paths = np.array(paths)
+    #shapes
+    print(images.shape)
+    print(inputs.shape)
+    print(states.shape)
+    print(paths.shape)
+
+    #wait for user input to continue
+    input("Press Enter to continue...")
+    #for i in range(len(images)):
+        #load image and display the shape
+        #image = cv2.imread(images[i])
+        #shape = image.shape
+
+        #print(f"No: {i:4d} ImageName: {images[i]} Input: {inputs[i].shape} Image: {images[i].shape} imageShape: {shape} State: {states[i].shape} Path: {paths[i].shape}")
+    
+
+    
+    #input("Press Enter to continue...")
 
     imageDataset = tf.data.Dataset.from_tensor_slices(images)
     stateDataset = tf.data.Dataset.from_tensor_slices(states)
