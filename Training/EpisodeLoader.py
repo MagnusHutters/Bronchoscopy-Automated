@@ -155,9 +155,10 @@ def prepEpisode(episodePath):
             
             images.append(image)
             newInput = [frameData["data"]["rotation"], frameData["data"]["bend"], frameData["data"]["extend"]]
+            newState = [frameData["data"]["currentBend"], frameData["data"]["currentRot"]]
 
             inputs.append(newInput)
-            states.append([])
+            states.append(newState)
 
         
 

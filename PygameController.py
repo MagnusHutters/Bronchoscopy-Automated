@@ -32,6 +32,9 @@ class PygameController(Controller):
         self.size = self.interface.camera.get_size()
 
         self.screen = pygame.display.set_mode(self.size)
+        
+        pygame.font.init()
+        self.font = pygame.font.Font(None, 18)
 
         self.js.init()
         
@@ -69,21 +72,32 @@ class PygameController(Controller):
     def doStep(self, image):
         pygame.event.pump()        
         num_axes = self.js.get_numaxes()
+        axes = [self.js.get_axis(i) for i in range(num_axes)]
+        print(f"axes: {axes}")
+        
+        
+        
         print(num_axes)
         #time.sleep(1)
         #rot = self.js.get_axis(2)
         #bend = self.js.get_axis(3)
         move=-self.js.get_axis(1)
+        rot = self.js.get_axis(2)
+        bend = self.js.get_axis(3)
+        
         
         print(self.size)
         
         
-        #num_buttons = self.js.get_numbuttons()
-        #buttons=[self.js.get_button(i) for i in range(num_buttons)]
-        #print(buttons)
+        num_buttons = self.js.get_numbuttons()
+        buttons=[self.js.get_button(i) for i in range(num_buttons)]
+        print(f"buttons: {buttons}")
         
-        rot     =-(self.js.get_button(3)-self.js.get_button(1))
-        bend    =(self.js.get_button(2)-self.js.get_button(0))
+        doStart=self.js.get_button(9)
+        doStop=self.js.get_button(8)
+        
+        #rot     =-(self.js.get_button(3)-self.js.get_button(1))
+        #bend    =(self.js.get_button(2)-self.js.get_button(0))
         #movef = self.js.get_button(0)
         #moveb = self.js.get_button(2)
         
@@ -115,12 +129,38 @@ class PygameController(Controller):
         # check joystick button -> forward or backward
         
         
+        # set recording to true if interface.currentEpisode is not None
+        recording = False
+        currentFrame=0
+        if self.interface.currentEpisode is not None:
+            recording = True
+            currentFrame = self.interface.currentEpisode.length
+            
+        print(f"Recording: {recording}")
+        # if recoding show a red dot
+        
+        
         
         
         #frame = np.rot90(frame)
         frame = pygame.surfarray.make_surface(image)
         
+        
+            
+            
+
+            
+            
+        
         self.screen.blit(frame, (0,0))
+        
+        if recording:
+            pygame.draw.circle(self.screen, (255,0,0), (12,12), 6)
+            
+            #display current frame number on screen
+            
+            text = self.font.render(f'Frame: {currentFrame}', True, (255, 255, 255))
+            self.screen.blit(text, (24,6))
         
         self.drawBar(currentBend)
         
@@ -140,7 +180,7 @@ class PygameController(Controller):
         pygame.display.flip()  
         
         
-        return input  
+        return input, doStart, doStop
     
     def close(self):
         #pygame shutdown

@@ -280,6 +280,10 @@ class Bronchoscope:
         
         
         
+        return (normBend,normRot)
+        
+        
+        
         
     
     def extensionLoop(self):
@@ -321,15 +325,16 @@ class Bronchoscope:
             
             dir=1
             if(toMove<0): dir=0
-            
+            sleepTime=0.008
+            print(f"toMove: {toMove}")
             self.pi.write(self.fwd_dir, dir)
             if(toMove is not 0):
                 self.pi.write(self.fwd_stp, 1)
-                time.sleep(0.008)
+                time.sleep(sleepTime)
                 self.pi.write(self.fwd_stp, 0)
                 
             else:
-                time.sleep(0.008)
+                time.sleep(sleepTime)
                 
             time.sleep(0.04)
                 

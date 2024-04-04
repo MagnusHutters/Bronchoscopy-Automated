@@ -14,9 +14,11 @@ class Interface:
         self.broncho=Bronchoscope()
         self.camera=Camera()
         self.currentEpisode=None
+        self.currentState=[]
+        self.currentInput=None
         
         
-        self.startEpisode()
+        #self.startEpisode()
         
         
     
@@ -27,9 +29,13 @@ class Interface:
         self.currentFrame = self.camera.get_frame()
         return self.currentFrame
     
-    def updateInput(self, input):
+    def updateInput(self, input, doStart, doStop):
         
         self.currentInput=input
+        
+        
+        
+        self.currentState=self.broncho.getState()
         self.broncho.rotate(input.rotation)
         
         self.broncho.changeBend(input.bend)
@@ -37,15 +43,28 @@ class Interface:
         self.broncho.move(input.extend)   
         
         
+        if(doStart):
+            self.startEpisode()
+            print("Starting Episode")
+        if(doStop):
+            self.endEpisode()
+            print("Ending Episode")
+        
         self.doStoreCurrentFrame()
         
         
     def doStoreCurrentFrame(self):
         
-        state=self.broncho.getState()
         
-        self.currentEpisode.addFrame(self.currentFrame,self.currentInput.toDict())
-        pass
+        frameDict=self.currentInput.toDict()
+        frameDict['currentBend']=self.currentState[0]
+        frameDict['currentRot']=self.currentState[1]
+        
+        
+        if(self.currentEpisode is not None):
+            
+            self.currentEpisode.addFrame(self.currentFrame,)
+        
         
         
     def startEpisode(self):
@@ -56,6 +75,10 @@ class Interface:
     def endEpisode(self):
         if self.currentEpisode != None:
             self.currentEpisode.saveEpisode()
+            
+        #delete current episode
+        
+        self.currentEpisode=None
     
     def nextEpisode(self):
         
@@ -65,8 +88,8 @@ class Interface:
         
     def close(self):
         print("Closing Interface")
-        self.endEpisode()
         self.camera.release()
+        self.endEpisode()
         
         self.broncho.close()
         
