@@ -116,13 +116,15 @@ def load_labels(dataPath, image_width, image_height):
     return np.array(labels)
 
 # Load and preprocess images
-def load_images(dataPath, imageSize):
+def load_images(dataPath, imageSize, saveOriginalImages=False):
 
 
     episodes = os.listdir(dataPath)
     images = []
     realImageSize=None
 
+
+    originalImages = []
     for episode in episodes:
         image_folder = os.path.join(dataPath, episode)
 
@@ -144,10 +146,18 @@ def load_images(dataPath, imageSize):
             if realImageSize is None:
                 realImageSize = image.shape[:2]
 
+            originalImage=None
+            if saveOriginalImages:
+                originalImage = image.copy()
+                originalImage = img_to_array(originalImage) / 255.0  # Normalize to [0, 1]
+                originalImages.append(originalImage)
             image = cv2.resize(image, imageSize)
 
             image = img_to_array(image) / 255.0  # Normalize to [0, 1]
             images.append(image)
+            
+    if saveOriginalImages:
+        return np.array(images), realImageSize, np.array(originalImages)
     return np.array(images), realImageSize
 
 

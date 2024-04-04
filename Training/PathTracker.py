@@ -14,8 +14,8 @@ from tensorflow.keras.models import Model, load_model
 from tensorflow.keras.layers import Input, Conv2D, MaxPooling2D, Flatten, Dense, Reshape
 from tensorflow.keras.preprocessing.image import img_to_array
 import tensorflow as tf
-
-
+import VideoRecorder
+from SETTINGS import *
 
 
 
@@ -140,23 +140,26 @@ def main():
 
 
     input_shape = (input_shape[0], input_shape[1])
-    val_images, realImageSize = load_images(path, input_shape)
+    val_images, realImageSize, originalImages = load_images(path, input_shape, saveOriginalImages=True)
     val_labels = load_labels(path, realImageSize[0], realImageSize[1])
 
 
-    pathTracker = PathTracker()
+    video_recorder = VideoRecorder.VideoRecorder("PathTracker", folder="Output", frame_size=(realImageSize[0], realImageSize[1]))
 
+    pathTracker = PathTracker()
 
     index = 0
     while(True):
         
         #Display result one image at a time
-        val_image = val_images[index].copy()
+        val_image = val_images[index]
 
         prediction = model.predict(np.array([val_image]))[0]
 
+
+
         objects = pathTracker.update(prediction)
-                
+        displayImage = originalImages[index].copy()        
 
 
         # Draw the holes on the image
@@ -165,34 +168,38 @@ def main():
         #draw predicted holes
         i=1
         for prediction in prediction:
-            x = int((prediction[0] + 1) / 2 * imagesSize[0])
-            y = int((prediction[1] + 1) / 2 * imagesSize[1])
+            x = int((prediction[0] + 1) / 2 * realImageSize[0])
+            y = int((prediction[1] + 1) / 2 * realImageSize[1])
             #draw holes with opacity based on existence
             existance = prediction[2]
 
             
-            cv2.circle(val_image, (x, y), 10, (float(existance), 0, 0), 2)
+            if existance > 0.5:
+                cv2.circle(displayImage, (x, y), 10, (0, 0, float(existance)), 2)
 
         #draw tracked holes
         i=1
         for key, value in objects.items():
-            x = int((value[0] + 1) / 2 * imagesSize[0])
-            y = int((value[1] + 1) / 2 * imagesSize[1])
+            x = int((value[0] + 1) / 2 * realImageSize[0])
+            y = int((value[1] + 1) / 2 * realImageSize[1])
             #draw holes with opacity based on existence
 
             #scale the existence to 0-255
 
 
-            cv2.circle(val_image, (x, y), 8, (0, 1, 0), 2)
+            cv2.circle(displayImage, (x, y), 8, (0, 1, 0), 2)
 
             #draw number of the hole
-            cv2.putText(val_image, str(key), (x-8, y+8), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (1,1,1), 2)
+            cv2.putText(displayImage, str(key), (x-8, y+8), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (1,1,1), 2)
 
             i+=1
 
-        cv2.imshow("Image", val_image)
+
+        video_recorder.write(displayImage)
+        cv2.imshow("Image", displayImage)
         key = cv2.waitKey(0)
         if key == ord('q'):
+            out.release()
             break
         #if d is pressed go to next image
         elif key == ord('d'):
