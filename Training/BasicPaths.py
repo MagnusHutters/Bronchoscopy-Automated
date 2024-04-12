@@ -115,6 +115,50 @@ def load_labels(dataPath, image_width, image_height):
             labels.append(label)
     return np.array(labels)
 
+
+
+def load_images_single_episode(dataPath, imageSize, saveOriginalImages=False):
+    
+    
+    images = []
+    realImageSize=None
+
+
+    originalImages = []
+    image_folder = dataPath 
+
+    imageNames = os.listdir(image_folder)
+    #remove all files that are not images
+    imageNames = [image for image in imageNames if image.endswith(".png") or image.endswith(".jpg")]
+
+
+    imageNames.sort(key=lambda x: int(x.split("_")[0].split("e")[-1]))
+
+
+    
+    for name in imageNames:
+
+        path = os.path.join(image_folder, name)
+        
+        image = cv2.imread(path)
+
+        if realImageSize is None:
+            realImageSize = image.shape[:2]
+
+        originalImage=None
+        if saveOriginalImages:
+            originalImage = image.copy()
+            originalImage = img_to_array(originalImage) / 255.0  # Normalize to [0, 1]
+            originalImages.append(originalImage)
+        image = cv2.resize(image, imageSize)
+
+        image = img_to_array(image) / 255.0  # Normalize to [0, 1]
+        images.append(image)
+            
+    if saveOriginalImages:
+        return np.array(images), realImageSize, np.array(originalImages)
+    return np.array(images), realImageSize
+
 # Load and preprocess images
 def load_images(dataPath, imageSize, saveOriginalImages=False):
 

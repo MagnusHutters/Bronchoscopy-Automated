@@ -9,7 +9,7 @@ class VideoRecorder:
         self.fps = fps
         self.frame_size = frame_size
         # Add current date to filename and specify MP4 format
-        date_str = datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
+        date_str = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         self.filename = f"{name}_{date_str}.mp4"
         if folder != "":
             #ensure folder exists

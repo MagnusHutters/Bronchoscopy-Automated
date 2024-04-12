@@ -199,7 +199,7 @@ def main():
         cv2.imshow("Image", displayImage)
         key = cv2.waitKey(0)
         if key == ord('q'):
-            out.release()
+            video_recorder.release()
             break
         #if d is pressed go to next image
         elif key == ord('d'):
