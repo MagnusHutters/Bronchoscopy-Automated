@@ -8,7 +8,7 @@ import os
 import cv2
 import json
 
-from SETTINGS import *
+from .SETTINGS import *
 
 
 def createModel(inputShape):
@@ -135,7 +135,6 @@ def load_images_single_episode(dataPath, imageSize, saveOriginalImages=False):
     imageNames.sort(key=lambda x: int(x.split("_")[0].split("e")[-1]))
 
 
-    
     for name in imageNames:
 
         path = os.path.join(image_folder, name)

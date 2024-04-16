@@ -6,7 +6,6 @@
 
 
 
-from BasicPaths import *
 import cv2
 from scipy.optimize import linear_sum_assignment
 import numpy as np
@@ -14,8 +13,13 @@ from tensorflow.keras.models import Model, load_model
 from tensorflow.keras.layers import Input, Conv2D, MaxPooling2D, Flatten, Dense, Reshape
 from tensorflow.keras.preprocessing.image import img_to_array
 import tensorflow as tf
-import VideoRecorder
-from SETTINGS import *
+
+
+from Training.BasicPaths import *
+from Training.VideoRecorder import VideoRecorder
+from Training.SETTINGS import *
+
+
 
 
 
@@ -69,11 +73,11 @@ class PathTracker:
             objectIDs = list(self.objects.keys())
             objectCentroids = list(self.objects.values())
 
-            print(inputCentroids)
-            print(objectCentroids)
+            #print(inputCentroids)
+            #print(objectCentroids)
             D = np.linalg.norm(np.array(objectCentroids) - inputCentroids[:, None], axis=2)
 
-            print(D)
+            #print(D)
             rows, cols = linear_sum_assignment(D)
 
             usedRows = set()
@@ -144,7 +148,7 @@ def main():
     val_labels = load_labels(path, realImageSize[0], realImageSize[1])
 
 
-    video_recorder = VideoRecorder.VideoRecorder("PathTracker", folder="Output", frame_size=(realImageSize[0], realImageSize[1]))
+    video_recorder = VideoRecorder("PathTracker", folder="Output", frame_size=(realImageSize[0], realImageSize[1]))
 
     pathTracker = PathTracker()
 
@@ -153,12 +157,19 @@ def main():
         
         #Display result one image at a time
         val_image = val_images[index]
+        #print(val_image)
 
         prediction = model.predict(np.array([val_image]))[0]
+
+        
 
 
 
         objects = pathTracker.update(prediction)
+
+
+
+        #draw ground truth holes
         displayImage = originalImages[index].copy()        
 
 
@@ -224,6 +235,7 @@ def main():
 
 if __name__ == '__main__':
 
+    
 
 
     main()
