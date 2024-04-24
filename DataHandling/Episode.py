@@ -183,6 +183,8 @@ class Episode:
 
         #add index to Unsaved frame index
         self.unsavedFramesIndex.append(self.length-1)       
+        
+        #self.saveData()
 
         self.manage()
     
@@ -211,29 +213,41 @@ class Episode:
                 time.sleep(0.1)
             print(f"Frame {frame.index} is done saving")
 
-        frames = {}
+        
+        
+        #saving data to json
+        self.saveData()
 
 
-        jsonPath = f"{self.dir_path}/data.json"
-
-        print(f"Saving data to {jsonPath}")
-        n=0
-        with open(jsonPath, 'w', encoding='utf-8') as f:
-            json.dump(dataStruct, f, indent=4)
-
-            pathName = f"{DATABASEDIR}/{name}_{n}"
-
-            n += 1
+        pathName = f"{DATABASEDIR}/{name}_{0}"
 
         print(f"Compressing to {pathName}.zip")
         
         
-        #shutil.make_archive(pathName, 'zip', self.dir_path)
+        shutil.make_archive(pathName, 'zip', self.dir_path)
         #achive in new process
         
-        self.pool.apply_async(shutil.make_archive, (pathName, 'zip', self.dir_path))
-        print(f"Compressed to {pathName}.zip")
+        #self.pool.apply_async(shutil.make_archive, (pathName, 'zip', self.dir_path))
+        #print(f"Compressed to {pathName}.zip")
         
+
+    def saveData(self):
+        
+        
+        data = {}
+        frames = {}
+        
+        for frame in self.frames:
+            frames[frame.index] = frame.getJsonStruct()
+            #frames.append(frame.getJsonStruct())
+
+        data["frames"] = frames
+        
+        
+        jsonPath = f"{self.dir_path}/data.json"
+        with open(jsonPath, 'w') as f:
+            json.dump(data, f, indent=4)
+            
 
     def __del__(self):
         

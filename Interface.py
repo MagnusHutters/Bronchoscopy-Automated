@@ -11,8 +11,9 @@ class Interface:
     
     def __init__(self):
         
-        self.broncho=Bronchoscope()
+        
         self.camera=Camera()
+        self.broncho=Bronchoscope()
         self.currentEpisode=None
         self.currentState=self.broncho.getState()
         self.currentInput=None

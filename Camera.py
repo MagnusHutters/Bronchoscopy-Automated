@@ -5,11 +5,16 @@ class Camera:
     def __init__(self, camera_index=0):
         # Initialize the video capture with the given camera index
         self.cap = cv2.VideoCapture(camera_index)
+        #self.cameraOpened=True
         if not self.cap.isOpened():
+            #self.cameraOpened=False
             raise ValueError("Unable to open video source", camera_index)
 
     def get_frame(self):
         # Capture frame-by-frame
+        #if not self.cameraOpened:
+        #    return None
+        
         ret, frame = self.cap.read()
         
         #frame = np.rot90(frame)

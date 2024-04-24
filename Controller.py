@@ -11,8 +11,15 @@ from Interface import *
 
 class Controller:
     def __init__(self):
+        
+        
         self.closed=False
-        self.interface = Interface()
+        try:
+            
+            self.interface = Interface()
+        except:
+            self.close()
+            raise ValueError("Interface failed to initialize")
         
         
     def __del__(self): 
