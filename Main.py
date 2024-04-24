@@ -11,6 +11,7 @@ import cv2
 
 
 from PygameController import *
+from ModelController import *
 
 
 
@@ -18,7 +19,8 @@ from PygameController import *
 
 
 
-controller = PygameController()
+#controller = PygameController()
+controller = ModelController()
 
 
 

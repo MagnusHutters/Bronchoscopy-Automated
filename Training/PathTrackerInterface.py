@@ -97,6 +97,12 @@ class PathTrackerInterface:
 
     def predictAndTrack(self, val_image,displayImage):
         displayImage = displayImage.copy()
+        
+        #ensure val_image matches input shape
+        input_shape=self.getInputShape()
+        if val_image.shape[0] != input_shape[0] or val_image.shape[1] != input_shape[1]:
+            val_image = cv2.resize(val_image, (input_shape[0], input_shape[1]))
+        
 
         if self.realImageSize is None:
             #set from displayImage

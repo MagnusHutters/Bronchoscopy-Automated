@@ -325,8 +325,8 @@ class Bronchoscope:
             
             dir=1
             if(toMove<0): dir=0
-            sleepTime=0.008
-            print(f"toMove: {toMove}")
+            sleepTime=0.007
+            #print(f"toMove: {toMove}")
             self.pi.write(self.fwd_dir, dir)
             if(toMove is not 0):
                 self.pi.write(self.fwd_stp, 1)

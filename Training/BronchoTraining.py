@@ -75,6 +75,8 @@ def create_model():
     output = Dense(3, activation='linear')(combined_features)
 
     # Define the model
+    
+    
     model = tf.keras.Model(inputs=[image_input, pathInput, statesInput], outputs=output)
     #model = tf.keras.Model(inputs=image_input, outputs=output)
 

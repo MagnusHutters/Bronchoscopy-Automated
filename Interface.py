@@ -14,7 +14,7 @@ class Interface:
         self.broncho=Bronchoscope()
         self.camera=Camera()
         self.currentEpisode=None
-        self.currentState=[]
+        self.currentState=self.broncho.getState()
         self.currentInput=None
         
         
@@ -63,7 +63,7 @@ class Interface:
         
         if(self.currentEpisode is not None):
             
-            self.currentEpisode.addFrame(self.currentFrame,)
+            self.currentEpisode.addFrame(self.currentFrame,frameDict)
         
         
         

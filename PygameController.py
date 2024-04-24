@@ -42,7 +42,7 @@ class PygameController(Controller):
         
         
     def drawBar(self, value):
-        print(f"Drawing bar with value: {value}")
+        #print(f"Drawing bar with value: {value}")
             
         # Calculate bar dimensions
         bar_width = 20
@@ -73,11 +73,11 @@ class PygameController(Controller):
         pygame.event.pump()        
         num_axes = self.js.get_numaxes()
         axes = [self.js.get_axis(i) for i in range(num_axes)]
-        print(f"axes: {axes}")
+        #print(f"axes: {axes}")
         
         
         
-        print(num_axes)
+        #print(num_axes)
         #time.sleep(1)
         #rot = self.js.get_axis(2)
         #bend = self.js.get_axis(3)
@@ -86,12 +86,12 @@ class PygameController(Controller):
         bend = self.js.get_axis(3)
         
         
-        print(self.size)
+        #print(self.size)
         
         
         num_buttons = self.js.get_numbuttons()
         buttons=[self.js.get_button(i) for i in range(num_buttons)]
-        print(f"buttons: {buttons}")
+        #print(f"buttons: {buttons}")
         
         doStart=self.js.get_button(9)
         doStop=self.js.get_button(8)
@@ -103,7 +103,7 @@ class PygameController(Controller):
         
         #toMove=moveb-movef
         
-        print(f"rot: {rot}, bend: {bend}, move: {move}")
+        #print(f"rot: {rot}, bend: {bend}, move: {move}")
         
         
         
@@ -136,7 +136,7 @@ class PygameController(Controller):
             recording = True
             currentFrame = self.interface.currentEpisode.length
             
-        print(f"Recording: {recording}")
+        #print(f"Recording: {recording}")
         # if recoding show a red dot
         
         
@@ -169,7 +169,7 @@ class PygameController(Controller):
         # Display the resulting frame
         #cv2.imshow('Frame', frame)
         
-        print("Showing frame")
+        #print("Showing frame")
         #broncho.rotate(rot)
         
         #broncho.changeBend(bend)
