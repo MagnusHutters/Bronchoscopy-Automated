@@ -244,6 +244,9 @@ class Episode:
         data["frames"] = frames
         
         
+        
+        
+        
         jsonPath = f"{self.dir_path}/data.json"
         with open(jsonPath, 'w') as f:
             json.dump(data, f, indent=4)
