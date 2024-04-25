@@ -7,14 +7,14 @@ import json
 
 
 
-from EpisodeLoader import *
+from Training.EpisodeLoader import *
 
 
 databasePath = "Database"
-BronchoPath = "Training\Data\BronchoData"
+BronchoPath = "Training/Data/BronchoData"
 
 
-from SETTINGS import *
+from Training.SETTINGS import *
 
 
 
