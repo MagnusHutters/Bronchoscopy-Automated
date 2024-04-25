@@ -8,10 +8,10 @@ import cv2
 import numpy as np
 import tensorflow as tf
 
-from PathTracker import PathTracker
+from Training.PathTracker import PathTracker
 
 
-from SETTINGS import *
+from Training.SETTINGS import *
 
 
 def doObjectTracking(predictions, imageSize=(256, 256)):
@@ -155,8 +155,8 @@ def prepEpisode(episodePath):
             
             images.append(image)
             newInput = [frameData["data"]["rotation"], frameData["data"]["bend"], frameData["data"]["extend"]]
-            newState = [frameData["data"]["currentBend"], frameData["data"]["currentRot"]]
-
+            #newState = [frameData["data"]["currentBend"], frameData["data"]["currentRot"]]
+            newState = [0, 0]
             inputs.append(newInput)
             states.append(newState)
 
