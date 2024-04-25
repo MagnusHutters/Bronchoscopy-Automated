@@ -1,7 +1,7 @@
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Input, Conv2D, MaxPooling2D, Flatten, Dense, Reshape
 from tensorflow.keras.preprocessing.image import img_to_array
-
+import tensorflow as tf
 
 import numpy as np
 import os
@@ -10,31 +10,44 @@ import json
 
 from .SETTINGS import *
 
-
-def createModel(inputShape):
+def createModelSimple():
     # Input layer
-    input_img = Input(inputShape)
+    input_img = Input((128, 128, 3))
+
+    # Convolutional layer
+    x = Conv2D(filters=16, kernel_size=(3, 3), activation='relu')(input_img)
+
+    # Dense layer
+    output = Dense(32, activation='relu')(x)
+
+    model = Model(inputs=input_img, outputs=output)
+
+    model.compile(optimizer='adam', loss='mse', metrics=['accuracy'])
+
+    model.summary()
+
+    return model
+
+def createModel():
+    # Input layer
+    input_img = Input((128, 128, 3))
 
     # Convolutional layers
 
 
-    x = Conv2D(filters=16, kernel_size=(3, 3), activation='relu')(input_img)
-    x = MaxPooling2D(pool_size=(2, 2))(x)
-    x = Conv2D(filters=32, kernel_size=(3, 3), activation='relu')(x)
-    x = MaxPooling2D(pool_size=(2, 2))(x)
-    #x = Conv2D(filters=64, kernel_size=(3, 3), activation='relu')(x)
+    output = Conv2D(filters=16, kernel_size=(3, 3), activation='relu')(input_img)
     #x = MaxPooling2D(pool_size=(2, 2))(x)
-    #x = Conv2D(filters=128, kernel_size=(3, 3), activation='relu')(x)
+    #x = Conv2D(filters=32, kernel_size=(3, 3), activation='relu')(x)
     #x = MaxPooling2D(pool_size=(2, 2))(x)
-    x = Flatten()(x)
+    #x = Flatten()(x)
 
     # Shared dense layers
-    x = Dense(64, activation='relu')(x)
-    x = Dense(32, activation='relu')(x)
+    #x = Dense(64, activation='relu')(x)
+    #output = Dense(32, activation='relu')(x)
 
     # Single output layer for all holes
-    output = Dense(4 * 3, activation='linear')(x)  # 4 holes * (x, y, existence)
-    output = Reshape((4, 3))(output)  # Reshape to 4x3 for clarity
+    #output = Dense(4 * 3, activation='linear')(x)  # 4 holes * (x, y, existence)
+    #output = Reshape((4, 3))(output)  # Reshape to 4x3 for clarity
 
     model = Model(inputs=input_img, outputs=output)
 
@@ -73,9 +86,6 @@ def rotate_image_90_degrees(image, labels):
         rotated_labels.append(rotated_label)
         
     return rotated_image, rotated_labels
-
-
-
 
 
 # Load labels from JSON
@@ -245,10 +255,6 @@ def train_model(model, images, labels, epochs=20):
 
 
 
-
-
-
-
 def main():
     
     path="Training/Data/PathData"
@@ -260,11 +266,11 @@ def main():
     
 
 
-
+    
 
     
-    images, realImageSize = load_images(path, IMAGE_SIZE)
-
+    #images, realImageSize = load_images(path, IMAGE_SIZE)
+    '''
     labels = load_labels(path, realImageSize[0], realImageSize[1])
 
 
@@ -282,16 +288,22 @@ def main():
     val_images = images[split:]
     val_labels = labels[split:]
 
+    '''
 
+    #input_shape = images[0].shape
+    #print(f"Input shape: {input_shape}")
+    #return
+    model = createModelSimple()
+    
+    
+    
+    tf.get_logger().setLevel('DEBUG')
 
-    input_shape = images[0].shape
-
-    model = createModel(input_shape)
-
-    model = train_model(model, train_images, train_labels)
+    #model = train_model(model, train_images, train_labels)
 
     #save the model
-    model.save("Training/model.keras")
+    tf.saved_model.save(model, "saved_model")
+    
 
 
 
