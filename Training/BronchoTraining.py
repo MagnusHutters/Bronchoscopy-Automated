@@ -6,9 +6,9 @@ from tensorflow.keras.layers import Input, Conv2D, MaxPooling2D, Flatten, Dense,
 
 
 
-from EpisodeLoader import *
+from Training.EpisodeLoader import *
 
-from SETTINGS import *
+from Training.SETTINGS import *
 
 
 def imageLoader(image_path):
@@ -100,7 +100,7 @@ def train():
 
 
     #load data
-    path = "Training\Data\BronchoData"
+    path = "Training/Data/BronchoData"
 
     episodes = os.listdir(path)
 

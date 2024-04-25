@@ -8,10 +8,10 @@ import cv2
 import numpy as np
 import tensorflow as tf
 
-from PathTracker import PathTracker
+from Training.PathTracker import PathTracker
 
 
-from SETTINGS import *
+from Training.SETTINGS import *
 
 
 def doObjectTracking(predictions, imageSize=(256, 256)):
@@ -127,6 +127,7 @@ def prepEpisode(episodePath):
     with tempfile.TemporaryDirectory() as tempDir:
         #extract the episode
         #print(f"Extracting {episodePath} to {tempDir}")
+        print(f"Extracting {episodePath}")
         shutil.unpack_archive(episodePath, tempDir)
 
         #list the files in the directory
@@ -164,7 +165,7 @@ def prepEpisode(episodePath):
 
 
         #load model and predict
-        model = tf.keras.models.load_model("Training\model.keras")
+        model = tf.keras.models.load_model("model.keras")
         
 
         for i in range(len(images)):
