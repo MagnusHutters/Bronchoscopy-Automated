@@ -165,30 +165,24 @@ def prepEpisode(episodePath):
 
 
         #load model and predict
-        model = tf.keras.models.load_model("model.keras")
+        model = tf.keras.models.load_model("pathModel.keras")
         
 
-        for i in range(len(images)):
-            prediction = model.predict(np.array([images[i]]))[0]
-            #print(prediction)
+        images_array = np.array(images)  # Convert list of images to a numpy array for efficient processing
+
+        # Make predictions on all images at once
+        
+        #print shape
+        print(images_array.shape)
+        
+        #wait for keypress
+        
+        
+        predictions = model.predict(images_array) 
+        
+        
 
             
-
-            '''
-            #Display result one image at a time
-            val_image = images[i].copy()
-            #draw predicted holes
-            for hole in prediction:
-                x = int((hole[0] + 1) / 2 * imageSize[0])
-                y = int((hole[1] + 1) / 2 * imageSize[1])
-                #draw holes with opacity based on existence
-                existance = hole[2]
-                cv2.circle(val_image, (x, y), 10, (float(existance), 0, 0), 2)
-            cv2.imshow("image", val_image)
-            cv2.waitKey(0)
-            '''
-
-            predictions.append(prediction)
         
         objectsList = doObjectTracking(predictions, imageSize)
 

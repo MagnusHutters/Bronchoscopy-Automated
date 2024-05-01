@@ -30,12 +30,12 @@ from Training.PathTracker import PathTracker
 
 
 def main():
-    pathInterface= PathTrackerInterface("Training/model.keras")
+    pathInterface= PathTrackerInterface("pathModel.keras")
     input_shape = pathInterface.getInputShape()
 
     #val_images, realImageSize, originalImages = load_images("Training/Data/PathData", input_shape, saveOriginalImages=True)
-    val_images, realImageSize, originalImages = load_images_single_episode("Training/Data/PathData/24-03-19-15-59-18_0", input_shape, saveOriginalImages=True)
-
+    val_images, realImageSize, originalImages = load_images_single_episode("Training/Data/PathData/24-04-30-04-55-37_0", input_shape, saveOriginalImages=True)
+    
     pathInterface.realImageSize = realImageSize
 
     index = 0
@@ -96,6 +96,8 @@ class PathTrackerInterface:
 
 
     def predictAndTrack(self, val_image,displayImage):
+        print("Predicting and tracking")
+        
         displayImage = displayImage.copy()
         
         #ensure val_image matches input shape
@@ -114,7 +116,6 @@ class PathTrackerInterface:
 
         prediction = self.model.predict(np.array([val_image]), verbose=0)[0]
 
-        
 
 
 

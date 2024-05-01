@@ -16,6 +16,12 @@ class ImageLabeler:
         self.unlabelledPath = "training_data/unlabelled"
         self.labelledPath = "training_data/labelled"
         self.inProgressPath = "training_data/inProgress"
+        #make sure the folders exist
+        os.makedirs(self.unlabelledPath, exist_ok=True)
+        os.makedirs(self.labelledPath, exist_ok=True)
+        os.makedirs(self.inProgressPath, exist_ok=True)
+        
+        
         self.dataBasePath = "Database"
         self.episodePaths = []
         self.currentEpisodePath = None
@@ -33,7 +39,7 @@ class ImageLabeler:
 
 
         #load tensorflow model
-        self.model = tf.keras.models.load_model("Training/model.keras")
+        self.model = tf.keras.models.load_model("pathModel.keras")
 
     def initialize(self):
         # Clear the unlabelled folder
@@ -163,6 +169,8 @@ class ImageLabeler:
         # Stack the images horizontally
         stackedImages = np.hstack((image1, image2))
         cv2.imshow('frame', stackedImages)
+        
+        
 
     def draw_image(self, index):
 
@@ -330,7 +338,8 @@ class ImageLabeler:
     def main(self):
         self.initialize()
 
-        cv2.namedWindow('frame')
+        
+        cv2.namedWindow("frame", cv2.WINDOW_NORMAL | cv2.WINDOW_GUI_NORMAL)
         cv2.setMouseCallback('frame', self.click_event)
 
         while not self.doExit:
