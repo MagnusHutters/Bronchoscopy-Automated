@@ -43,11 +43,11 @@ def createModel():
 
     # Shared dense layers
     x = Dense(64, activation='relu')(x)
-    output = Dense(32, activation='relu')(x)
+    x = Dense(32, activation='relu')(x)
 
     # Single output layer for all holes
-    #output = Dense(4 * 3, activation='linear')(x)  # 4 holes * (x, y, existence)
-    #output = Reshape((4, 3))(output)  # Reshape to 4x3 for clarity
+    output = Dense(4 * 3, activation='linear')(x)  # 4 holes * (x, y, existence)
+    output = Reshape((4, 3))(output)  # Reshape to 4x3 for clarity
 
     model = Model(inputs=input_img, outputs=output)
 
@@ -247,7 +247,7 @@ def augment_data(images, labels):
         
     return np.array(augmented_images), np.array(augmented_labels)
 
-def train_model(model, images, labels, epochs=20):
+def train_model(model, images, labels, epochs=10):
 
     #augment the data
 
@@ -268,6 +268,11 @@ def main():
     
     #extract episodes from path
     episodes = os.listdir(path)
+    
+    num_cores = 11  # Adjust based on your total cores - 1
+    tf.config.threading.set_intra_op_parallelism_threads(num_cores)
+    tf.config.threading.set_inter_op_parallelism_threads(num_cores)
+
 
     
     
@@ -276,8 +281,8 @@ def main():
     
 
     
-    #images, realImageSize = load_images(path, IMAGE_SIZE)
-    '''
+    images, realImageSize = load_images(path, IMAGE_SIZE)
+    
     labels = load_labels(path, realImageSize[0], realImageSize[1])
 
 
@@ -295,7 +300,7 @@ def main():
     val_images = images[split:]
     val_labels = labels[split:]
 
-    '''
+    
 
     #input_shape = images[0].shape
     #print(f"Input shape: {input_shape}")
@@ -306,10 +311,12 @@ def main():
     
     tf.get_logger().setLevel('DEBUG')
 
-    #model = train_model(model, train_images, train_labels)
+    model = train_model(model, train_images, train_labels)
 
     #save the model
-    tf.saved_model.save(model, "saved_model")
+    tf.saved_model.save(model, "path_model")
+    
+    model.save("pathModel.keras")
     
     
     

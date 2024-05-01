@@ -2,7 +2,7 @@
 
 
 
-from BasicPaths import *
+from Training.BasicPaths import *
 import cv2
 import numpy as np
 from tensorflow.keras.models import Model, load_model
@@ -11,7 +11,7 @@ from tensorflow.keras.preprocessing.image import img_to_array
 import tensorflow as tf
 
 
-from SETTINGS import *
+from Training.SETTINGS import *
 
 
 def main():
@@ -21,7 +21,7 @@ def main():
 
     path="Training/Data/PathData"
     
-    model = tf.keras.models.load_model("Training/model.keras")
+    model = tf.keras.models.load_model("pathModel.keras")
     index = 0
 
     #find input shape of the model
@@ -32,6 +32,8 @@ def main():
     val_images, realImageSize = load_images(path, input_shape)
     val_labels = load_labels(path, realImageSize[0], realImageSize[1])
 
+    print(val_images.shape)
+    print(val_labels.shape)
 
 
 
@@ -54,7 +56,7 @@ def main():
 
             exist = hole[2]
             if exist > 0.5:
-                cv2.circle(val_image, (x, y), 8, (1, 0, 0), 2)
+                cv2.circle(val_image, (x, y), 8, (1, 1, 0), 2)
 
 
 
@@ -70,12 +72,12 @@ def main():
 
             #scale the existence to 0-255
 
-            print(hole)
+            #print(hole)
 
-            cv2.circle(val_image, (x, y), 8, (0, float(exist), 0), 2)
+            #cv2.circle(val_image, (x, y), 8, (0, float(exist), 0), 2)
 
             #draw number of the hole
-            cv2.putText(val_image, str(i), (x-8, y+8), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (float(exist), float(exist), float(exist)), 2)
+            #cv2.putText(val_image, str(i), (x-8, y+8), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (float(exist), float(exist), float(exist)), 2)
 
             i+=1
 

@@ -1,0 +1,5503 @@
+{
+    "frames": {
+        "0": {
+            "index": 0,
+            "imagePaths": [
+                "WorkDir/temp1/frame0_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": -0.09529426574707034,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "1": {
+            "index": 1,
+            "imagePaths": [
+                "WorkDir/temp1/frame1_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": -0.09529426574707034,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "2": {
+            "index": 2,
+            "imagePaths": [
+                "WorkDir/temp1/frame2_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": -0.09529426574707034,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "3": {
+            "index": 3,
+            "imagePaths": [
+                "WorkDir/temp1/frame3_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": -0.09529426574707034,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "4": {
+            "index": 4,
+            "imagePaths": [
+                "WorkDir/temp1/frame4_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": -0.09529426574707034,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "5": {
+            "index": 5,
+            "imagePaths": [
+                "WorkDir/temp1/frame5_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": -0.09529426574707034,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "6": {
+            "index": 6,
+            "imagePaths": [
+                "WorkDir/temp1/frame6_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": -0.09529426574707034,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "7": {
+            "index": 7,
+            "imagePaths": [
+                "WorkDir/temp1/frame7_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": -0.09529426574707034,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "8": {
+            "index": 8,
+            "imagePaths": [
+                "WorkDir/temp1/frame8_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": -0.09529426574707034,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "9": {
+            "index": 9,
+            "imagePaths": [
+                "WorkDir/temp1/frame9_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": -0.09529426574707034,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "10": {
+            "index": 10,
+            "imagePaths": [
+                "WorkDir/temp1/frame10_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": -0.09529426574707034,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "11": {
+            "index": 11,
+            "imagePaths": [
+                "WorkDir/temp1/frame11_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": -0.09529426574707034,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "12": {
+            "index": 12,
+            "imagePaths": [
+                "WorkDir/temp1/frame12_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": -0.09529426574707034,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "13": {
+            "index": 13,
+            "imagePaths": [
+                "WorkDir/temp1/frame13_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": -0.09529426574707034,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "14": {
+            "index": 14,
+            "imagePaths": [
+                "WorkDir/temp1/frame14_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": -0.989715576171875,
+                "extend": -0.0,
+                "currentBend": -0.09529426574707034,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "15": {
+            "index": 15,
+            "imagePaths": [
+                "WorkDir/temp1/frame15_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": -1.0,
+                "extend": -0.0,
+                "currentBend": -0.10271713256835935,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "16": {
+            "index": 16,
+            "imagePaths": [
+                "WorkDir/temp1/frame16_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": -1.0,
+                "extend": -0.0,
+                "currentBend": -0.11021713256835941,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "17": {
+            "index": 17,
+            "imagePaths": [
+                "WorkDir/temp1/frame17_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": -1.0,
+                "extend": -0.0,
+                "currentBend": -0.11771713256835936,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "18": {
+            "index": 18,
+            "imagePaths": [
+                "WorkDir/temp1/frame18_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": -1.0,
+                "extend": -0.0,
+                "currentBend": -0.12521713256835942,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "19": {
+            "index": 19,
+            "imagePaths": [
+                "WorkDir/temp1/frame19_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": -1.0,
+                "extend": -0.0,
+                "currentBend": -0.13271713256835938,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "20": {
+            "index": 20,
+            "imagePaths": [
+                "WorkDir/temp1/frame20_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": -1.0,
+                "extend": -0.0,
+                "currentBend": -0.14021713256835933,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "21": {
+            "index": 21,
+            "imagePaths": [
+                "WorkDir/temp1/frame21_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": -1.0,
+                "extend": -0.0,
+                "currentBend": -0.1477171325683594,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "22": {
+            "index": 22,
+            "imagePaths": [
+                "WorkDir/temp1/frame22_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": -1.0,
+                "extend": -0.0,
+                "currentBend": -0.15521713256835934,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "23": {
+            "index": 23,
+            "imagePaths": [
+                "WorkDir/temp1/frame23_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": -1.0,
+                "extend": -0.0,
+                "currentBend": -0.1627171325683594,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "24": {
+            "index": 24,
+            "imagePaths": [
+                "WorkDir/temp1/frame24_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": -0.17021713256835935,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "25": {
+            "index": 25,
+            "imagePaths": [
+                "WorkDir/temp1/frame25_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": -0.17021713256835935,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "26": {
+            "index": 26,
+            "imagePaths": [
+                "WorkDir/temp1/frame26_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": -0.17021713256835935,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "27": {
+            "index": 27,
+            "imagePaths": [
+                "WorkDir/temp1/frame27_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": -0.17021713256835935,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "28": {
+            "index": 28,
+            "imagePaths": [
+                "WorkDir/temp1/frame28_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": -0.17021713256835935,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "29": {
+            "index": 29,
+            "imagePaths": [
+                "WorkDir/temp1/frame29_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": -0.17021713256835935,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "30": {
+            "index": 30,
+            "imagePaths": [
+                "WorkDir/temp1/frame30_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": -0.17021713256835935,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "31": {
+            "index": 31,
+            "imagePaths": [
+                "WorkDir/temp1/frame31_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": -0.17021713256835935,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "32": {
+            "index": 32,
+            "imagePaths": [
+                "WorkDir/temp1/frame32_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": -0.17021713256835935,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "33": {
+            "index": 33,
+            "imagePaths": [
+                "WorkDir/temp1/frame33_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": -0.17021713256835935,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "34": {
+            "index": 34,
+            "imagePaths": [
+                "WorkDir/temp1/frame34_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": -0.17021713256835935,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "35": {
+            "index": 35,
+            "imagePaths": [
+                "WorkDir/temp1/frame35_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": -0.17021713256835935,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "36": {
+            "index": 36,
+            "imagePaths": [
+                "WorkDir/temp1/frame36_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": -0.17021713256835935,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "37": {
+            "index": 37,
+            "imagePaths": [
+                "WorkDir/temp1/frame37_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": -0.17021713256835935,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "38": {
+            "index": 38,
+            "imagePaths": [
+                "WorkDir/temp1/frame38_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": -0.17021713256835935,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "39": {
+            "index": 39,
+            "imagePaths": [
+                "WorkDir/temp1/frame39_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": -0.17021713256835935,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "40": {
+            "index": 40,
+            "imagePaths": [
+                "WorkDir/temp1/frame40_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": -0.17021713256835935,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "41": {
+            "index": 41,
+            "imagePaths": [
+                "WorkDir/temp1/frame41_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": -0.17021713256835935,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "42": {
+            "index": 42,
+            "imagePaths": [
+                "WorkDir/temp1/frame42_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": -0.659820556640625,
+                "extend": 1.0,
+                "currentBend": -0.17021713256835935,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "43": {
+            "index": 43,
+            "imagePaths": [
+                "WorkDir/temp1/frame43_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": -1.0,
+                "extend": 1.0,
+                "currentBend": -0.17516578674316408,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "44": {
+            "index": 44,
+            "imagePaths": [
+                "WorkDir/temp1/frame44_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": -1.0,
+                "extend": 1.0,
+                "currentBend": -0.18266578674316403,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "45": {
+            "index": 45,
+            "imagePaths": [
+                "WorkDir/temp1/frame45_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": -1.0,
+                "extend": 1.0,
+                "currentBend": -0.1901657867431641,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "46": {
+            "index": 46,
+            "imagePaths": [
+                "WorkDir/temp1/frame46_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": -1.0,
+                "extend": 1.0,
+                "currentBend": -0.19766578674316404,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "47": {
+            "index": 47,
+            "imagePaths": [
+                "WorkDir/temp1/frame47_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": -0.2051657867431641,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "48": {
+            "index": 48,
+            "imagePaths": [
+                "WorkDir/temp1/frame48_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": -0.2051657867431641,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "49": {
+            "index": 49,
+            "imagePaths": [
+                "WorkDir/temp1/frame49_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": -0.2051657867431641,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "50": {
+            "index": 50,
+            "imagePaths": [
+                "WorkDir/temp1/frame50_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": -0.2051657867431641,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "51": {
+            "index": 51,
+            "imagePaths": [
+                "WorkDir/temp1/frame51_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": -0.2051657867431641,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "52": {
+            "index": 52,
+            "imagePaths": [
+                "WorkDir/temp1/frame52_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": -0.2051657867431641,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "53": {
+            "index": 53,
+            "imagePaths": [
+                "WorkDir/temp1/frame53_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": -0.2051657867431641,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "54": {
+            "index": 54,
+            "imagePaths": [
+                "WorkDir/temp1/frame54_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": -0.2051657867431641,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "55": {
+            "index": 55,
+            "imagePaths": [
+                "WorkDir/temp1/frame55_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": -0.2051657867431641,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "56": {
+            "index": 56,
+            "imagePaths": [
+                "WorkDir/temp1/frame56_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": -0.2051657867431641,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "57": {
+            "index": 57,
+            "imagePaths": [
+                "WorkDir/temp1/frame57_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": -0.2051657867431641,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "58": {
+            "index": 58,
+            "imagePaths": [
+                "WorkDir/temp1/frame58_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": -0.2051657867431641,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "59": {
+            "index": 59,
+            "imagePaths": [
+                "WorkDir/temp1/frame59_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": -0.2051657867431641,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "60": {
+            "index": 60,
+            "imagePaths": [
+                "WorkDir/temp1/frame60_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": -0.19766601562499997,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "61": {
+            "index": 61,
+            "imagePaths": [
+                "WorkDir/temp1/frame61_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": -0.19016624450683595,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "62": {
+            "index": 62,
+            "imagePaths": [
+                "WorkDir/temp1/frame62_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": -0.18266647338867192,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "63": {
+            "index": 63,
+            "imagePaths": [
+                "WorkDir/temp1/frame63_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": -0.1751667022705078,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "64": {
+            "index": 64,
+            "imagePaths": [
+                "WorkDir/temp1/frame64_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": -0.16766693115234377,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "65": {
+            "index": 65,
+            "imagePaths": [
+                "WorkDir/temp1/frame65_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": -0.16016716003417963,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "66": {
+            "index": 66,
+            "imagePaths": [
+                "WorkDir/temp1/frame66_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": -0.1526673889160156,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "67": {
+            "index": 67,
+            "imagePaths": [
+                "WorkDir/temp1/frame67_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": -0.1451676177978516,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "68": {
+            "index": 68,
+            "imagePaths": [
+                "WorkDir/temp1/frame68_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": -0.13766784667968746,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "69": {
+            "index": 69,
+            "imagePaths": [
+                "WorkDir/temp1/frame69_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": -0.13016807556152343,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "70": {
+            "index": 70,
+            "imagePaths": [
+                "WorkDir/temp1/frame70_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": -0.12266830444335941,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "71": {
+            "index": 71,
+            "imagePaths": [
+                "WorkDir/temp1/frame71_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": -0.11516853332519528,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "72": {
+            "index": 72,
+            "imagePaths": [
+                "WorkDir/temp1/frame72_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": -0.10766876220703125,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "73": {
+            "index": 73,
+            "imagePaths": [
+                "WorkDir/temp1/frame73_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": -0.10016899108886723,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "74": {
+            "index": 74,
+            "imagePaths": [
+                "WorkDir/temp1/frame74_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": -0.0926692199707031,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "75": {
+            "index": 75,
+            "imagePaths": [
+                "WorkDir/temp1/frame75_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": -0.08516944885253908,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "76": {
+            "index": 76,
+            "imagePaths": [
+                "WorkDir/temp1/frame76_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": -0.07766967773437505,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "77": {
+            "index": 77,
+            "imagePaths": [
+                "WorkDir/temp1/frame77_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": -0.07016990661621092,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "78": {
+            "index": 78,
+            "imagePaths": [
+                "WorkDir/temp1/frame78_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": -0.0626701354980469,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "79": {
+            "index": 79,
+            "imagePaths": [
+                "WorkDir/temp1/frame79_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": -0.055170364379882764,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "80": {
+            "index": 80,
+            "imagePaths": [
+                "WorkDir/temp1/frame80_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": -0.04767059326171874,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "81": {
+            "index": 81,
+            "imagePaths": [
+                "WorkDir/temp1/frame81_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": -0.04017082214355472,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "82": {
+            "index": 82,
+            "imagePaths": [
+                "WorkDir/temp1/frame82_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": -0.032671051025390585,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "83": {
+            "index": 83,
+            "imagePaths": [
+                "WorkDir/temp1/frame83_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": -0.025171279907226562,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "84": {
+            "index": 84,
+            "imagePaths": [
+                "WorkDir/temp1/frame84_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": -0.01767150878906254,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "85": {
+            "index": 85,
+            "imagePaths": [
+                "WorkDir/temp1/frame85_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": -0.010171737670898406,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "86": {
+            "index": 86,
+            "imagePaths": [
+                "WorkDir/temp1/frame86_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": -0.002671966552734384,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "87": {
+            "index": 87,
+            "imagePaths": [
+                "WorkDir/temp1/frame87_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.00482780456542975,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "88": {
+            "index": 88,
+            "imagePaths": [
+                "WorkDir/temp1/frame88_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.012327575683593661,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "89": {
+            "index": 89,
+            "imagePaths": [
+                "WorkDir/temp1/frame89_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.019827346801757795,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "90": {
+            "index": 90,
+            "imagePaths": [
+                "WorkDir/temp1/frame90_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.02732711791992193,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "91": {
+            "index": 91,
+            "imagePaths": [
+                "WorkDir/temp1/frame91_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.03482688903808584,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "92": {
+            "index": 92,
+            "imagePaths": [
+                "WorkDir/temp1/frame92_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.04232666015624997,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "93": {
+            "index": 93,
+            "imagePaths": [
+                "WorkDir/temp1/frame93_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.04982643127441411,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "94": {
+            "index": 94,
+            "imagePaths": [
+                "WorkDir/temp1/frame94_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 0.989715576171875,
+                "currentBend": 0.05732620239257802,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "95": {
+            "index": 95,
+            "imagePaths": [
+                "WorkDir/temp1/frame95_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.06482597351074215,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "96": {
+            "index": 96,
+            "imagePaths": [
+                "WorkDir/temp1/frame96_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.07232574462890629,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "97": {
+            "index": 97,
+            "imagePaths": [
+                "WorkDir/temp1/frame97_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.07982551574707042,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "98": {
+            "index": 98,
+            "imagePaths": [
+                "WorkDir/temp1/frame98_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.08732528686523433,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "99": {
+            "index": 99,
+            "imagePaths": [
+                "WorkDir/temp1/frame99_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.09482505798339846,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "100": {
+            "index": 100,
+            "imagePaths": [
+                "WorkDir/temp1/frame100_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.1023248291015626,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "101": {
+            "index": 101,
+            "imagePaths": [
+                "WorkDir/temp1/frame101_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.10982460021972651,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "102": {
+            "index": 102,
+            "imagePaths": [
+                "WorkDir/temp1/frame102_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.11732437133789064,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "103": {
+            "index": 103,
+            "imagePaths": [
+                "WorkDir/temp1/frame103_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "104": {
+            "index": 104,
+            "imagePaths": [
+                "WorkDir/temp1/frame104_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "105": {
+            "index": 105,
+            "imagePaths": [
+                "WorkDir/temp1/frame105_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "106": {
+            "index": 106,
+            "imagePaths": [
+                "WorkDir/temp1/frame106_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "107": {
+            "index": 107,
+            "imagePaths": [
+                "WorkDir/temp1/frame107_0.png"
+            ],
+            "data": {
+                "rotation": -1.0,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.0033333333333334103
+            }
+        },
+        "108": {
+            "index": 108,
+            "imagePaths": [
+                "WorkDir/temp1/frame108_0.png"
+            ],
+            "data": {
+                "rotation": -1.0,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": -0.007777777777777772
+            }
+        },
+        "109": {
+            "index": 109,
+            "imagePaths": [
+                "WorkDir/temp1/frame109_0.png"
+            ],
+            "data": {
+                "rotation": -1.0,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": -0.01777777777777778
+            }
+        },
+        "110": {
+            "index": 110,
+            "imagePaths": [
+                "WorkDir/temp1/frame110_0.png"
+            ],
+            "data": {
+                "rotation": -1.0,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": -0.030000000000000027
+            }
+        },
+        "111": {
+            "index": 111,
+            "imagePaths": [
+                "WorkDir/temp1/frame111_0.png"
+            ],
+            "data": {
+                "rotation": -1.0,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": -0.0411111111111111
+            }
+        },
+        "112": {
+            "index": 112,
+            "imagePaths": [
+                "WorkDir/temp1/frame112_0.png"
+            ],
+            "data": {
+                "rotation": -1.0,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": -0.05222222222222217
+            }
+        },
+        "113": {
+            "index": 113,
+            "imagePaths": [
+                "WorkDir/temp1/frame113_0.png"
+            ],
+            "data": {
+                "rotation": -1.0,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": -0.06333333333333335
+            }
+        },
+        "114": {
+            "index": 114,
+            "imagePaths": [
+                "WorkDir/temp1/frame114_0.png"
+            ],
+            "data": {
+                "rotation": -1.0,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": -0.07333333333333336
+            }
+        },
+        "115": {
+            "index": 115,
+            "imagePaths": [
+                "WorkDir/temp1/frame115_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": -0.0855555555555556
+            }
+        },
+        "116": {
+            "index": 116,
+            "imagePaths": [
+                "WorkDir/temp1/frame116_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": -0.07333333333333336
+            }
+        },
+        "117": {
+            "index": 117,
+            "imagePaths": [
+                "WorkDir/temp1/frame117_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": -0.06333333333333335
+            }
+        },
+        "118": {
+            "index": 118,
+            "imagePaths": [
+                "WorkDir/temp1/frame118_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": -0.05222222222222217
+            }
+        },
+        "119": {
+            "index": 119,
+            "imagePaths": [
+                "WorkDir/temp1/frame119_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": -0.0411111111111111
+            }
+        },
+        "120": {
+            "index": 120,
+            "imagePaths": [
+                "WorkDir/temp1/frame120_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": -0.028888888888888853
+            }
+        },
+        "121": {
+            "index": 121,
+            "imagePaths": [
+                "WorkDir/temp1/frame121_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": -0.018888888888888844
+            }
+        },
+        "122": {
+            "index": 122,
+            "imagePaths": [
+                "WorkDir/temp1/frame122_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": -0.007777777777777772
+            }
+        },
+        "123": {
+            "index": 123,
+            "imagePaths": [
+                "WorkDir/temp1/frame123_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.004444444444444473
+            }
+        },
+        "124": {
+            "index": 124,
+            "imagePaths": [
+                "WorkDir/temp1/frame124_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.014444444444444482
+            }
+        },
+        "125": {
+            "index": 125,
+            "imagePaths": [
+                "WorkDir/temp1/frame125_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.026666666666666616
+            }
+        },
+        "126": {
+            "index": 126,
+            "imagePaths": [
+                "WorkDir/temp1/frame126_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.036666666666666625
+            }
+        },
+        "127": {
+            "index": 127,
+            "imagePaths": [
+                "WorkDir/temp1/frame127_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.0477777777777777
+            }
+        },
+        "128": {
+            "index": 128,
+            "imagePaths": [
+                "WorkDir/temp1/frame128_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.06000000000000005
+            }
+        },
+        "129": {
+            "index": 129,
+            "imagePaths": [
+                "WorkDir/temp1/frame129_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.07111111111111112
+            }
+        },
+        "130": {
+            "index": 130,
+            "imagePaths": [
+                "WorkDir/temp1/frame130_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.0822222222222222
+            }
+        },
+        "131": {
+            "index": 131,
+            "imagePaths": [
+                "WorkDir/temp1/frame131_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.09333333333333327
+            }
+        },
+        "132": {
+            "index": 132,
+            "imagePaths": [
+                "WorkDir/temp1/frame132_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.10333333333333328
+            }
+        },
+        "133": {
+            "index": 133,
+            "imagePaths": [
+                "WorkDir/temp1/frame133_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.11444444444444435
+            }
+        },
+        "134": {
+            "index": 134,
+            "imagePaths": [
+                "WorkDir/temp1/frame134_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.12555555555555564
+            }
+        },
+        "135": {
+            "index": 135,
+            "imagePaths": [
+                "WorkDir/temp1/frame135_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.13777777777777778
+            }
+        },
+        "136": {
+            "index": 136,
+            "imagePaths": [
+                "WorkDir/temp1/frame136_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.14777777777777779
+            }
+        },
+        "137": {
+            "index": 137,
+            "imagePaths": [
+                "WorkDir/temp1/frame137_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.15999999999999992
+            }
+        },
+        "138": {
+            "index": 138,
+            "imagePaths": [
+                "WorkDir/temp1/frame138_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.1711111111111112
+            }
+        },
+        "139": {
+            "index": 139,
+            "imagePaths": [
+                "WorkDir/temp1/frame139_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.18222222222222229
+            }
+        },
+        "140": {
+            "index": 140,
+            "imagePaths": [
+                "WorkDir/temp1/frame140_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.1922222222222223
+            }
+        },
+        "141": {
+            "index": 141,
+            "imagePaths": [
+                "WorkDir/temp1/frame141_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.20333333333333337
+            }
+        },
+        "142": {
+            "index": 142,
+            "imagePaths": [
+                "WorkDir/temp1/frame142_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.21444444444444444
+            }
+        },
+        "143": {
+            "index": 143,
+            "imagePaths": [
+                "WorkDir/temp1/frame143_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.22666666666666657
+            }
+        },
+        "144": {
+            "index": 144,
+            "imagePaths": [
+                "WorkDir/temp1/frame144_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.23777777777777787
+            }
+        },
+        "145": {
+            "index": 145,
+            "imagePaths": [
+                "WorkDir/temp1/frame145_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.24777777777777787
+            }
+        },
+        "146": {
+            "index": 146,
+            "imagePaths": [
+                "WorkDir/temp1/frame146_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.25888888888888895
+            }
+        },
+        "147": {
+            "index": 147,
+            "imagePaths": [
+                "WorkDir/temp1/frame147_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.2711111111111111
+            }
+        },
+        "148": {
+            "index": 148,
+            "imagePaths": [
+                "WorkDir/temp1/frame148_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.2811111111111111
+            }
+        },
+        "149": {
+            "index": 149,
+            "imagePaths": [
+                "WorkDir/temp1/frame149_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.29222222222222216
+            }
+        },
+        "150": {
+            "index": 150,
+            "imagePaths": [
+                "WorkDir/temp1/frame150_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.30333333333333323
+            }
+        },
+        "151": {
+            "index": 151,
+            "imagePaths": [
+                "WorkDir/temp1/frame151_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.3144444444444445
+            }
+        },
+        "152": {
+            "index": 152,
+            "imagePaths": [
+                "WorkDir/temp1/frame152_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.32666666666666666
+            }
+        },
+        "153": {
+            "index": 153,
+            "imagePaths": [
+                "WorkDir/temp1/frame153_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.33777777777777773
+            }
+        },
+        "154": {
+            "index": 154,
+            "imagePaths": [
+                "WorkDir/temp1/frame154_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.34777777777777774
+            }
+        },
+        "155": {
+            "index": 155,
+            "imagePaths": [
+                "WorkDir/temp1/frame155_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.3588888888888888
+            }
+        },
+        "156": {
+            "index": 156,
+            "imagePaths": [
+                "WorkDir/temp1/frame156_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.3700000000000001
+            }
+        },
+        "157": {
+            "index": 157,
+            "imagePaths": [
+                "WorkDir/temp1/frame157_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.38222222222222224
+            }
+        },
+        "158": {
+            "index": 158,
+            "imagePaths": [
+                "WorkDir/temp1/frame158_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.39222222222222225
+            }
+        },
+        "159": {
+            "index": 159,
+            "imagePaths": [
+                "WorkDir/temp1/frame159_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.4044444444444444
+            }
+        },
+        "160": {
+            "index": 160,
+            "imagePaths": [
+                "WorkDir/temp1/frame160_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.4144444444444444
+            }
+        },
+        "161": {
+            "index": 161,
+            "imagePaths": [
+                "WorkDir/temp1/frame161_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.42555555555555546
+            }
+        },
+        "162": {
+            "index": 162,
+            "imagePaths": [
+                "WorkDir/temp1/frame162_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.4377777777777778
+            }
+        },
+        "163": {
+            "index": 163,
+            "imagePaths": [
+                "WorkDir/temp1/frame163_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.4488888888888889
+            }
+        },
+        "164": {
+            "index": 164,
+            "imagePaths": [
+                "WorkDir/temp1/frame164_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.4588888888888889
+            }
+        },
+        "165": {
+            "index": 165,
+            "imagePaths": [
+                "WorkDir/temp1/frame165_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.47
+            }
+        },
+        "166": {
+            "index": 166,
+            "imagePaths": [
+                "WorkDir/temp1/frame166_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.48111111111111104
+            }
+        },
+        "167": {
+            "index": 167,
+            "imagePaths": [
+                "WorkDir/temp1/frame167_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.4933333333333334
+            }
+        },
+        "168": {
+            "index": 168,
+            "imagePaths": [
+                "WorkDir/temp1/frame168_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.5044444444444445
+            }
+        },
+        "169": {
+            "index": 169,
+            "imagePaths": [
+                "WorkDir/temp1/frame169_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.5155555555555555
+            }
+        },
+        "170": {
+            "index": 170,
+            "imagePaths": [
+                "WorkDir/temp1/frame170_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.5266666666666666
+            }
+        },
+        "171": {
+            "index": 171,
+            "imagePaths": [
+                "WorkDir/temp1/frame171_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.5366666666666666
+            }
+        },
+        "172": {
+            "index": 172,
+            "imagePaths": [
+                "WorkDir/temp1/frame172_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.12482414245605478,
+                "currentRot": 0.5477777777777777
+            }
+        },
+        "173": {
+            "index": 173,
+            "imagePaths": [
+                "WorkDir/temp1/frame173_0.png"
+            ],
+            "data": {
+                "rotation": 0.257720947265625,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.1323239135742187,
+                "currentRot": 0.56
+            }
+        },
+        "174": {
+            "index": 174,
+            "imagePaths": [
+                "WorkDir/temp1/frame174_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.13982368469238282,
+                "currentRot": 0.5633333333333332
+            }
+        },
+        "175": {
+            "index": 175,
+            "imagePaths": [
+                "WorkDir/temp1/frame175_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.14732345581054695,
+                "currentRot": 0.5633333333333332
+            }
+        },
+        "176": {
+            "index": 176,
+            "imagePaths": [
+                "WorkDir/temp1/frame176_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.15482322692871087,
+                "currentRot": 0.5622222222222222
+            }
+        },
+        "177": {
+            "index": 177,
+            "imagePaths": [
+                "WorkDir/temp1/frame177_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.162322998046875,
+                "currentRot": 0.5622222222222222
+            }
+        },
+        "178": {
+            "index": 178,
+            "imagePaths": [
+                "WorkDir/temp1/frame178_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.16982276916503913,
+                "currentRot": 0.5622222222222222
+            }
+        },
+        "179": {
+            "index": 179,
+            "imagePaths": [
+                "WorkDir/temp1/frame179_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.17732254028320305,
+                "currentRot": 0.5622222222222222
+            }
+        },
+        "180": {
+            "index": 180,
+            "imagePaths": [
+                "WorkDir/temp1/frame180_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.18482231140136718,
+                "currentRot": 0.5622222222222222
+            }
+        },
+        "181": {
+            "index": 181,
+            "imagePaths": [
+                "WorkDir/temp1/frame181_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.1923220825195313,
+                "currentRot": 0.5622222222222222
+            }
+        },
+        "182": {
+            "index": 182,
+            "imagePaths": [
+                "WorkDir/temp1/frame182_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.19982185363769522,
+                "currentRot": 0.5622222222222222
+            }
+        },
+        "183": {
+            "index": 183,
+            "imagePaths": [
+                "WorkDir/temp1/frame183_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.20732162475585936,
+                "currentRot": 0.5622222222222222
+            }
+        },
+        "184": {
+            "index": 184,
+            "imagePaths": [
+                "WorkDir/temp1/frame184_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.2148213958740235,
+                "currentRot": 0.5622222222222222
+            }
+        },
+        "185": {
+            "index": 185,
+            "imagePaths": [
+                "WorkDir/temp1/frame185_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.2223211669921874,
+                "currentRot": 0.5622222222222222
+            }
+        },
+        "186": {
+            "index": 186,
+            "imagePaths": [
+                "WorkDir/temp1/frame186_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.22982093811035154,
+                "currentRot": 0.5633333333333332
+            }
+        },
+        "187": {
+            "index": 187,
+            "imagePaths": [
+                "WorkDir/temp1/frame187_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.22982093811035154,
+                "currentRot": 0.5633333333333332
+            }
+        },
+        "188": {
+            "index": 188,
+            "imagePaths": [
+                "WorkDir/temp1/frame188_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.22982093811035154,
+                "currentRot": 0.5622222222222222
+            }
+        },
+        "189": {
+            "index": 189,
+            "imagePaths": [
+                "WorkDir/temp1/frame189_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.22982093811035154,
+                "currentRot": 0.5622222222222222
+            }
+        },
+        "190": {
+            "index": 190,
+            "imagePaths": [
+                "WorkDir/temp1/frame190_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.22982093811035154,
+                "currentRot": 0.5633333333333332
+            }
+        },
+        "191": {
+            "index": 191,
+            "imagePaths": [
+                "WorkDir/temp1/frame191_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.22982093811035154,
+                "currentRot": 0.5633333333333332
+            }
+        },
+        "192": {
+            "index": 192,
+            "imagePaths": [
+                "WorkDir/temp1/frame192_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.22982093811035154,
+                "currentRot": 0.5633333333333332
+            }
+        },
+        "193": {
+            "index": 193,
+            "imagePaths": [
+                "WorkDir/temp1/frame193_0.png"
+            ],
+            "data": {
+                "rotation": 0.7525634765625,
+                "bend": -1.0,
+                "extend": 0.82476806640625,
+                "currentBend": 0.22982093811035154,
+                "currentRot": 0.5633333333333332
+            }
+        },
+        "194": {
+            "index": 194,
+            "imagePaths": [
+                "WorkDir/temp1/frame194_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": -1.0,
+                "extend": -0.0,
+                "currentBend": 0.22232093811035147,
+                "currentRot": 0.5700000000000001
+            }
+        },
+        "195": {
+            "index": 195,
+            "imagePaths": [
+                "WorkDir/temp1/frame195_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": -1.0,
+                "extend": -0.0,
+                "currentBend": 0.21482093811035163,
+                "currentRot": 0.5711111111111111
+            }
+        },
+        "196": {
+            "index": 196,
+            "imagePaths": [
+                "WorkDir/temp1/frame196_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": -1.0,
+                "extend": -0.0,
+                "currentBend": 0.20732093811035157,
+                "currentRot": 0.5700000000000001
+            }
+        },
+        "197": {
+            "index": 197,
+            "imagePaths": [
+                "WorkDir/temp1/frame197_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": -1.0,
+                "extend": -0.0,
+                "currentBend": 0.1998209381103515,
+                "currentRot": 0.5700000000000001
+            }
+        },
+        "198": {
+            "index": 198,
+            "imagePaths": [
+                "WorkDir/temp1/frame198_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": -1.0,
+                "extend": -0.0,
+                "currentBend": 0.19232093811035167,
+                "currentRot": 0.5700000000000001
+            }
+        },
+        "199": {
+            "index": 199,
+            "imagePaths": [
+                "WorkDir/temp1/frame199_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": -1.0,
+                "extend": -0.0,
+                "currentBend": 0.1848209381103516,
+                "currentRot": 0.5711111111111111
+            }
+        },
+        "200": {
+            "index": 200,
+            "imagePaths": [
+                "WorkDir/temp1/frame200_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": -1.0,
+                "extend": -0.0,
+                "currentBend": 0.17732093811035154,
+                "currentRot": 0.5711111111111111
+            }
+        },
+        "201": {
+            "index": 201,
+            "imagePaths": [
+                "WorkDir/temp1/frame201_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": -1.0,
+                "extend": -0.0,
+                "currentBend": 0.16982093811035148,
+                "currentRot": 0.5700000000000001
+            }
+        },
+        "202": {
+            "index": 202,
+            "imagePaths": [
+                "WorkDir/temp1/frame202_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": -1.0,
+                "extend": -0.0,
+                "currentBend": 0.16232093811035164,
+                "currentRot": 0.5700000000000001
+            }
+        },
+        "203": {
+            "index": 203,
+            "imagePaths": [
+                "WorkDir/temp1/frame203_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": -1.0,
+                "extend": -0.0,
+                "currentBend": 0.15482093811035158,
+                "currentRot": 0.5700000000000001
+            }
+        },
+        "204": {
+            "index": 204,
+            "imagePaths": [
+                "WorkDir/temp1/frame204_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": -1.0,
+                "extend": -0.0,
+                "currentBend": 0.14732093811035152,
+                "currentRot": 0.5711111111111111
+            }
+        },
+        "205": {
+            "index": 205,
+            "imagePaths": [
+                "WorkDir/temp1/frame205_0.png"
+            ],
+            "data": {
+                "rotation": -1.0,
+                "bend": -1.0,
+                "extend": -0.0,
+                "currentBend": 0.13982093811035146,
+                "currentRot": 0.5711111111111111
+            }
+        },
+        "206": {
+            "index": 206,
+            "imagePaths": [
+                "WorkDir/temp1/frame206_0.png"
+            ],
+            "data": {
+                "rotation": -1.0,
+                "bend": -0.9072265625,
+                "extend": -0.0,
+                "currentBend": 0.13232093811035162,
+                "currentRot": 0.56
+            }
+        },
+        "207": {
+            "index": 207,
+            "imagePaths": [
+                "WorkDir/temp1/frame207_0.png"
+            ],
+            "data": {
+                "rotation": -1.0,
+                "bend": -0.82476806640625,
+                "extend": -0.0,
+                "currentBend": 0.12551673889160164,
+                "currentRot": 0.548888888888889
+            }
+        },
+        "208": {
+            "index": 208,
+            "imagePaths": [
+                "WorkDir/temp1/frame208_0.png"
+            ],
+            "data": {
+                "rotation": -1.0,
+                "bend": -0.742279052734375,
+                "extend": -0.0,
+                "currentBend": 0.11933097839355478,
+                "currentRot": 0.5377777777777777
+            }
+        },
+        "209": {
+            "index": 209,
+            "imagePaths": [
+                "WorkDir/temp1/frame209_0.png"
+            ],
+            "data": {
+                "rotation": -1.0,
+                "bend": -0.742279052734375,
+                "extend": -0.0,
+                "currentBend": 0.11376388549804695,
+                "currentRot": 0.5266666666666666
+            }
+        },
+        "210": {
+            "index": 210,
+            "imagePaths": [
+                "WorkDir/temp1/frame210_0.png"
+            ],
+            "data": {
+                "rotation": -1.0,
+                "bend": -0.742279052734375,
+                "extend": -0.0,
+                "currentBend": 0.10819679260253912,
+                "currentRot": 0.5144444444444445
+            }
+        },
+        "211": {
+            "index": 211,
+            "imagePaths": [
+                "WorkDir/temp1/frame211_0.png"
+            ],
+            "data": {
+                "rotation": -1.0,
+                "bend": -0.659820556640625,
+                "extend": -0.0,
+                "currentBend": 0.10262969970703129,
+                "currentRot": 0.5044444444444445
+            }
+        },
+        "212": {
+            "index": 212,
+            "imagePaths": [
+                "WorkDir/temp1/frame212_0.png"
+            ],
+            "data": {
+                "rotation": -1.0,
+                "bend": -0.659820556640625,
+                "extend": -0.0,
+                "currentBend": 0.09768104553222656,
+                "currentRot": 0.4933333333333334
+            }
+        },
+        "213": {
+            "index": 213,
+            "imagePaths": [
+                "WorkDir/temp1/frame213_0.png"
+            ],
+            "data": {
+                "rotation": -1.0,
+                "bend": -0.659820556640625,
+                "extend": -0.0,
+                "currentBend": 0.09273239135742184,
+                "currentRot": 0.48111111111111104
+            }
+        },
+        "214": {
+            "index": 214,
+            "imagePaths": [
+                "WorkDir/temp1/frame214_0.png"
+            ],
+            "data": {
+                "rotation": -1.0,
+                "bend": -0.659820556640625,
+                "extend": -0.0,
+                "currentBend": 0.08778373718261712,
+                "currentRot": 0.47111111111111104
+            }
+        },
+        "215": {
+            "index": 215,
+            "imagePaths": [
+                "WorkDir/temp1/frame215_0.png"
+            ],
+            "data": {
+                "rotation": -1.0,
+                "bend": -0.659820556640625,
+                "extend": -0.0,
+                "currentBend": 0.0828350830078124,
+                "currentRot": 0.45999999999999996
+            }
+        },
+        "216": {
+            "index": 216,
+            "imagePaths": [
+                "WorkDir/temp1/frame216_0.png"
+            ],
+            "data": {
+                "rotation": -1.0,
+                "bend": -0.659820556640625,
+                "extend": -0.0,
+                "currentBend": 0.07788642883300789,
+                "currentRot": 0.44777777777777783
+            }
+        },
+        "217": {
+            "index": 217,
+            "imagePaths": [
+                "WorkDir/temp1/frame217_0.png"
+            ],
+            "data": {
+                "rotation": -1.0,
+                "bend": -0.659820556640625,
+                "extend": -0.0,
+                "currentBend": 0.07293777465820317,
+                "currentRot": 0.4377777777777778
+            }
+        },
+        "218": {
+            "index": 218,
+            "imagePaths": [
+                "WorkDir/temp1/frame218_0.png"
+            ],
+            "data": {
+                "rotation": -1.0,
+                "bend": -0.659820556640625,
+                "extend": -0.0,
+                "currentBend": 0.06798912048339845,
+                "currentRot": 0.42666666666666675
+            }
+        },
+        "219": {
+            "index": 219,
+            "imagePaths": [
+                "WorkDir/temp1/frame219_0.png"
+            ],
+            "data": {
+                "rotation": -1.0,
+                "bend": -0.659820556640625,
+                "extend": -0.0,
+                "currentBend": 0.06304046630859372,
+                "currentRot": 0.4144444444444444
+            }
+        },
+        "220": {
+            "index": 220,
+            "imagePaths": [
+                "WorkDir/temp1/frame220_0.png"
+            ],
+            "data": {
+                "rotation": -1.0,
+                "bend": -0.659820556640625,
+                "extend": -0.0,
+                "currentBend": 0.058091812133789,
+                "currentRot": 0.4033333333333333
+            }
+        },
+        "221": {
+            "index": 221,
+            "imagePaths": [
+                "WorkDir/temp1/frame221_0.png"
+            ],
+            "data": {
+                "rotation": -1.0,
+                "bend": -0.659820556640625,
+                "extend": -0.0,
+                "currentBend": 0.05314315795898428,
+                "currentRot": 0.3933333333333333
+            }
+        },
+        "222": {
+            "index": 222,
+            "imagePaths": [
+                "WorkDir/temp1/frame222_0.png"
+            ],
+            "data": {
+                "rotation": -1.0,
+                "bend": -0.57733154296875,
+                "extend": 0.329925537109375,
+                "currentBend": 0.048194503784179776,
+                "currentRot": 0.3811111111111112
+            }
+        },
+        "223": {
+            "index": 223,
+            "imagePaths": [
+                "WorkDir/temp1/frame223_0.png"
+            ],
+            "data": {
+                "rotation": -1.0,
+                "bend": -0.57733154296875,
+                "extend": 1.0,
+                "currentBend": 0.04386451721191409,
+                "currentRot": 0.37111111111111117
+            }
+        },
+        "224": {
+            "index": 224,
+            "imagePaths": [
+                "WorkDir/temp1/frame224_0.png"
+            ],
+            "data": {
+                "rotation": -1.0,
+                "bend": -0.57733154296875,
+                "extend": 1.0,
+                "currentBend": 0.0395345306396484,
+                "currentRot": 0.3600000000000001
+            }
+        },
+        "225": {
+            "index": 225,
+            "imagePaths": [
+                "WorkDir/temp1/frame225_0.png"
+            ],
+            "data": {
+                "rotation": -1.0,
+                "bend": -0.57733154296875,
+                "extend": 1.0,
+                "currentBend": 0.035204544067382715,
+                "currentRot": 0.3488888888888888
+            }
+        },
+        "226": {
+            "index": 226,
+            "imagePaths": [
+                "WorkDir/temp1/frame226_0.png"
+            ],
+            "data": {
+                "rotation": -1.0,
+                "bend": -0.57733154296875,
+                "extend": 1.0,
+                "currentBend": 0.03087455749511725,
+                "currentRot": 0.33777777777777773
+            }
+        },
+        "227": {
+            "index": 227,
+            "imagePaths": [
+                "WorkDir/temp1/frame227_0.png"
+            ],
+            "data": {
+                "rotation": -1.0,
+                "bend": -0.57733154296875,
+                "extend": 1.0,
+                "currentBend": 0.026544570922851562,
+                "currentRot": 0.32666666666666666
+            }
+        },
+        "228": {
+            "index": 228,
+            "imagePaths": [
+                "WorkDir/temp1/frame228_0.png"
+            ],
+            "data": {
+                "rotation": -1.0,
+                "bend": -0.57733154296875,
+                "extend": 1.0,
+                "currentBend": 0.022214584350585875,
+                "currentRot": 0.3155555555555556
+            }
+        },
+        "229": {
+            "index": 229,
+            "imagePaths": [
+                "WorkDir/temp1/frame229_0.png"
+            ],
+            "data": {
+                "rotation": -1.0,
+                "bend": -0.57733154296875,
+                "extend": 1.0,
+                "currentBend": 0.01788459777832041,
+                "currentRot": 0.3044444444444445
+            }
+        },
+        "230": {
+            "index": 230,
+            "imagePaths": [
+                "WorkDir/temp1/frame230_0.png"
+            ],
+            "data": {
+                "rotation": -1.0,
+                "bend": -0.57733154296875,
+                "extend": 1.0,
+                "currentBend": 0.013554611206054723,
+                "currentRot": 0.29222222222222216
+            }
+        },
+        "231": {
+            "index": 231,
+            "imagePaths": [
+                "WorkDir/temp1/frame231_0.png"
+            ],
+            "data": {
+                "rotation": -1.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.009224624633789036,
+                "currentRot": 0.2811111111111111
+            }
+        },
+        "232": {
+            "index": 232,
+            "imagePaths": [
+                "WorkDir/temp1/frame232_0.png"
+            ],
+            "data": {
+                "rotation": -1.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.009224624633789036,
+                "currentRot": 0.2711111111111111
+            }
+        },
+        "233": {
+            "index": 233,
+            "imagePaths": [
+                "WorkDir/temp1/frame233_0.png"
+            ],
+            "data": {
+                "rotation": -0.989715576171875,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.01672439575195317,
+                "currentRot": 0.26
+            }
+        },
+        "234": {
+            "index": 234,
+            "imagePaths": [
+                "WorkDir/temp1/frame234_0.png"
+            ],
+            "data": {
+                "rotation": -0.9072265625,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.02422416687011708,
+                "currentRot": 0.24888888888888894
+            }
+        },
+        "235": {
+            "index": 235,
+            "imagePaths": [
+                "WorkDir/temp1/frame235_0.png"
+            ],
+            "data": {
+                "rotation": -0.82476806640625,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.031723937988281214,
+                "currentRot": 0.23777777777777787
+            }
+        },
+        "236": {
+            "index": 236,
+            "imagePaths": [
+                "WorkDir/temp1/frame236_0.png"
+            ],
+            "data": {
+                "rotation": -0.82476806640625,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.03922370910644535,
+                "currentRot": 0.22888888888888892
+            }
+        },
+        "237": {
+            "index": 237,
+            "imagePaths": [
+                "WorkDir/temp1/frame237_0.png"
+            ],
+            "data": {
+                "rotation": -0.659820556640625,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.04672348022460948,
+                "currentRot": 0.21999999999999997
+            }
+        },
+        "238": {
+            "index": 238,
+            "imagePaths": [
+                "WorkDir/temp1/frame238_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.05422325134277339,
+                "currentRot": 0.21333333333333337
+            }
+        },
+        "239": {
+            "index": 239,
+            "imagePaths": [
+                "WorkDir/temp1/frame239_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.05422325134277339,
+                "currentRot": 0.2122222222222223
+            }
+        },
+        "240": {
+            "index": 240,
+            "imagePaths": [
+                "WorkDir/temp1/frame240_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.05422325134277339,
+                "currentRot": 0.21333333333333337
+            }
+        },
+        "241": {
+            "index": 241,
+            "imagePaths": [
+                "WorkDir/temp1/frame241_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.05422325134277339,
+                "currentRot": 0.21333333333333337
+            }
+        },
+        "242": {
+            "index": 242,
+            "imagePaths": [
+                "WorkDir/temp1/frame242_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.05422325134277339,
+                "currentRot": 0.2122222222222223
+            }
+        },
+        "243": {
+            "index": 243,
+            "imagePaths": [
+                "WorkDir/temp1/frame243_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.05422325134277339,
+                "currentRot": 0.21333333333333337
+            }
+        },
+        "244": {
+            "index": 244,
+            "imagePaths": [
+                "WorkDir/temp1/frame244_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.05422325134277339,
+                "currentRot": 0.21333333333333337
+            }
+        },
+        "245": {
+            "index": 245,
+            "imagePaths": [
+                "WorkDir/temp1/frame245_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.05422325134277339,
+                "currentRot": 0.2122222222222223
+            }
+        },
+        "246": {
+            "index": 246,
+            "imagePaths": [
+                "WorkDir/temp1/frame246_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.05422325134277339,
+                "currentRot": 0.21333333333333337
+            }
+        },
+        "247": {
+            "index": 247,
+            "imagePaths": [
+                "WorkDir/temp1/frame247_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.05422325134277339,
+                "currentRot": 0.2122222222222223
+            }
+        },
+        "248": {
+            "index": 248,
+            "imagePaths": [
+                "WorkDir/temp1/frame248_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.05422325134277339,
+                "currentRot": 0.2122222222222223
+            }
+        },
+        "249": {
+            "index": 249,
+            "imagePaths": [
+                "WorkDir/temp1/frame249_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.05422325134277339,
+                "currentRot": 0.2122222222222223
+            }
+        },
+        "250": {
+            "index": 250,
+            "imagePaths": [
+                "WorkDir/temp1/frame250_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.05422325134277339,
+                "currentRot": 0.21333333333333337
+            }
+        },
+        "251": {
+            "index": 251,
+            "imagePaths": [
+                "WorkDir/temp1/frame251_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.05422325134277339,
+                "currentRot": 0.21333333333333337
+            }
+        },
+        "252": {
+            "index": 252,
+            "imagePaths": [
+                "WorkDir/temp1/frame252_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.05422325134277339,
+                "currentRot": 0.2122222222222223
+            }
+        },
+        "253": {
+            "index": 253,
+            "imagePaths": [
+                "WorkDir/temp1/frame253_0.png"
+            ],
+            "data": {
+                "rotation": 0.340179443359375,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.05422325134277339,
+                "currentRot": 0.2122222222222223
+            }
+        },
+        "254": {
+            "index": 254,
+            "imagePaths": [
+                "WorkDir/temp1/frame254_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.05422325134277339,
+                "currentRot": 0.21666666666666656
+            }
+        },
+        "255": {
+            "index": 255,
+            "imagePaths": [
+                "WorkDir/temp1/frame255_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.05422325134277339,
+                "currentRot": 0.22888888888888892
+            }
+        },
+        "256": {
+            "index": 256,
+            "imagePaths": [
+                "WorkDir/temp1/frame256_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.05422325134277339,
+                "currentRot": 0.23888888888888893
+            }
+        },
+        "257": {
+            "index": 257,
+            "imagePaths": [
+                "WorkDir/temp1/frame257_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.05422325134277339,
+                "currentRot": 0.25111111111111106
+            }
+        },
+        "258": {
+            "index": 258,
+            "imagePaths": [
+                "WorkDir/temp1/frame258_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.05422325134277339,
+                "currentRot": 0.26111111111111107
+            }
+        },
+        "259": {
+            "index": 259,
+            "imagePaths": [
+                "WorkDir/temp1/frame259_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.05422325134277339,
+                "currentRot": 0.27333333333333343
+            }
+        },
+        "260": {
+            "index": 260,
+            "imagePaths": [
+                "WorkDir/temp1/frame260_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.05422325134277339,
+                "currentRot": 0.2844444444444445
+            }
+        },
+        "261": {
+            "index": 261,
+            "imagePaths": [
+                "WorkDir/temp1/frame261_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.05422325134277339,
+                "currentRot": 0.2944444444444445
+            }
+        },
+        "262": {
+            "index": 262,
+            "imagePaths": [
+                "WorkDir/temp1/frame262_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.05422325134277339,
+                "currentRot": 0.3055555555555556
+            }
+        },
+        "263": {
+            "index": 263,
+            "imagePaths": [
+                "WorkDir/temp1/frame263_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.05422325134277339,
+                "currentRot": 0.3177777777777777
+            }
+        },
+        "264": {
+            "index": 264,
+            "imagePaths": [
+                "WorkDir/temp1/frame264_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.05422325134277339,
+                "currentRot": 0.3277777777777777
+            }
+        },
+        "265": {
+            "index": 265,
+            "imagePaths": [
+                "WorkDir/temp1/frame265_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.05422325134277339,
+                "currentRot": 0.3388888888888888
+            }
+        },
+        "266": {
+            "index": 266,
+            "imagePaths": [
+                "WorkDir/temp1/frame266_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.83502197265625,
+                "extend": 1.0,
+                "currentBend": 0.05422325134277339,
+                "currentRot": 0.3466666666666667
+            }
+        },
+        "267": {
+            "index": 267,
+            "imagePaths": [
+                "WorkDir/temp1/frame267_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.060485916137695384,
+                "currentRot": 0.35777777777777775
+            }
+        },
+        "268": {
+            "index": 268,
+            "imagePaths": [
+                "WorkDir/temp1/frame268_0.png"
+            ],
+            "data": {
+                "rotation": 0.505126953125,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.0679856872558593,
+                "currentRot": 0.37222222222222223
+            }
+        },
+        "269": {
+            "index": 269,
+            "imagePaths": [
+                "WorkDir/temp1/frame269_0.png"
+            ],
+            "data": {
+                "rotation": 0.0927734375,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.07548545837402343,
+                "currentRot": 0.37888888888888883
+            }
+        },
+        "270": {
+            "index": 270,
+            "imagePaths": [
+                "WorkDir/temp1/frame270_0.png"
+            ],
+            "data": {
+                "rotation": 0.0927734375,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.08298522949218756,
+                "currentRot": 0.37888888888888883
+            }
+        },
+        "271": {
+            "index": 271,
+            "imagePaths": [
+                "WorkDir/temp1/frame271_0.png"
+            ],
+            "data": {
+                "rotation": 0.0927734375,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.09048500061035147,
+                "currentRot": 0.3811111111111112
+            }
+        },
+        "272": {
+            "index": 272,
+            "imagePaths": [
+                "WorkDir/temp1/frame272_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.09798477172851561,
+                "currentRot": 0.3811111111111112
+            }
+        },
+        "273": {
+            "index": 273,
+            "imagePaths": [
+                "WorkDir/temp1/frame273_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.10548454284667974,
+                "currentRot": 0.3799999999999999
+            }
+        },
+        "274": {
+            "index": 274,
+            "imagePaths": [
+                "WorkDir/temp1/frame274_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.11298431396484365,
+                "currentRot": 0.3799999999999999
+            }
+        },
+        "275": {
+            "index": 275,
+            "imagePaths": [
+                "WorkDir/temp1/frame275_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.12048408508300779,
+                "currentRot": 0.3811111111111112
+            }
+        },
+        "276": {
+            "index": 276,
+            "imagePaths": [
+                "WorkDir/temp1/frame276_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 0.9072265625,
+                "currentBend": 0.12798385620117192,
+                "currentRot": 0.3799999999999999
+            }
+        },
+        "277": {
+            "index": 277,
+            "imagePaths": [
+                "WorkDir/temp1/frame277_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.13548362731933583,
+                "currentRot": 0.3799999999999999
+            }
+        },
+        "278": {
+            "index": 278,
+            "imagePaths": [
+                "WorkDir/temp1/frame278_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.14298339843749996,
+                "currentRot": 0.3811111111111112
+            }
+        },
+        "279": {
+            "index": 279,
+            "imagePaths": [
+                "WorkDir/temp1/frame279_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.1504831695556641,
+                "currentRot": 0.3811111111111112
+            }
+        },
+        "280": {
+            "index": 280,
+            "imagePaths": [
+                "WorkDir/temp1/frame280_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.15798294067382823,
+                "currentRot": 0.3799999999999999
+            }
+        },
+        "281": {
+            "index": 281,
+            "imagePaths": [
+                "WorkDir/temp1/frame281_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.16548271179199214,
+                "currentRot": 0.3811111111111112
+            }
+        },
+        "282": {
+            "index": 282,
+            "imagePaths": [
+                "WorkDir/temp1/frame282_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.17298248291015628,
+                "currentRot": 0.3799999999999999
+            }
+        },
+        "283": {
+            "index": 283,
+            "imagePaths": [
+                "WorkDir/temp1/frame283_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.1804822540283204,
+                "currentRot": 0.3811111111111112
+            }
+        },
+        "284": {
+            "index": 284,
+            "imagePaths": [
+                "WorkDir/temp1/frame284_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.18798202514648432,
+                "currentRot": 0.3799999999999999
+            }
+        },
+        "285": {
+            "index": 285,
+            "imagePaths": [
+                "WorkDir/temp1/frame285_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.19548179626464846,
+                "currentRot": 0.3799999999999999
+            }
+        },
+        "286": {
+            "index": 286,
+            "imagePaths": [
+                "WorkDir/temp1/frame286_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.2029815673828126,
+                "currentRot": 0.3799999999999999
+            }
+        },
+        "287": {
+            "index": 287,
+            "imagePaths": [
+                "WorkDir/temp1/frame287_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.2104813385009765,
+                "currentRot": 0.3799999999999999
+            }
+        },
+        "288": {
+            "index": 288,
+            "imagePaths": [
+                "WorkDir/temp1/frame288_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.21798110961914063,
+                "currentRot": 0.3811111111111112
+            }
+        },
+        "289": {
+            "index": 289,
+            "imagePaths": [
+                "WorkDir/temp1/frame289_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.22548088073730477,
+                "currentRot": 0.3799999999999999
+            }
+        },
+        "290": {
+            "index": 290,
+            "imagePaths": [
+                "WorkDir/temp1/frame290_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.23298065185546868,
+                "currentRot": 0.3811111111111112
+            }
+        },
+        "291": {
+            "index": 291,
+            "imagePaths": [
+                "WorkDir/temp1/frame291_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 0.82476806640625,
+                "currentBend": 0.2404804229736328,
+                "currentRot": 0.3811111111111112
+            }
+        },
+        "292": {
+            "index": 292,
+            "imagePaths": [
+                "WorkDir/temp1/frame292_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.24798019409179695,
+                "currentRot": 0.3811111111111112
+            }
+        },
+        "293": {
+            "index": 293,
+            "imagePaths": [
+                "WorkDir/temp1/frame293_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.25547996520996086,
+                "currentRot": 0.3811111111111112
+            }
+        },
+        "294": {
+            "index": 294,
+            "imagePaths": [
+                "WorkDir/temp1/frame294_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.262979736328125,
+                "currentRot": 0.3799999999999999
+            }
+        },
+        "295": {
+            "index": 295,
+            "imagePaths": [
+                "WorkDir/temp1/frame295_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 0.329925537109375,
+                "currentBend": 0.2704795074462891,
+                "currentRot": 0.3799999999999999
+            }
+        },
+        "296": {
+            "index": 296,
+            "imagePaths": [
+                "WorkDir/temp1/frame296_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.27797927856445304,
+                "currentRot": 0.3799999999999999
+            }
+        },
+        "297": {
+            "index": 297,
+            "imagePaths": [
+                "WorkDir/temp1/frame297_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.670074462890625,
+                "extend": -0.0,
+                "currentBend": 0.28547904968261717,
+                "currentRot": 0.39222222222222225
+            }
+        },
+        "298": {
+            "index": 298,
+            "imagePaths": [
+                "WorkDir/temp1/frame298_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.340179443359375,
+                "extend": -0.0,
+                "currentBend": 0.2905046081542968,
+                "currentRot": 0.4033333333333333
+            }
+        },
+        "299": {
+            "index": 299,
+            "imagePaths": [
+                "WorkDir/temp1/frame299_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.29305595397949213,
+                "currentRot": 0.4144444444444444
+            }
+        },
+        "300": {
+            "index": 300,
+            "imagePaths": [
+                "WorkDir/temp1/frame300_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.29305595397949213,
+                "currentRot": 0.42555555555555546
+            }
+        },
+        "301": {
+            "index": 301,
+            "imagePaths": [
+                "WorkDir/temp1/frame301_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.29305595397949213,
+                "currentRot": 0.43666666666666676
+            }
+        },
+        "302": {
+            "index": 302,
+            "imagePaths": [
+                "WorkDir/temp1/frame302_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.29305595397949213,
+                "currentRot": 0.44666666666666677
+            }
+        },
+        "303": {
+            "index": 303,
+            "imagePaths": [
+                "WorkDir/temp1/frame303_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.29305595397949213,
+                "currentRot": 0.45777777777777784
+            }
+        },
+        "304": {
+            "index": 304,
+            "imagePaths": [
+                "WorkDir/temp1/frame304_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.29305595397949213,
+                "currentRot": 0.47
+            }
+        },
+        "305": {
+            "index": 305,
+            "imagePaths": [
+                "WorkDir/temp1/frame305_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.29305595397949213,
+                "currentRot": 0.48
+            }
+        },
+        "306": {
+            "index": 306,
+            "imagePaths": [
+                "WorkDir/temp1/frame306_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.29305595397949213,
+                "currentRot": 0.49111111111111105
+            }
+        },
+        "307": {
+            "index": 307,
+            "imagePaths": [
+                "WorkDir/temp1/frame307_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.29305595397949213,
+                "currentRot": 0.5033333333333334
+            }
+        },
+        "308": {
+            "index": 308,
+            "imagePaths": [
+                "WorkDir/temp1/frame308_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.29305595397949213,
+                "currentRot": 0.5144444444444445
+            }
+        },
+        "309": {
+            "index": 309,
+            "imagePaths": [
+                "WorkDir/temp1/frame309_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.29305595397949213,
+                "currentRot": 0.5255555555555556
+            }
+        },
+        "310": {
+            "index": 310,
+            "imagePaths": [
+                "WorkDir/temp1/frame310_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.29305595397949213,
+                "currentRot": 0.5366666666666666
+            }
+        },
+        "311": {
+            "index": 311,
+            "imagePaths": [
+                "WorkDir/temp1/frame311_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.29305595397949213,
+                "currentRot": 0.5466666666666666
+            }
+        },
+        "312": {
+            "index": 312,
+            "imagePaths": [
+                "WorkDir/temp1/frame312_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.29305595397949213,
+                "currentRot": 0.558888888888889
+            }
+        },
+        "313": {
+            "index": 313,
+            "imagePaths": [
+                "WorkDir/temp1/frame313_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.29305595397949213,
+                "currentRot": 0.5700000000000001
+            }
+        },
+        "314": {
+            "index": 314,
+            "imagePaths": [
+                "WorkDir/temp1/frame314_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.29305595397949213,
+                "currentRot": 0.5811111111111111
+            }
+        },
+        "315": {
+            "index": 315,
+            "imagePaths": [
+                "WorkDir/temp1/frame315_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.29305595397949213,
+                "currentRot": 0.5922222222222222
+            }
+        },
+        "316": {
+            "index": 316,
+            "imagePaths": [
+                "WorkDir/temp1/frame316_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": 0.57733154296875,
+                "currentBend": 0.29305595397949213,
+                "currentRot": 0.6033333333333333
+            }
+        },
+        "317": {
+            "index": 317,
+            "imagePaths": [
+                "WorkDir/temp1/frame317_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.29305595397949213,
+                "currentRot": 0.6133333333333333
+            }
+        },
+        "318": {
+            "index": 318,
+            "imagePaths": [
+                "WorkDir/temp1/frame318_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.29305595397949213,
+                "currentRot": 0.6255555555555556
+            }
+        },
+        "319": {
+            "index": 319,
+            "imagePaths": [
+                "WorkDir/temp1/frame319_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.29305595397949213,
+                "currentRot": 0.6366666666666667
+            }
+        },
+        "320": {
+            "index": 320,
+            "imagePaths": [
+                "WorkDir/temp1/frame320_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.29305595397949213,
+                "currentRot": 0.6477777777777778
+            }
+        },
+        "321": {
+            "index": 321,
+            "imagePaths": [
+                "WorkDir/temp1/frame321_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.29305595397949213,
+                "currentRot": 0.6588888888888889
+            }
+        },
+        "322": {
+            "index": 322,
+            "imagePaths": [
+                "WorkDir/temp1/frame322_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.29305595397949213,
+                "currentRot": 0.6699999999999999
+            }
+        },
+        "323": {
+            "index": 323,
+            "imagePaths": [
+                "WorkDir/temp1/frame323_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.29305595397949213,
+                "currentRot": 0.681111111111111
+            }
+        },
+        "324": {
+            "index": 324,
+            "imagePaths": [
+                "WorkDir/temp1/frame324_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.29305595397949213,
+                "currentRot": 0.691111111111111
+            }
+        },
+        "325": {
+            "index": 325,
+            "imagePaths": [
+                "WorkDir/temp1/frame325_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.29305595397949213,
+                "currentRot": 0.7022222222222223
+            }
+        },
+        "326": {
+            "index": 326,
+            "imagePaths": [
+                "WorkDir/temp1/frame326_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": 1.0,
+                "currentBend": 0.29305595397949213,
+                "currentRot": 0.7144444444444444
+            }
+        },
+        "327": {
+            "index": 327,
+            "imagePaths": [
+                "WorkDir/temp1/frame327_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.29305595397949213,
+                "currentRot": 0.7255555555555555
+            }
+        },
+        "328": {
+            "index": 328,
+            "imagePaths": [
+                "WorkDir/temp1/frame328_0.png"
+            ],
+            "data": {
+                "rotation": 0.999969482421875,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.29305595397949213,
+                "currentRot": 0.7355555555555555
+            }
+        },
+        "329": {
+            "index": 329,
+            "imagePaths": [
+                "WorkDir/temp1/frame329_0.png"
+            ],
+            "data": {
+                "rotation": 0.917510986328125,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.29305595397949213,
+                "currentRot": 0.7466666666666666
+            }
+        },
+        "330": {
+            "index": 330,
+            "imagePaths": [
+                "WorkDir/temp1/frame330_0.png"
+            ],
+            "data": {
+                "rotation": 0.0927734375,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.30055572509765627,
+                "currentRot": 0.7577777777777779
+            }
+        },
+        "331": {
+            "index": 331,
+            "imagePaths": [
+                "WorkDir/temp1/frame331_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.3080554962158204,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "332": {
+            "index": 332,
+            "imagePaths": [
+                "WorkDir/temp1/frame332_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.3155552673339843,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "333": {
+            "index": 333,
+            "imagePaths": [
+                "WorkDir/temp1/frame333_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.32305503845214845,
+                "currentRot": 0.76
+            }
+        },
+        "334": {
+            "index": 334,
+            "imagePaths": [
+                "WorkDir/temp1/frame334_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.3305548095703126,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "335": {
+            "index": 335,
+            "imagePaths": [
+                "WorkDir/temp1/frame335_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.3380545806884765,
+                "currentRot": 0.76
+            }
+        },
+        "336": {
+            "index": 336,
+            "imagePaths": [
+                "WorkDir/temp1/frame336_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.3455543518066406,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "337": {
+            "index": 337,
+            "imagePaths": [
+                "WorkDir/temp1/frame337_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.35305412292480476,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "338": {
+            "index": 338,
+            "imagePaths": [
+                "WorkDir/temp1/frame338_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.36055389404296867,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "339": {
+            "index": 339,
+            "imagePaths": [
+                "WorkDir/temp1/frame339_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.3680536651611328,
+                "currentRot": 0.76
+            }
+        },
+        "340": {
+            "index": 340,
+            "imagePaths": [
+                "WorkDir/temp1/frame340_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.37555343627929694,
+                "currentRot": 0.76
+            }
+        },
+        "341": {
+            "index": 341,
+            "imagePaths": [
+                "WorkDir/temp1/frame341_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.38305320739746085,
+                "currentRot": 0.76
+            }
+        },
+        "342": {
+            "index": 342,
+            "imagePaths": [
+                "WorkDir/temp1/frame342_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.390552978515625,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "343": {
+            "index": 343,
+            "imagePaths": [
+                "WorkDir/temp1/frame343_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.3980527496337891,
+                "currentRot": 0.76
+            }
+        },
+        "344": {
+            "index": 344,
+            "imagePaths": [
+                "WorkDir/temp1/frame344_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.405552520751953,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "345": {
+            "index": 345,
+            "imagePaths": [
+                "WorkDir/temp1/frame345_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.41305229187011716,
+                "currentRot": 0.76
+            }
+        },
+        "346": {
+            "index": 346,
+            "imagePaths": [
+                "WorkDir/temp1/frame346_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.4205520629882813,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "347": {
+            "index": 347,
+            "imagePaths": [
+                "WorkDir/temp1/frame347_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.4280518341064452,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "348": {
+            "index": 348,
+            "imagePaths": [
+                "WorkDir/temp1/frame348_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.43555160522460934,
+                "currentRot": 0.76
+            }
+        },
+        "349": {
+            "index": 349,
+            "imagePaths": [
+                "WorkDir/temp1/frame349_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.4430513763427735,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "350": {
+            "index": 350,
+            "imagePaths": [
+                "WorkDir/temp1/frame350_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.4505511474609376,
+                "currentRot": 0.76
+            }
+        },
+        "351": {
+            "index": 351,
+            "imagePaths": [
+                "WorkDir/temp1/frame351_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.4580509185791015,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "352": {
+            "index": 352,
+            "imagePaths": [
+                "WorkDir/temp1/frame352_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.46555068969726565,
+                "currentRot": 0.76
+            }
+        },
+        "353": {
+            "index": 353,
+            "imagePaths": [
+                "WorkDir/temp1/frame353_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.4730504608154298,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "354": {
+            "index": 354,
+            "imagePaths": [
+                "WorkDir/temp1/frame354_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.4805502319335937,
+                "currentRot": 0.76
+            }
+        },
+        "355": {
+            "index": 355,
+            "imagePaths": [
+                "WorkDir/temp1/frame355_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.48805000305175783,
+                "currentRot": 0.76
+            }
+        },
+        "356": {
+            "index": 356,
+            "imagePaths": [
+                "WorkDir/temp1/frame356_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.49554977416992196,
+                "currentRot": 0.76
+            }
+        },
+        "357": {
+            "index": 357,
+            "imagePaths": [
+                "WorkDir/temp1/frame357_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.5030495452880859,
+                "currentRot": 0.76
+            }
+        },
+        "358": {
+            "index": 358,
+            "imagePaths": [
+                "WorkDir/temp1/frame358_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.51054931640625,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "359": {
+            "index": 359,
+            "imagePaths": [
+                "WorkDir/temp1/frame359_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.5180490875244141,
+                "currentRot": 0.76
+            }
+        },
+        "360": {
+            "index": 360,
+            "imagePaths": [
+                "WorkDir/temp1/frame360_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.525548858642578,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "361": {
+            "index": 361,
+            "imagePaths": [
+                "WorkDir/temp1/frame361_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.5330486297607422,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "362": {
+            "index": 362,
+            "imagePaths": [
+                "WorkDir/temp1/frame362_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.5405484008789063,
+                "currentRot": 0.76
+            }
+        },
+        "363": {
+            "index": 363,
+            "imagePaths": [
+                "WorkDir/temp1/frame363_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.5480481719970702,
+                "currentRot": 0.76
+            }
+        },
+        "364": {
+            "index": 364,
+            "imagePaths": [
+                "WorkDir/temp1/frame364_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.5555479431152344,
+                "currentRot": 0.76
+            }
+        },
+        "365": {
+            "index": 365,
+            "imagePaths": [
+                "WorkDir/temp1/frame365_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.5630477142333985,
+                "currentRot": 0.76
+            }
+        },
+        "366": {
+            "index": 366,
+            "imagePaths": [
+                "WorkDir/temp1/frame366_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.5705474853515624,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "367": {
+            "index": 367,
+            "imagePaths": [
+                "WorkDir/temp1/frame367_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.5780472564697265,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "368": {
+            "index": 368,
+            "imagePaths": [
+                "WorkDir/temp1/frame368_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.5855470275878907,
+                "currentRot": 0.76
+            }
+        },
+        "369": {
+            "index": 369,
+            "imagePaths": [
+                "WorkDir/temp1/frame369_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.5930467987060546,
+                "currentRot": 0.76
+            }
+        },
+        "370": {
+            "index": 370,
+            "imagePaths": [
+                "WorkDir/temp1/frame370_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.6005465698242187,
+                "currentRot": 0.76
+            }
+        },
+        "371": {
+            "index": 371,
+            "imagePaths": [
+                "WorkDir/temp1/frame371_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.6080463409423829,
+                "currentRot": 0.76
+            }
+        },
+        "372": {
+            "index": 372,
+            "imagePaths": [
+                "WorkDir/temp1/frame372_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 0.82476806640625,
+                "currentBend": 0.6155461120605468,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "373": {
+            "index": 373,
+            "imagePaths": [
+                "WorkDir/temp1/frame373_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.6230458831787109,
+                "currentRot": 0.76
+            }
+        },
+        "374": {
+            "index": 374,
+            "imagePaths": [
+                "WorkDir/temp1/frame374_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.630545654296875,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "375": {
+            "index": 375,
+            "imagePaths": [
+                "WorkDir/temp1/frame375_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.6380454254150392,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "376": {
+            "index": 376,
+            "imagePaths": [
+                "WorkDir/temp1/frame376_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.6455451965332031,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "377": {
+            "index": 377,
+            "imagePaths": [
+                "WorkDir/temp1/frame377_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.6530449676513672,
+                "currentRot": 0.76
+            }
+        },
+        "378": {
+            "index": 378,
+            "imagePaths": [
+                "WorkDir/temp1/frame378_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.6605447387695313,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "379": {
+            "index": 379,
+            "imagePaths": [
+                "WorkDir/temp1/frame379_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.6680445098876953,
+                "currentRot": 0.76
+            }
+        },
+        "380": {
+            "index": 380,
+            "imagePaths": [
+                "WorkDir/temp1/frame380_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.6755442810058594,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "381": {
+            "index": 381,
+            "imagePaths": [
+                "WorkDir/temp1/frame381_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.6830440521240235,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "382": {
+            "index": 382,
+            "imagePaths": [
+                "WorkDir/temp1/frame382_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.6905438232421874,
+                "currentRot": 0.76
+            }
+        },
+        "383": {
+            "index": 383,
+            "imagePaths": [
+                "WorkDir/temp1/frame383_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.6980435943603516,
+                "currentRot": 0.76
+            }
+        },
+        "384": {
+            "index": 384,
+            "imagePaths": [
+                "WorkDir/temp1/frame384_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.7055433654785157,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "385": {
+            "index": 385,
+            "imagePaths": [
+                "WorkDir/temp1/frame385_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.7130431365966796,
+                "currentRot": 0.76
+            }
+        },
+        "386": {
+            "index": 386,
+            "imagePaths": [
+                "WorkDir/temp1/frame386_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.7205429077148438,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "387": {
+            "index": 387,
+            "imagePaths": [
+                "WorkDir/temp1/frame387_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.7280426788330079,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "388": {
+            "index": 388,
+            "imagePaths": [
+                "WorkDir/temp1/frame388_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.7355424499511718,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "389": {
+            "index": 389,
+            "imagePaths": [
+                "WorkDir/temp1/frame389_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.7430422210693359,
+                "currentRot": 0.76
+            }
+        },
+        "390": {
+            "index": 390,
+            "imagePaths": [
+                "WorkDir/temp1/frame390_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.7505419921875001,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "391": {
+            "index": 391,
+            "imagePaths": [
+                "WorkDir/temp1/frame391_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.758041763305664,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "392": {
+            "index": 392,
+            "imagePaths": [
+                "WorkDir/temp1/frame392_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.7655415344238281,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "393": {
+            "index": 393,
+            "imagePaths": [
+                "WorkDir/temp1/frame393_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.7730413055419922,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "394": {
+            "index": 394,
+            "imagePaths": [
+                "WorkDir/temp1/frame394_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.7805410766601562,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "395": {
+            "index": 395,
+            "imagePaths": [
+                "WorkDir/temp1/frame395_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.7880408477783203,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "396": {
+            "index": 396,
+            "imagePaths": [
+                "WorkDir/temp1/frame396_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.7955406188964844,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "397": {
+            "index": 397,
+            "imagePaths": [
+                "WorkDir/temp1/frame397_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.8030403900146483,
+                "currentRot": 0.76
+            }
+        },
+        "398": {
+            "index": 398,
+            "imagePaths": [
+                "WorkDir/temp1/frame398_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": 1.0,
+                "currentBend": 0.8105401611328125,
+                "currentRot": 0.76
+            }
+        },
+        "399": {
+            "index": 399,
+            "imagePaths": [
+                "WorkDir/temp1/frame399_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.8180399322509766,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "400": {
+            "index": 400,
+            "imagePaths": [
+                "WorkDir/temp1/frame400_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.8180399322509766,
+                "currentRot": 0.76
+            }
+        },
+        "401": {
+            "index": 401,
+            "imagePaths": [
+                "WorkDir/temp1/frame401_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.8180399322509766,
+                "currentRot": 0.76
+            }
+        },
+        "402": {
+            "index": 402,
+            "imagePaths": [
+                "WorkDir/temp1/frame402_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.8180399322509766,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "403": {
+            "index": 403,
+            "imagePaths": [
+                "WorkDir/temp1/frame403_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.8180399322509766,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "404": {
+            "index": 404,
+            "imagePaths": [
+                "WorkDir/temp1/frame404_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.8180399322509766,
+                "currentRot": 0.76
+            }
+        },
+        "405": {
+            "index": 405,
+            "imagePaths": [
+                "WorkDir/temp1/frame405_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.8180399322509766,
+                "currentRot": 0.76
+            }
+        },
+        "406": {
+            "index": 406,
+            "imagePaths": [
+                "WorkDir/temp1/frame406_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.8180399322509766,
+                "currentRot": 0.76
+            }
+        },
+        "407": {
+            "index": 407,
+            "imagePaths": [
+                "WorkDir/temp1/frame407_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.8180399322509766,
+                "currentRot": 0.76
+            }
+        },
+        "408": {
+            "index": 408,
+            "imagePaths": [
+                "WorkDir/temp1/frame408_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.8255397033691407,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "409": {
+            "index": 409,
+            "imagePaths": [
+                "WorkDir/temp1/frame409_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.8330394744873046,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "410": {
+            "index": 410,
+            "imagePaths": [
+                "WorkDir/temp1/frame410_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.8405392456054688,
+                "currentRot": 0.76
+            }
+        },
+        "411": {
+            "index": 411,
+            "imagePaths": [
+                "WorkDir/temp1/frame411_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.8480390167236329,
+                "currentRot": 0.76
+            }
+        },
+        "412": {
+            "index": 412,
+            "imagePaths": [
+                "WorkDir/temp1/frame412_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.8555387878417968,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "413": {
+            "index": 413,
+            "imagePaths": [
+                "WorkDir/temp1/frame413_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.863038558959961,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "414": {
+            "index": 414,
+            "imagePaths": [
+                "WorkDir/temp1/frame414_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.8705383300781251,
+                "currentRot": 0.758888888888889
+            }
+        },
+        "415": {
+            "index": 415,
+            "imagePaths": [
+                "WorkDir/temp1/frame415_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.999969482421875,
+                "extend": -0.0,
+                "currentBend": 0.878038101196289,
+                "currentRot": 0.76
+            }
+        },
+        "416": {
+            "index": 416,
+            "imagePaths": [
+                "WorkDir/temp1/frame416_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.8855378723144531,
+                "currentRot": 0.76
+            }
+        },
+        "417": {
+            "index": 417,
+            "imagePaths": [
+                "WorkDir/temp1/frame417_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.8855378723144531,
+                "currentRot": 0.76
+            }
+        },
+        "418": {
+            "index": 418,
+            "imagePaths": [
+                "WorkDir/temp1/frame418_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.8855378723144531,
+                "currentRot": 0.76
+            }
+        },
+        "419": {
+            "index": 419,
+            "imagePaths": [
+                "WorkDir/temp1/frame419_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.8855378723144531,
+                "currentRot": 0.76
+            }
+        },
+        "420": {
+            "index": 420,
+            "imagePaths": [
+                "WorkDir/temp1/frame420_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.8855378723144531,
+                "currentRot": 0.76
+            }
+        },
+        "421": {
+            "index": 421,
+            "imagePaths": [
+                "WorkDir/temp1/frame421_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.8855378723144531,
+                "currentRot": 0.76
+            }
+        },
+        "422": {
+            "index": 422,
+            "imagePaths": [
+                "WorkDir/temp1/frame422_0.png"
+            ],
+            "data": {
+                "rotation": 0.0,
+                "bend": 0.0,
+                "extend": -0.0,
+                "currentBend": 0.8855378723144531,
+                "currentRot": 0.758888888888889
+            }
+        }
+    }
+}

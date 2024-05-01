@@ -304,7 +304,8 @@ class ImageLabeler:
     def main(self):
         self.initialize()
 
-        cv2.namedWindow('frame')
+        #cv2.namedWindow('frame', cv2.WINDOW_NORMAL)
+        cv2.namedWindow("frame", cv2.WINDOW_NORMAL | cv2.WINDOW_GUI_NORMAL)
         cv2.setMouseCallback('frame', self.click_event)
 
         while not self.doExit:
