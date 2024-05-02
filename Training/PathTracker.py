@@ -134,9 +134,9 @@ def main():
 
     #Load validation data
 
-    path="Training/Data/PathData"
+    path="Training/Data/TestData"
     
-    model = tf.keras.models.load_model("pathModel.keras")
+    model = tf.keras.models.load_model("pathModelLabel.keras")
     index = 0
 
     #find input shape of the model
@@ -145,8 +145,11 @@ def main():
 
     input_shape = (input_shape[0], input_shape[1])
     val_images, realImageSize, originalImages = load_images(path, input_shape, saveOriginalImages=True)
-    val_labels = load_labels(path, realImageSize[0], realImageSize[1])
-
+    
+    
+        
+    #val_labels = load_labels(path, realImageSize[0], realImageSize[1])
+    
 
     video_recorder = VideoRecorder("PathTracker", folder="Output", frame_size=(realImageSize[0], realImageSize[1]))
 

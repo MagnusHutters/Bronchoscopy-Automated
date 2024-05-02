@@ -99,6 +99,7 @@ def load_labels(dataPath, image_width, image_height):
     labels = []
 
     for episode in episodes:
+        print(f"Loading episode labels for: {episode}")
         epsisode_path = os.path.join(dataPath, episode)
         json_path = os.path.join(epsisode_path, "labels.json")
         
@@ -182,6 +183,7 @@ def load_images(dataPath, imageSize, saveOriginalImages=False):
 
     originalImages = []
     for episode in episodes:
+        print(f"Loading episode images for: {episode}")
         image_folder = os.path.join(dataPath, episode)
 
         imageNames = os.listdir(image_folder)
@@ -209,7 +211,7 @@ def load_images(dataPath, imageSize, saveOriginalImages=False):
                 originalImages.append(originalImage)
             image = cv2.resize(image, imageSize)
 
-            image = img_to_array(image) / 255.0  # Normalize to [0, 1]
+            image = img_to_array(image) / 256.0  # Normalize to [0, 1]
             images.append(image)
             
     if saveOriginalImages:
@@ -224,6 +226,13 @@ def augment_data(images, labels):
     augmented_labels = []
     
     for image, label in zip(images, labels):
+        
+        #print progress on same line with zero padding
+        print(f"\rAugmenting data: {len(augmented_images):<5}/{len(images):<5}", end="")
+        
+        
+        
+        
         # Original image and labels
         augmented_images.append(image)
         augmented_labels.append(label)
@@ -247,11 +256,15 @@ def augment_data(images, labels):
         
     return np.array(augmented_images), np.array(augmented_labels)
 
+
 def train_model(model, images, labels, epochs=10):
 
     #augment the data
-
-    model.fit(images, labels, epochs=epochs)
+    #without validation data
+    #model.fit(images, labels, epochs=epochs)
+    
+    #with validation data
+    model.fit(images, labels, epochs=epochs, validation_split=0.2)
 
     return model
 
@@ -283,22 +296,40 @@ def main():
     
     images, realImageSize = load_images(path, IMAGE_SIZE)
     
+    
     labels = load_labels(path, realImageSize[0], realImageSize[1])
 
-
-    images, labels = augment_data(images, labels)
-
+    print(f"Succesfully loaded {len(images)} images and {len(labels)} labels")
+    
     #shuffle the images and labels
+    print("Shuffling images and labels")
     indices = np.random.permutation(len(images))
     images = images[indices]
     labels = labels[indices]
+    
+    print(f"Discarding... {len(images) - 2000} images")
+    #only use 2000 
+    images=images[:2000]
+    labels=labels[:2000]
+
+
+
+    print(f"Images shape: {images.shape}, Labels shape: {labels.shape}")
+
+    print("Augmenting data")
+    images, labels = augment_data(images, labels)
+    print(f"Augmented images shape: {images.shape}, Augmented labels shape: {labels.shape}")
+    
+
+    #shuffle the images and labels
+    
 
     #split the data into training and validation data
-    split = int(0.8 * len(images))
-    train_images = images[:split]
-    train_labels = labels[:split]
-    val_images = images[split:]
-    val_labels = labels[split:]
+    #split = int(0.8 * len(images))
+    #train_images = images[:split]
+    #train_labels = labels[:split]
+    #val_images = images[split:]
+    #val_labels = labels[split:]
 
     
 
@@ -311,12 +342,12 @@ def main():
     
     tf.get_logger().setLevel('DEBUG')
 
-    model = train_model(model, train_images, train_labels)
+    model = train_model(model, images, labels, epochs=10)
 
     #save the model
-    tf.saved_model.save(model, "path_model")
+    tf.saved_model.save(model, "path_model_label")
     
-    model.save("pathModel.keras")
+    model.save("pathModelLabel.keras")
     
     
     
