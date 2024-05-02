@@ -21,7 +21,7 @@ def main():
 
     path="Training/Data/PathData"
     
-    model = tf.keras.models.load_model("pathModel.keras")
+    model = tf.keras.models.load_model("pathModelLabel.keras")
     index = 0
 
     #find input shape of the model
@@ -56,7 +56,7 @@ def main():
 
             exist = hole[2]
             if exist > 0.5:
-                cv2.circle(val_image, (x, y), 8, (1, 1, 0), 2)
+                cv2.circle(val_image, (x, y), 8, (1, 0, 0), 2)
 
 
 
@@ -74,10 +74,10 @@ def main():
 
             #print(hole)
 
-            #cv2.circle(val_image, (x, y), 8, (0, float(exist), 0), 2)
+            cv2.circle(val_image, (x, y), 8, (0, float(exist), 0), 2)
 
             #draw number of the hole
-            #cv2.putText(val_image, str(i), (x-8, y+8), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (float(exist), float(exist), float(exist)), 2)
+            cv2.putText(val_image, str(i), (x-8, y+8), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,0, float(exist)), 2)
 
             i+=1
 
