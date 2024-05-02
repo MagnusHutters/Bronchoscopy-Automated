@@ -4,11 +4,11 @@ import pygame
 import pygame.camera
 from pygame.locals import *
 
-import tensorflow as tf
+#import tensorflow as tf
 
 import time
 from Controller import*
-
+from TFLiteModel import TFLiteModel
 from GUI import *
 
 
@@ -20,9 +20,15 @@ class ModelController(Controller):
         self.pathInterface= PathTrackerInterface("Training/model.keras")
         self.input_shape = self.pathInterface.getInputShape()
         
-        #load tf model
-        bronchoModelPath="BronchoModel.keras"
-        self.bronchoModel= tf.keras.models.load_model(bronchoModelPath)
+        #load tf-lite model
+
+
+        # Load the TFLite model and allocate tensors
+        self.model = TFLiteModel("")
+        
+        
+        
+        
         
         
         

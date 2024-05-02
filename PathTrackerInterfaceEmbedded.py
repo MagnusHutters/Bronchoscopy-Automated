@@ -7,61 +7,22 @@
 
 
 import cv2
-from scipy.optimize import linear_sum_assignment
+#from scipy.optimize import linear_sum_assignment
 import numpy as np
-from tensorflow.keras.models import Model, load_model
-from tensorflow.keras.layers import Input, Conv2D, MaxPooling2D, Flatten, Dense, Reshape
-from tensorflow.keras.preprocessing.image import img_to_array
-import tensorflow as tf
+#from tensorflow.keras.models import Model, load_model
+#from tensorflow.keras.layers import Input, Conv2D, MaxPooling2D, Flatten, Dense, Reshape
+#from tensorflow.keras.preprocessing.image import img_to_array
+#import tensorflow as tf
 import os
 
-import tflite_runtime.interpreter as tflite
+from TFLiteModel import TFLiteModel
 
 
 
 
-
-from Training.BasicPaths import *
-from Training.VideoRecorder import VideoRecorder
-from Training.SETTINGS import *
 from Training.PathTracker import PathTracker
 
 
-
-
-
-
-def main():
-    pathInterface= PathTrackerInterface("pathModel.keras")
-    input_shape = pathInterface.getInputShape()
-
-    #val_images, realImageSize, originalImages = load_images("Training/Data/PathData", input_shape, saveOriginalImages=True)
-    val_images, realImageSize, originalImages = load_images_single_episode("Training/Data/PathData/24-04-30-04-55-37_0", input_shape, saveOriginalImages=True)
-    
-    pathInterface.realImageSize = realImageSize
-
-    index = 0
-    while(True):
-
-        val_image = val_images[index]
-
-        displayImage = originalImages[index].copy()    
-        newIndex, doExit, objects = pathInterface.predictAndTrack(val_image,displayImage)
-
-        #Update index
-        index = index+newIndex
-        index = index % len(val_images) # make sure index is within bounds
-
-        #print(f"Index: {index}")
-
-        #Exit if doExit is True
-        if doExit:
-            break
-
-
-
-        
-        
 
                 
 class PathTrackerInterface:
@@ -75,14 +36,9 @@ class PathTrackerInterface:
         self.modelPath = modelPath
         #self.dataPath = dataPath
         
-        
+        self.model = TFLiteModel(modelPath)
         # Load the TFLite model and allocate tensors
-        self.interpreter = tflite.Interpreter(model_path=modelPath)
-        self.interpreter.allocate_tensors()
-
-        # Get input and output details
-        self.input_details = self.interpreter.get_input_details()
-        self.output_details = self.interpreter.get_output_details()
+        
         
         
         #self.model = tf.keras.models.load_model(self.modelPath)
@@ -97,9 +53,7 @@ class PathTrackerInterface:
 
         self.pathTracker = PathTracker()
 
-    def getInputShape(self):
-        input_shape = self.model.input_shape[1:]
-        return (input_shape[0], input_shape[1])
+    
     
 
     def run(self):
@@ -113,9 +67,9 @@ class PathTrackerInterface:
         displayImage = displayImage.copy()
         
         #ensure val_image matches input shape
-        input_shape=self.getInputShape()
-        if val_image.shape[0] != input_shape[0] or val_image.shape[1] != input_shape[1]:
-            val_image = cv2.resize(val_image, (input_shape[0], input_shape[1]))
+        #input_shape=self.getInputShape()
+        #if val_image.shape[0] != input_shape[0] or val_image.shape[1] != input_shape[1]:
+        #    val_image = cv2.resize(val_image, (input_shape[0], input_shape[1]))
         
 
         if self.realImageSize is None:
@@ -126,9 +80,12 @@ class PathTrackerInterface:
         
         #print(val_image)
 
-        prediction = self.model.predict(np.array([val_image]), verbose=0)[0]
+        
+        #val_image to numpy array
+        
+        val_image = np.array(val_image)
 
-
+        prediction = self.model.predict(val_image)
 
 
         objects = self.pathTracker.update(prediction)
