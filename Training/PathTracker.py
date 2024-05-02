@@ -136,7 +136,7 @@ def main():
 
     path="Training/Data/PathData"
     
-    model = tf.keras.models.load_model("Training/model.keras")
+    model = tf.keras.models.load_model("pathModel.keras")
     index = 0
 
     #find input shape of the model

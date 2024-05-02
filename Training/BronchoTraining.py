@@ -133,7 +133,7 @@ def train():
     print(paths.shape)
 
     #wait for user input to continue
-    input("Press Enter to continue...")
+    #input("Press Enter to continue...")
     #for i in range(len(images)):
         #load image and display the shape
         #image = cv2.imread(images[i])
@@ -145,14 +145,18 @@ def train():
     
     #input("Press Enter to continue...")
 
+    print(f"Creating dataset...")
+
     imageDataset = tf.data.Dataset.from_tensor_slices(images)
     stateDataset = tf.data.Dataset.from_tensor_slices(states)
     pathDataset = tf.data.Dataset.from_tensor_slices(paths)
     labelInput = tf.data.Dataset.from_tensor_slices(inputs)
 
+    print(f"Zipping dataset...")
     combined_dataset = tf.data.Dataset.zip((imageDataset, pathDataset, stateDataset, labelInput))
     #combined_dataset = tf.data.Dataset.zip((imageDataset, labelInput))
 
+    print(f"Mapping dataset...")
     combined_dataset = combined_dataset.map(
         lambda img, arr1, arr2, label: (
             (img, arr1, arr2), label
@@ -168,15 +172,19 @@ def train():
 
     buffer_size = 1000  # This is just an example; adjust based on your dataset size and memory constraints
     batch_size = 4
-
+    print(f"Shuffling and batching dataset...")
     combined_dataset = combined_dataset.shuffle(buffer_size).batch(batch_size).prefetch(tf.data.AUTOTUNE)
 
-
+    print(f"Creating model...")
     model = create_model()
 
     model.fit(combined_dataset, epochs=20)
 
+    print(f"Saving model...")
     model.save("BronchoModel.keras")
+    
+    tf.saved_model.save(model, "broncho_model")
+    
 
 
 
