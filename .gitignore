@@ -9,6 +9,17 @@
 *.tiff
 *.tif
 
+#Video Files
+*.mp4
+*.avi
+*.mkv
+*.flv
+*.wmv
+*.mov
+*.webm
+
+
+
 # Ignore all zip files
 *.zip
 
@@ -17,3 +28,9 @@ __pycache__/
 
 
 venv/
+
+
+
+
+.gitignore
+.vscode/*
