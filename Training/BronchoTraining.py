@@ -112,6 +112,9 @@ def train():
 
     for episode in episodes:
         episodePath = os.path.join(path, episode)
+        episodePath = correctPathForOS(episodePath)
+        
+
         episodeImages, episodeInputs, episodeStates, episodePaths, episodePredictions = loadEpisodeFull(episodePath)
         images.extend(episodeImages)
         inputs.extend(episodeInputs)

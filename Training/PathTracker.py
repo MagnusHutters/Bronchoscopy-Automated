@@ -165,7 +165,7 @@ def main():
         prediction = model.predict(np.array([val_image]))[0]
 
         
-
+        print(f"Prediction: {prediction}")
 
 
         objects = pathTracker.update(prediction)

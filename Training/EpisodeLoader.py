@@ -82,6 +82,15 @@ def findChosenPath(objectsList):
     return chosenPaths
 
 
+def correctPathForOS(mixed_path):
+    # Replace backslashes with slashes to unify separators, then split
+    path_parts = mixed_path.replace('\\', '/').split('/')
+    
+    # Use os.path.join to assemble the parts into a path with the correct separators
+    corrected_path = os.path.join(*path_parts)
+    
+    return corrected_path
+
 def compilePaths(objectsList, chosenKeys):
     paths = []
     for i in range(len(objectsList)):
@@ -207,7 +216,8 @@ def prepEpisode(episodePath):
 
 
 def saveEpisode(path, images, inputs, states, paths, predictions):
-    
+
+        
         #print(paths.tolist())
         #save the episode to the BronchoData folder
 
@@ -242,6 +252,8 @@ def saveEpisode(path, images, inputs, states, paths, predictions):
         json_path = os.path.join(path, "data.json")
         with open(json_path, 'w') as f:
             json.dump(data, f, indent=4)
+
+
 
 
 def loadEpisodeFull(path):

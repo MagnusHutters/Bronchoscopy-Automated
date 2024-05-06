@@ -9,28 +9,22 @@ import cv2
 import json
 
 from .SETTINGS import *
+from Training.ImageMod import preprocess_image
 
-def createModelSimple():
+
+def createModel(sampleImage=None):
     # Input layer
-    input_img = Input((128, 128, 3))
 
-    # Convolutional layer
-    x = Conv2D(filters=16, kernel_size=(3, 3), activation='relu')(input_img)
+    #get the shape of the image
+    input_shape = (128,128, 3)
+    if sampleImage is not None:
 
-    # Dense layer
-    output = Dense(32, activation='relu')(x)
+        input_shape = sampleImage.shape
 
-    model = Model(inputs=input_img, outputs=output)
+    if len(input_shape) == 2:
+        input_shape = (input_shape[0], input_shape[1], 1)
 
-    model.compile(optimizer='adam', loss='mse', metrics=['accuracy'])
-
-    model.summary()
-
-    return model
-
-def createModel():
-    # Input layer
-    input_img = Input((128, 128, 3))
+    input_img = Input(shape=input_shape)
 
     # Convolutional layers
 
@@ -39,11 +33,13 @@ def createModel():
     x = MaxPooling2D(pool_size=(2, 2))(x)
     x = Conv2D(filters=32, kernel_size=(3, 3), activation='relu')(x)
     x = MaxPooling2D(pool_size=(2, 2))(x)
+    #x = Conv2D(filters=128, kernel_size=(3, 3), activation='relu')(x)
+    #x = MaxPooling2D(pool_size=(2, 2))(x)
     x = Flatten()(x)
 
     # Shared dense layers
+    x = Dense(128, activation='relu')(x)
     x = Dense(64, activation='relu')(x)
-    x = Dense(32, activation='relu')(x)
 
     # Single output layer for all holes
     output = Dense(4 * 3, activation='linear')(x)  # 4 holes * (x, y, existence)
@@ -118,7 +114,7 @@ def load_labels(dataPath, image_width, image_height):
                 x = (hole['x'] / image_width) * 2 - 1  # Normalize x to [-1, 1]
                 y = (hole['y'] / image_height) * 2 - 1  # Normalize y to [-1, 1]
                 exist = hole['existance']
-                if exist is 0:
+                if exist == 0:
                     x = 0
                     y = 0
                     
@@ -163,9 +159,10 @@ def load_images_single_episode(dataPath, imageSize, saveOriginalImages=False):
             originalImage = image.copy()
             originalImage = img_to_array(originalImage) / 255.0  # Normalize to [0, 1]
             originalImages.append(originalImage)
-        image = cv2.resize(image, imageSize)
+        
 
-        image = img_to_array(image) / 255.0  # Normalize to [0, 1]
+        image = preprocess_image(image, imageSize)
+
         images.append(image)
             
     if saveOriginalImages:
@@ -209,9 +206,11 @@ def load_images(dataPath, imageSize, saveOriginalImages=False):
                 originalImage = image.copy()
                 originalImage = img_to_array(originalImage) / 255.0  # Normalize to [0, 1]
                 originalImages.append(originalImage)
-            image = cv2.resize(image, imageSize)
+            
+            
 
-            image = img_to_array(image) / 256.0  # Normalize to [0, 1]
+            #image = preprocess_image(image, imageSize)
+
             images.append(image)
             
     if saveOriginalImages:
@@ -228,7 +227,7 @@ def augment_data(images, labels):
     for image, label in zip(images, labels):
         
         #print progress on same line with zero padding
-        print(f"\rAugmenting data: {len(augmented_images):<5}/{len(images):<5}", end="")
+        print(f"\rAugmenting data: {len(augmented_images):<5}", end="")
         
         
         
@@ -303,14 +302,14 @@ def main():
     
     #shuffle the images and labels
     print("Shuffling images and labels")
-    indices = np.random.permutation(len(images))
-    images = images[indices]
-    labels = labels[indices]
+    #indices = np.random.permutation(len(images))
+    #images = images[indices]
+    #labels = labels[indices]
     
-    print(f"Discarding... {len(images) - 2000} images")
+    #print(f"Discarding... {len(images) - 2000} images")
     #only use 2000 
-    images=images[:2000]
-    labels=labels[:2000]
+    #images=images[:2000]
+    #labels=labels[:2000]
 
 
 
@@ -336,7 +335,7 @@ def main():
     #input_shape = images[0].shape
     #print(f"Input shape: {input_shape}")
     #return
-    model = createModel()
+    model = createModel(images[0])
     
     
     
