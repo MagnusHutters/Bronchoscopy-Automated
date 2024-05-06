@@ -13,6 +13,12 @@ class TFLiteModel:
         # Get input and output details
         self.input_details = self.interpreter.get_input_details()
         self.output_details = self.interpreter.get_output_details()
+        
+        #print input shapes:
+        #print(f"Model loaded: {model_path}")
+        #print("Input shapes:")
+        #for i, input_detail in enumerate(self.input_details):
+        #    print(f"Input {i}: {input_detail['shape']}")    
 
     def predict(self, *inputs):
         # Check if the number of inputs matches the expected number

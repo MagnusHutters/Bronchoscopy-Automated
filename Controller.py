@@ -16,7 +16,7 @@ class Controller:
     def doStep(self, image):
 
         return Input(0,0,0)
-        return Input(0,0,0), 0, 0
+        #return Input(0,0,0), 0, 0
 
     def update(self):
 
@@ -24,7 +24,7 @@ class Controller:
 
 
 
-        input = self.doStep(image)
+        #input = self.doStep(image)
         input, doStart, doStop = self.doStep(image)
 
         #self.interface.updateInput(input)

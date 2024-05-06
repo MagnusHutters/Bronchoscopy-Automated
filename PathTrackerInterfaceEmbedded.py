@@ -25,18 +25,18 @@ from Training.PathTracker import PathTracker
 
 
                 
-class PathTrackerInterface:
+class PathTrackerInterfaceEmbedded:
     def __init__(self, modelPath, embedded=True):
 
 
         #Load validation data
 
-        path="Training/Data/PathData"
+        #path="Training/Data/PathData"
 
         self.modelPath = modelPath
         #self.dataPath = dataPath
         
-        self.model = TFLiteModel(modelPath)
+        self.model = TFLiteModel(self.modelPath)
         # Load the TFLite model and allocate tensors
         
         
@@ -61,10 +61,13 @@ class PathTrackerInterface:
 
 
 
-    def predictAndTrack(self, val_image,displayImage):
-        print("Predicting and tracking")
+    def predictAndTrack(self, image):
+        #print("Predicting and tracking")
         
-        displayImage = displayImage.copy()
+        
+        val_image = np.resize(image, (128,128,3))
+        image=image.copy()
+        #displayImage = displayImage.copy()
         
         #ensure val_image matches input shape
         #input_shape=self.getInputShape()
@@ -74,7 +77,7 @@ class PathTrackerInterface:
 
         if self.realImageSize is None:
             #set from displayImage
-            self.realImageSize = (displayImage.shape[1], displayImage.shape[0])
+            self.realImageSize = (image.shape[1], image.shape[0])
 
         #Display result one image at a time
         
@@ -83,14 +86,16 @@ class PathTrackerInterface:
         
         #val_image to numpy array
         
-        val_image = np.array(val_image)
+        val_image = np.array([val_image])
+        val_image= val_image.astype(np.float32)
 
         prediction = self.model.predict(val_image)
-
+        #print(prediction)
+        prediction=prediction[0]
 
         objects = self.pathTracker.update(prediction)
 
-
+        
 
         #draw ground truth holes
             
@@ -109,7 +114,7 @@ class PathTrackerInterface:
 
             
             if existance > 0.5:
-                cv2.circle(displayImage, (x, y), 10, (0, 0, float(existance)), 2)
+                cv2.circle(image, (x, y), 10, (0, 0, float(existance)), 2)
 
         #draw tracked holes
         i=1
@@ -121,10 +126,10 @@ class PathTrackerInterface:
             #scale the existence to 0-255
 
 
-            cv2.circle(displayImage, (x, y), 8, (0, 1, 0), 2)
+            cv2.circle(image, (x, y), 8, (0, 1, 0), 2)
 
             #draw number of the hole
-            cv2.putText(displayImage, str(key), (x-8, y+8), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (1,1,1), 2)
+            cv2.putText(image, str(key), (x-8, y+8), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (1,1,1), 2)
 
             i+=1
 
@@ -144,6 +149,8 @@ class PathTrackerInterface:
         #elif key == ord('a'):
         #    index -= 1
 
+
+        #print(f"Index: {index}, doExit: {doExit}, objects: {objects}")
         return index, doExit, objects
 
 

@@ -14,8 +14,8 @@ import cv2
 
 import time
 
-from Training.PathTrackerInterface import PathTrackerInterface
-from Training.BasicPaths import load_images_single_episode, load_images
+#from PathTrackerInterfaceEmbedded import PathTrackerInterfaceEmbedded
+#from Training.BasicPaths import load_images_single_episode, load_images
 
 class GUI:
     def __init__(self, size=None):
@@ -236,7 +236,7 @@ class GUI:
 
 
 
-
+'''
 def main():
     
 
@@ -291,7 +291,7 @@ def main():
 if __name__ == "__main__":
     main()
 
-
+'''
 
 
     

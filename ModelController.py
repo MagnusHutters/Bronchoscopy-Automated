@@ -10,21 +10,23 @@ import time
 from Controller import*
 from TFLiteModel import TFLiteModel
 from GUI import *
+from PathTrackerInterfaceEmbedded import PathTrackerInterfaceEmbedded
 
 
 class ModelController(Controller):
     
     def __init__(self):
+        super().__init__()
         
         self.gui = GUI()
-        self.pathInterface= PathTrackerInterface("Training/model.keras")
-        self.input_shape = self.pathInterface.getInputShape()
+        self.pathInterface= PathTrackerInterfaceEmbedded("pathModel.tflite")
+        #self.input_shape = self.pathInterface.getInputShape()
         
         #load tf-lite model
 
 
         # Load the TFLite model and allocate tensors
-        self.model = TFLiteModel("")
+        self.model = TFLiteModel("BronchoModel.tflite")
         
         
         
@@ -39,7 +41,13 @@ class ModelController(Controller):
         doStart = False
         doStop = False
         
-        newIndex, doExit, objects = self.pathInterface.predictAndTrack(image,image)
+        image = np.array(image)
+        image = image.astype(np.float32)
+        image = image/255.0
+        
+        _, doExit, objects = self.pathInterface.predictAndTrack(valImage,image)
+        
+        index, doExit = self.gui.update(image, objects)
         
         
         paths = []
@@ -49,7 +57,7 @@ class ModelController(Controller):
             chosen=0
             x=item[0]
             y=item[1]
-            if key is newIndex:
+            if key is index:
                 chosen=1
                 
             paths.append([x,y,existance,chosen])
@@ -60,13 +68,28 @@ class ModelController(Controller):
             
         state = self.interface.currentState
         
-        
-        
+        input=Input(0,0,0)
+        print(f"index: {index}")
+        print(f"Keys: {objects.keys()}")
         #if new index is in obejcts keys
-        if newIndex in objects.keys():
+        if index in objects.keys():
             #prediction with 3 inputs: image, paths, state
-            prediction = self.bronchoModel.predict([image, paths, state])
+            #prediction = self.bronchoModel.predict([image, paths, state])
+            
+            state = np.array([[state]])
+            valImage = np.array([valImage])
+            paths = np.array([paths])
+            
+            #to float32
+            state = state.astype(np.float32)
+            valImage = valImage.astype(np.float32)
+            paths = paths.astype(np.float32)
+            
+            
+            prediction = self.model.predict(state, valImage, paths)
             print(prediction)
+            
+            input = Input(*(prediction[0]))
         
         
         
@@ -81,7 +104,7 @@ class ModelController(Controller):
         
         
         
-        input=[0,0,0]
+        
         
         return input, doStart, doStop
     

@@ -10,7 +10,7 @@ import cv2
 
 
 
-#from PygameController import *
+from PygameController import *
 from ModelController import *
 
 
@@ -19,8 +19,8 @@ from ModelController import *
 
 
 
-#controller = PygameController()
-controller = ModelController()
+controller = PygameController()
+#controller = ModelController()
 
 
 

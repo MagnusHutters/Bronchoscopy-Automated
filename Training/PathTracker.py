@@ -9,15 +9,15 @@
 import cv2
 from scipy.optimize import linear_sum_assignment
 import numpy as np
-from tensorflow.keras.models import Model, load_model
-from tensorflow.keras.layers import Input, Conv2D, MaxPooling2D, Flatten, Dense, Reshape
-from tensorflow.keras.preprocessing.image import img_to_array
-import tensorflow as tf
+#from tensorflow.keras.models import Model, load_model
+#from tensorflow.keras.layers import Input, Conv2D, MaxPooling2D, Flatten, Dense, Reshape
+#from tensorflow.keras.preprocessing.image import img_to_array
+#import tensorflow as tf
 
 
-from Training.BasicPaths import *
-from Training.VideoRecorder import VideoRecorder
-from Training.SETTINGS import *
+#from Training.BasicPaths import *
+#from Training.VideoRecorder import VideoRecorder
+#from Training.SETTINGS import *
 
 
 
@@ -53,7 +53,9 @@ class PathTracker:
         #randomize the order of the detections
         
         #remove detections whith low likelihood (less than 0.5)
-        detections = [[detection[0], detection[1]] for detection in detections if detection[2] > 0.5]
+        #print(detections)
+        
+        detections = [[detection[0], detection[1]] for detection in detections if detection[2] > 0.7]
         #remove likelihood from the detections
         
 
@@ -125,10 +127,12 @@ class PathTracker:
             maxConfidenceKey = max(self.confidence, key=self.confidence.get)
             print(f"No confident objects, returning only most confident object {maxConfidenceKey}")
             confidentObjects = {maxConfidenceKey: self.objects[maxConfidenceKey]}
+            
+        #print(f"Confident objects: {confidentObjects}")
         return confidentObjects
 
 
-
+'''
 def main():
 
 
@@ -239,3 +243,5 @@ if __name__ == '__main__':
 
 
     main()
+    
+'''

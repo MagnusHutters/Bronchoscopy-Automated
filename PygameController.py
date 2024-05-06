@@ -6,8 +6,7 @@ from pygame.locals import *
 
 import time
 from Controller import*
-
-
+from TFLiteModel import TFLiteModel
 
 
 class PygameController(Controller):
@@ -15,7 +14,11 @@ class PygameController(Controller):
     def __init__(self):
         
         
+        
+        
         super().__init__()
+        
+        self.model = TFLiteModel("pathModel.tflite")
         
         pygame.init()
 
@@ -27,7 +30,9 @@ class PygameController(Controller):
             
             
         self.js = pygame.joystick.Joystick(0)
-
+        
+        
+        
 
         self.size = self.interface.camera.get_size()
 
@@ -75,6 +80,21 @@ class PygameController(Controller):
         axes = [self.js.get_axis(i) for i in range(num_axes)]
         #print(f"axes: {axes}")
         
+        
+        predictImage = np.array(image).copy()
+        predictImage = np.resize(predictImage, (128, 128,3))
+        
+        predictImage = predictImage/256.0
+        predictImage = predictImage.astype(np.float32)
+        predictImage= np.array([predictImage])
+        
+        
+        
+        #print(predictImage)
+        prediction = self.model.predict(predictImage)
+        prediction = prediction[0]
+        
+        #_, doExit, objects = self.pathInterface.predictAndTrack(predictImage)
         
         
         #print(num_axes)
@@ -153,6 +173,27 @@ class PygameController(Controller):
             
         
         self.screen.blit(frame, (0,0))
+        
+        #get image size from image shape
+        imgSizeX = image.shape[1]
+        imgSizeY = image.shape[0]
+        
+        #draw predictions
+        for i in range(4):
+            x=prediction[i][0]
+            y=prediction[i][1]
+            exists=prediction[i][2]
+            
+            #translate xy from range [-1,1] to image size
+            x = ((x+1)*0.5)*imgSizeX
+            y = ((y+1)*0.5)*imgSizeY
+            
+            #draw dots if existance
+            if exists>0.5:
+                pygame.draw.circle(self.screen, (255,0,0), (int(x),int(y)), 6)
+            
+            
+        
         
         if recording:
             pygame.draw.circle(self.screen, (255,0,0), (12,12), 6)
