@@ -216,7 +216,7 @@ class Bronchoscope:
 
     def rotate(self,rotation):
         
-        rot=(rotation*10)
+        rot=(rotation*20)
         
         
         self.m_rot+=int(rot)
@@ -260,7 +260,7 @@ class Bronchoscope:
     def changeBend(self, bendChange):
         
         
-        self.m_bend+=bendChange*3
+        self.m_bend+=bendChange*6
         if self.m_bend > 1600: self.m_bend = 1600
         if self.m_bend < 800: self.m_bend=800
         

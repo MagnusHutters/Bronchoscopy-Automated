@@ -46,7 +46,8 @@ class Controller:
                 time.sleep(sleep_time)  # Sleep for the remaining time of the interval
             else:
                 # Processing took longer than the interval
-                print("Warning: Processing time exceeded the interval.")
+                #print("Warning: Processing time exceeded the interval.")
+                pass
                 
                 
     def close(self):

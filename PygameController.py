@@ -73,6 +73,10 @@ class PygameController(Controller):
         pygame.event.pump()        
         num_axes = self.js.get_numaxes()
         axes = [self.js.get_axis(i) for i in range(num_axes)]
+        
+        
+        num_buttons = self.js.get_numbuttons()
+        buttons=[self.js.get_button(i) for i in range(num_buttons)]
         #print(f"axes: {axes}")
         
         
@@ -89,8 +93,7 @@ class PygameController(Controller):
         #print(self.size)
         
         
-        num_buttons = self.js.get_numbuttons()
-        buttons=[self.js.get_button(i) for i in range(num_buttons)]
+        
         #print(f"buttons: {buttons}")
         
         doStart=self.js.get_button(9)

@@ -17,6 +17,50 @@ import time
 #from Training.PathTrackerInterfaceCV import PathTrackerInterface
 #from Training.BasicPaths import load_images_single_episode, load_images
 
+
+
+class JoystickData:
+    def __init__(self, forwards, rotate,bend,l1,r1,l2,r2):
+        self.forwards=forwards
+        self.rotation=rotate
+        self.bend=bend
+        self.l1=l1
+        self.r1=r1
+        self.l2=l2
+        self.r2=r2
+        self.dir=[self.rotation,self.bend]
+        
+        
+    #from joystick
+    @staticmethod
+    def fromJoystick(js):
+        num_axes = js.get_numaxes()
+        axes = [js.get_axis(i) for i in range(num_axes)]
+        
+        
+        num_buttons = js.get_numbuttons()
+        buttons=[js.get_button(i) for i in range(num_buttons)]    
+        
+        forwards=buttons[2]-buttons[0]
+        
+        hat=js.get_hat(0)
+        rotate=axes[0]+hat[0]
+        bend = axes[1]+hat[1]
+        
+        #clip rotate and bend to [-1,1]
+        rotate = np.clip(rotate, -1, 1)
+        bend = np.clip(bend, -1, 1)
+        
+        l1=buttons[4]
+        r1=buttons[5]
+        l2=buttons[6]
+        r2=buttons[7]
+        
+        
+        
+        
+        return JoystickData(forwards, rotate,bend,l1,r1,l2,r2)
+
 class GUI:
     def __init__(self, size=None):
         
@@ -26,6 +70,8 @@ class GUI:
         if size is not None:
             self.create_window(size)
 
+
+        self.manual=True
         
         pygame.font.init()
         self.font = pygame.font.Font(None, 18)
@@ -33,6 +79,12 @@ class GUI:
         self.current_index = -1
 
         #self.pathInterface = PathModelInterface("Training/model.keras")
+        
+        #init joystick
+        pygame.joystick.init()
+        self.js = pygame.joystick.Joystick(0)
+        self.js.init()
+        
 
 
     def create_window(self, size):
@@ -43,6 +95,16 @@ class GUI:
         self.hasWindow = True
         
 
+    def get_key_press_from_dir(self, dir): #dir is a x,y vector
+        if dir[0] > 0.5:
+            return 2
+        if dir[0] < -0.5:
+            return 0
+        if dir[1] > 0.5:
+            return 1
+        if dir[1] < -0.5:
+            return 3
+        return -1
         
 
 
@@ -139,8 +201,10 @@ class GUI:
         print(f"You pressed: \n\t {key_press}:\t {directionNames[key_press]}")
         print(f"In the direction \n\t {directions[key_press]}")
         #and selected
-        print(f"Selected: \n\t {best_index}:\t {points[best_index]}")
-        
+        if best_index>=0:
+            print(f"Selected: \n\t {best_index}:\t {points[best_index]}")
+        else: 
+            print(f"No points selected")
 
 
 
@@ -149,15 +213,75 @@ class GUI:
 
     
 
+    def drawBar(self, value):
+        print(f"Drawing bar with value: {value}")
+            
+        value=value*self.size[1]    
+            
+        # Calculate bar dimensions
+        bar_width = 20
+        bar_height = abs(value/2)
+
+        # Create a surface for the bar
+        bar_surface = pygame.Surface((bar_width, bar_height)).convert_alpha()
+        #bar_surface.fill(pygame.TRANSPARENT)
+
+        # Determine the color based on the sign of the value
+        if value >= 0:
+            color = (0, 255, 0)  # Green for positive values
+        else:
+            color = (255, 0, 0)  # Red for negative values
+
+        # Fill the bar with the color
+        pygame.draw.rect(bar_surface, color, (0, 0, bar_width, bar_height))
+
+        # Position the bar in the middle of the screen
+        bar_rect = bar_surface.get_rect()
+        bar_rect.centery = 200+(value/4)
+        bar_rect.right = 400
+
+        # Blit the bar onto the screen
+        self.screen.blit(bar_surface, bar_rect)
 
 
 
-    def update(self, originalImage, objects):
+
+    def refreshScreen(self, image):
+        
+        
+        if not self.hasWindow:
+            self.create_window(image.shape[:2])
+            
+        image=np.array(image, dtype=np.uint8)
+        
+        #blur
+        image=cv2.GaussianBlur(image, (5, 5), 0)
+        
+        
+        
+        
+        
+        #originalImage = cv2.cvtColor(originalImage, cv2.COLOR_BGR2RGB)
+        #flip x and y axis by transposing the image
+        #image = np.transpose(image, (1, 0, 2))
+
+
+        surface = pygame.surfarray.make_surface(image)
+
+        #draw image on screen
+        self.screen.blit(surface, (0, 0))
+
+    def update(self, originalImage, objects, state):
+
+
+        self.refreshScreen(originalImage)
+
+
 
         #create window if it does not exist using the size of the image
-        if not self.hasWindow:
-            self.create_window(originalImage.shape[:2])
+        
 
+        pygame.event.pump() #update the event queue
 
 
 
@@ -180,60 +304,53 @@ class GUI:
                 if event.key == K_SPACE:
                     selectEvent = -2
             
-
-        self.current_index = self.select_point(objects, self.current_index, selectEvent)
-
-        #Exit if doExit is True
-        
-        
-
-
-        #prediction = self.pathInterface.predict(image,originalImage, doTracking=True)
-        #print(prediction)
-        
-        #print(f"DRAWING IMAGE {image.shape} {originalImage.shape} {len(objects)}")
-
-        #convert image to pygame format
-
-        image=np.array(originalImage, dtype=np.uint8)
-        
-        #blur
-        image=cv2.GaussianBlur(image, (5, 5), 0)
         
         
         
-        
-        
-        #originalImage = cv2.cvtColor(originalImage, cv2.COLOR_BGR2RGB)
-        #flip x and y axis by transposing the image
-        outputImage = np.transpose(image, (1, 0, 2))
-
-
-        surface = pygame.surfarray.make_surface(outputImage)
-
-        #draw image on screen
-        self.screen.blit(surface, (0, 0))
-
-        
-
-
-
-
-        for key, value in objects.items():
-            x, y = value
+        joystick = JoystickData.fromJoystick(self.js)
+    
+        manualSwitch=joystick.r1-joystick.l1
+        if manualSwitch < -0.5:
+            self.manual = True
+            print("Manual")
+        elif manualSwitch >0.5:
+            self.manual = False
+            print("Auto")
+    
+        if(self.manual):
+            pass
             
-            x = int(((x + 1) / 2) * self.size[0])
-            y = int(((y + 1) / 2) * self.size[1])
+        else:
+            
+    
+            #Select path point to choose
+            
+            self.current_index = self.select_point(objects, self.current_index, self.get_key_press_from_dir(joystick.dir))
+            
 
-            if key == self.current_index:
-                pygame.draw.circle(self.screen, (0, 255, 0), (x, y), 5)
-            else:
-                pygame.draw.circle(self.screen, (255, 0, 0), (x, y), 5)
+
+            #draw path points
+            for key, value in objects.items():
+                y, x = value
+                
+                x = int(((x + 1) / 2) * self.size[0])
+                y = int(((y + 1) / 2) * self.size[1])
+
+                if key == self.current_index:
+                    pygame.draw.circle(self.screen, (0, 255, 0), (x, y), 5)
+                else:
+                    pygame.draw.circle(self.screen, (255, 0, 0), (x, y), 5)
+            
+
+        
+            
+        self.drawBar(state[0])
+        
+        
         pygame.display.flip()
-
         
-            
-        return self.current_index, False
+        return self.current_index, False, joystick, self.manual
+    
             
         #time.sleep(0.1)
 
