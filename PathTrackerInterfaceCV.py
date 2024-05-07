@@ -20,8 +20,8 @@ import os
 
 
 
-from Training.PathTracker import PathTracker
-from Training.CVPathsFinder import preprocess_image_tresholding
+from Training.PathTrackerCV import PathTracker
+from Training.CVPathsFinder import doCVPathFinding
 
 
 
@@ -35,7 +35,7 @@ class PathTrackerInterface:
 
         #Load validation data
 
-        path="Training/Data/PathData"
+        #path="Training/Data/PathData"
 
         #self.modelPath = modelPath
         #self.dataPath = dataPath
@@ -66,7 +66,7 @@ class PathTrackerInterface:
 
 
     def predictAndTrack(self, val_image,displayImage):
-        print("Predicting and tracking")
+        #print("Predicting and tracking")
         
         displayImage = displayImage.copy()
         
@@ -89,7 +89,8 @@ class PathTrackerInterface:
         
         val_image = np.array(val_image)
 
-        prediction = self.model.predict(val_image)
+        #prediction = self.model.predict(val_image)
+        prediction = doCVPathFinding(val_image)
 
 
         objects = self.pathTracker.update(prediction)
@@ -137,16 +138,6 @@ class PathTrackerInterface:
         doExit = False
         index=0
 
-        #cv2.imshow("Image", displayImage)
-        #key = cv2.waitKey(0)
-        #if key == ord('q'):
-        #    doExit = True
-        #if d is pressed go to next image
-        #elif key == ord('d'):
-        #    index += 1
-        #if a is pressed go to previous image  
-        #elif key == ord('a'):
-        #    index -= 1
 
         return index, doExit, objects
 
@@ -159,6 +150,6 @@ class PathTrackerInterface:
 if __name__ == '__main__':
 
     
+    pass
 
-
-    main()
+    #main()

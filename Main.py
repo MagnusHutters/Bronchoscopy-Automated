@@ -20,7 +20,12 @@ from ModelController import *
 
 
 #controller = PygameController()
-controller = ModelController()
+try:
+    
+    controller = ModelController()
+except Exception as e:
+    print("Error creating controller: ", e)
+    quit()
 
 
 

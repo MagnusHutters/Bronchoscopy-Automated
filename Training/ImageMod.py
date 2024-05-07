@@ -46,7 +46,29 @@ def rgb_to_grayscale(rgb_image):
     return grayscale
 
 
-
+def __prepare_image_basic(image, target_size=(128, 128)): #keep in color mode, and convert to color if neccecary, still do resize and blur
+    #convert image to color if neccecary
+    if len(image.shape) == 2:
+        image = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
+        
+    #resize the image if neccecary
+    if image.shape[0] != target_size[0] or image.shape[1] != target_size[1]:
+        image = cv2.resize(image, target_size, interpolation=cv2.INTER_AREA)
+        
+    #blur
+    image = cv2.GaussianBlur(image, (7, 7), 0)
+    
+    
+    #convert to float32 in range 0 to 1 if neccesary
+    if image.dtype == np.uint8:
+        image = image.astype('float32') / 255.0
+        
+        
+    return image
+        
+    
+    
+    
 
 def __preprocess_image_no_edge_detection(image, target_size=(128, 128)):
     # Step 1: Convert the image to grayscale if it is not already
@@ -181,9 +203,19 @@ def __preprocess_image_tresholding(image, target_size=(128, 128)):
     return image
 
 #preprocess an image wrapper function
-def preprocess_image(image, target_size=(128, 128), edge_detection=False):
+def preprocess_image(image, target_size=(128, 128), mode = "none"):
     
     #return __preprocess_image_with_edge_detection(image, target_size)
     #return __preprocess_image_no_edge_detection(image, target_size)
-    return __preprocess_image_tresholding(image, target_size)
+    #return __preprocess_image_tresholding(image, target_size)
     #return __preprocess_image_CLAHE(image, target_size)
+    if   mode == "none" or mode == "basic":
+        return __prepare_image_basic(image, target_size)
+    elif mode == "no_edge":
+        return __preprocess_image_no_edge_detection(image, target_size)
+    elif mode == "edge":
+        return __preprocess_image_with_edge_detection(image, target_size)
+    elif mode == "treshold":
+        return __preprocess_image_tresholding(image, target_size)
+    elif mode == "CLAHE":
+        return __preprocess_image_CLAHE(image, target_size)

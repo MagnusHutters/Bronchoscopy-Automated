@@ -14,8 +14,8 @@ import cv2
 
 import time
 
-from Training.PathTrackerInterface import PathTrackerInterface
-from Training.BasicPaths import load_images_single_episode, load_images
+#from Training.PathTrackerInterfaceCV import PathTrackerInterface
+#from Training.BasicPaths import load_images_single_episode, load_images
 
 class GUI:
     def __init__(self, size=None):
@@ -195,16 +195,24 @@ class GUI:
 
         #convert image to pygame format
 
-        originalImage=originalImage*255
-        originalImage = cv2.cvtColor(originalImage, cv2.COLOR_BGR2RGB)
+        image=np.array(originalImage, dtype=np.uint8)
+        
+        #blur
+        image=cv2.GaussianBlur(image, (5, 5), 0)
+        
+        
+        
+        
+        
+        #originalImage = cv2.cvtColor(originalImage, cv2.COLOR_BGR2RGB)
         #flip x and y axis by transposing the image
-        originalImage = np.transpose(originalImage, (1, 0, 2))
+        outputImage = np.transpose(image, (1, 0, 2))
 
 
-        originalImage = pygame.surfarray.make_surface(originalImage)
+        surface = pygame.surfarray.make_surface(outputImage)
 
         #draw image on screen
-        self.screen.blit(originalImage, (0, 0))
+        self.screen.blit(surface, (0, 0))
 
         
 
@@ -236,7 +244,7 @@ class GUI:
 
 
 
-
+'''
 def main():
     
 
@@ -290,7 +298,7 @@ def main():
 
 if __name__ == "__main__":
     main()
-
+'''
 
 
 

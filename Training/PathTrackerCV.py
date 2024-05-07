@@ -10,7 +10,7 @@ import cv2
 from scipy.optimize import linear_sum_assignment
 import numpy as np
 
-import tensorflow as tf
+#import tensorflow as tf
 
 
 #from Training.BasicPaths import *
@@ -20,7 +20,7 @@ from Training.CVPathsFinder import doCVPathFinding
 
 
 
-from Training.BasicPaths import load_images
+#from Training.BasicPaths import load_images
 
 
 
@@ -48,6 +48,8 @@ class PathTracker:
         del self.confidence[objectID]
 
     def update(self, detections): #detections is a list of points with likelihood [x, y, likelihood]
+        
+        detections = [[detection[0], detection[1]] for detection in detections if detection[2] > 0.5]
         np.random.shuffle(detections)
         inputCentroids = np.array(detections)
 
@@ -113,19 +115,19 @@ class PathTracker:
                 self.register(inputCentroids[row])
 
         if len(self.objects) == 0:
-            print("No objects left, returning empty dict")
+            #print("No objects left, returning empty dict")
             return {}
 
         confidentObjects = {key: value for key, value in self.objects.items() if self.confidence[key] >= self.maxConfidence*0.5}
         #if there are no confident objects, return disct of juist most confident object
         if len(confidentObjects) == 0:
             maxConfidenceKey = max(self.confidence, key=self.confidence.get)
-            print(f"No confident objects, returning only most confident object {maxConfidenceKey}")
+            #print(f"No confident objects, returning only most confident object {maxConfidenceKey}")
             confidentObjects = {maxConfidenceKey: self.objects[maxConfidenceKey]}
         return confidentObjects
 
 
-
+'''
 def main():
 
 
@@ -133,14 +135,14 @@ def main():
 
     path="Training/Data/PathData"
     
-    model = tf.keras.models.load_model("pathModelLabel.keras")
+    #model = tf.keras.models.load_model("pathModelLabel.keras")
     index = 0
 
     #find input shape of the model
-    input_shape = model.input_shape[1:]
+    #input_shape = model.input_shape[1:]
 
 
-    input_shape = (input_shape[0], input_shape[1])
+    #input_shape = (input_shape[0], input_shape[1])
     val_images, realImageSize, originalImages = load_images(path, input_shape, saveOriginalImages=True)
     
     
@@ -239,3 +241,4 @@ if __name__ == '__main__':
 
 
     main()
+    '''

@@ -9,10 +9,10 @@
 import cv2
 from scipy.optimize import linear_sum_assignment
 import numpy as np
-from tensorflow.keras.models import Model, load_model
-from tensorflow.keras.layers import Input, Conv2D, MaxPooling2D, Flatten, Dense, Reshape
-from tensorflow.keras.preprocessing.image import img_to_array
-import tensorflow as tf
+#from tensorflow.keras.models import Model, load_model
+#from tensorflow.keras.layers import Input, Conv2D, MaxPooling2D, Flatten, Dense, Reshape
+#from tensorflow.keras.preprocessing.image import img_to_array
+#import tensorflow as tf
 import os
 
 import tflite_runtime.interpreter as tflite

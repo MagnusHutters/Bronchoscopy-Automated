@@ -15,16 +15,17 @@ class Controller:
 
     def doStep(self, image):
 
-        return Input(0,0,0)
+        #return Input(0,0,0)
         return Input(0,0,0), 0, 0
 
     def update(self):
 
+        
         image = self.interface.getImage()
 
 
 
-        input = self.doStep(image)
+        #input = self.doStep(image)
         input, doStart, doStop = self.doStep(image)
 
         #self.interface.updateInput(input)
@@ -49,9 +50,13 @@ class Controller:
                 
                 
     def close(self):
-        if(not self.closed):
-            self.interface.close()
-            self.closed=True
+        #if self.closed exists
+        try:
+            if(not self.closed):
+                self.interface.close()
+                self.closed=True
+        except Exception as e:
+            print("Error closing controller: ", e)
 
 
 

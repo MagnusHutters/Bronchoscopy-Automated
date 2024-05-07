@@ -21,6 +21,7 @@ class TFLiteModel:
 
         # Set the inputs to the model
         for i, input_data in enumerate(inputs):
+            #print(input_data)
             if input_data.shape != tuple(self.input_details[i]['shape']):
                 raise ValueError(f"Input {i} has incorrect shape. Expected {self.input_details[i]['shape']}, got {input_data.shape}.")
             self.interpreter.set_tensor(self.input_details[i]['index'], input_data)

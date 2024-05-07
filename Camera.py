@@ -9,8 +9,11 @@ class Camera:
         if not self.cap.isOpened():
             #self.cameraOpened=False
             raise ValueError("Unable to open video source", camera_index)
+            
 
     def get_frame(self):
+        if(self.cap is None): #if cap is none return None
+            return None
         # Capture frame-by-frame
         #if not self.cameraOpened:
         #    return None

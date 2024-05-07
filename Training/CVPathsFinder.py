@@ -100,7 +100,7 @@ def preprocess_image_tresholding(original, target_size=(64, 64)):
 
                 nomalizedDistFromCenter = distFromCenter / np.sqrt((target_size[0]/2)**2 + (target_size[1]/2)**2)
                 invNormalizedDistFromCenter = 1-nomalizedDistFromCenter
-                print(f"Area: {area}")
+                #print(f"Area: {area}")
                 if area*((invNormalizedDistFromCenter**2)+0.1) > 10:
 
                     
@@ -168,18 +168,29 @@ def doCVPathFinding(image):
     img, rawPoints, targetSize = preprocess_image_tresholding(image)
 
     #normalize points from ranbge (0,0 - target size) to (-1,-1 - 1,1)
-    points = np.zeros((len(rawPoints),2))
+    points = np.zeros((len(rawPoints),3))
     for i in range(len(rawPoints)):
         x=rawPoints[i][0]
         y=rawPoints[i][1]
-        print(f"X: {x}, Y: {y}")
+        #print(f"X: {x}, Y: {y}")
         newX = (x/targetSize[0])*2-1
         newY = (y/targetSize[1])*2-1
-        print(f"NewX: {newX}, NewY: {newY}")
-        points[i] = [newX,newY]
+        #print(f"NewX: {newX}, NewY: {newY}")
+        points[i] = [newX,newY,1]
         
 
     #print(f"Points: {points}")
+    
+    
+    if len(points) > 4:#limit to 4 points
+        points = points[0:4]
+    elif len(points) < 4: #fill up to 4 points
+        for i in range(len(points),4):
+            #add to end of numpy array
+            points = np.append(points,[[0,0,0]],axis=0)
+    
+    
+    
     return points
     
 
@@ -191,7 +202,7 @@ def main():
     current_index = 4790
     increment = 20
     scale_factor = 6
-    print(f"Found {len(images)} images")
+    #print(f"Found {len(images)} images")
 
     while True:
         # Load the current image
