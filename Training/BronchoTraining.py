@@ -130,10 +130,10 @@ def train():
     states = np.array(states)
     paths = np.array(paths)
     #shapes
-    print(images.shape)
-    print(inputs.shape)
-    print(states.shape)
-    print(paths.shape)
+    print(f"Images: {images.shape}")
+    print(f"Inputs: {inputs.shape}")
+    print(f"States: {states.shape}")
+    print(f"Paths: {paths.shape}")
 
     #wait for user input to continue
     #input("Press Enter to continue...")

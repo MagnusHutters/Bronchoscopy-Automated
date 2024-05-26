@@ -12,7 +12,8 @@ from Training.PathTracker import PathTracker
 
 
 from Training.SETTINGS import *
-
+from Training.ImageMod import preprocess_image
+from Training.CVPathsFinder import doCVPathFinding
 
 def doObjectTracking(predictions, imageSize=(256, 256)):
     pathTracker=PathTracker()
@@ -160,8 +161,11 @@ def prepEpisode(episodePath):
 
             imagePath = frameData["imagePaths"][0].split("/")[-1]
             image = cv2.imread(os.path.join(tempDir, imagePath))
-            image = cv2.resize(image, imageSize)
-            image = image / 255.0
+            
+            
+            
+            image = preprocess_image(image)
+            
             
             images.append(image)
             newInput = [frameData["data"]["rotation"], frameData["data"]["bend"], frameData["data"]["extend"]]
@@ -187,7 +191,15 @@ def prepEpisode(episodePath):
         #wait for keypress
         
         
-        predictions = model.predict(images_array) 
+        #predictions = model.predict(images_array) 
+        
+        #create array of predictions
+        
+        for i in range(images_array.shape[0]):
+            image = images_array[i]
+            predictions.append(doCVPathFinding(image))
+            
+        
         
         
 
@@ -276,8 +288,11 @@ def loadEpisodeFull(path):
     for frame in data["frames"]:
         frameData = data["frames"][frame]
         image = cv2.imread(os.path.join(path, frameData["image"][0]))
-        image = image / 255.0
+        
+        
+        image = preprocess_image(image)
         images.append(image)
+        
         inputs.append(frameData["inputs"])
         state=frameData["states"]
         if state == []:
