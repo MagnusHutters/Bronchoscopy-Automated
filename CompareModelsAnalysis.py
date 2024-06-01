@@ -8,6 +8,8 @@ import os
 import cv2
 import random
 from scipy.optimize import linear_sum_assignment
+from scipy.stats import norm
+from statsmodels.stats.contingency_tables import mcnemar
 
 from Training.BasicPaths import *
 
@@ -37,6 +39,7 @@ def calculate_distance_matrix(ground_truth, predictions):
             distance_matrix[i, j] = np.linalg.norm(np.array(gt) - np.array(pred))
     return distance_matrix
 
+
 def calculate_metrics(ground_truth, predictions, tolerance_radius):
     distance_matrix = calculate_distance_matrix(ground_truth, predictions)
     row_ind, col_ind = linear_sum_assignment(distance_matrix)
@@ -54,8 +57,7 @@ def calculate_metrics(ground_truth, predictions, tolerance_radius):
     FN = len(ground_truth) - len(matched_gt)
     FP = len(predictions) - len(matched_pred)
     
-    return TP, FP, FN
-
+    return TP, FP, FN, matched_gt, matched_pred
 
 
 
@@ -74,6 +76,14 @@ def compute_metrics(TP, FP, FN):
         'FN': FN
     }
 
+
+
+def z_test_two_proportions(p1, n1, p2, n2):
+    p_pool = (p1 * n1 + p2 * n2) / (n1 + n2)
+    se = np.sqrt(p_pool * (1 - p_pool) * (1/n1 + 1/n2))
+    z_score = (p1 - p2) / se
+    p_value = 2 * (1 - norm.cdf(abs(z_score)))
+    return z_score, p_value
 
 def main():
     n=1000
@@ -111,6 +121,9 @@ def main():
     print(f"Images shape: {images.shape}, Labels shape: {labels.shape}")
     TP_CNN, FP_CNN, FN_CNN = 0, 0, 0
     TP_CV, FP_CV, FN_CV = 0, 0, 0
+    b, c = 0, 0  # Initialize counts for the contingency table
+    b2, c2 = 0, 0  # Initialize counts for the contingency table
+
 
     for i in range(n):
         #print(f"Image {i}")
@@ -143,8 +156,8 @@ def main():
 
         
     
-        tp_CNN, fp_CNN, fn_CNN = calculate_metrics(label, predictionNN, tolerance_radius)
-        tp_CV, fp_CV, fn_CV = calculate_metrics(label, predictionCV, tolerance_radius)
+        tp_CNN, fp_CNN, fn_CNN, matched_gt_CNN, matched_pred_CNN = calculate_metrics(label, predictionNN, tolerance_radius)
+        tp_CV, fp_CV, fn_CV,  matched_gt_CV, matched_pred_CV  = calculate_metrics(label, predictionCV, tolerance_radius)
         
         TP_CNN += tp_CNN
         FP_CNN += fp_CNN
@@ -154,6 +167,19 @@ def main():
         FP_CV += fp_CV
         FN_CV += fn_CV
 
+
+        set_matched_pred_CNN = set(matched_pred_CNN)
+        set_matched_pred_CV = set(matched_pred_CV)
+        
+        b += len(set_matched_pred_CV - set_matched_pred_CNN)  # Correct in CV, incorrect in CNN
+        c += len(set_matched_pred_CNN - set_matched_pred_CV)  # Correct in CNN, incorrect in CV
+    
+
+        set_matched_gt_CNN = set(matched_gt_CNN)
+        set_matched_gt_CV = set(matched_gt_CV)
+
+        b2 += len(set_matched_gt_CV - set_matched_gt_CNN)  # Correct in CV, incorrect in CNN
+        c2 += len(set_matched_gt_CNN - set_matched_gt_CV)  # Correct in CNN, incorrect in CV
 
 
 
@@ -184,9 +210,52 @@ def main():
     metrics_CNN = compute_metrics(TP_CNN, FP_CNN, FN_CNN)
     metrics_CV = compute_metrics(TP_CV, FP_CV, FN_CV)
 
+    CNN_N_Predictions = TP_CNN + FP_CNN
+    CV_N_Predictions = TP_CV + FP_CV
+    CNN_Precision = metrics_CNN['precision']
+    CV_Precision = metrics_CV['precision']
+    z_score, p_value = z_test_two_proportions(CNN_Precision, CNN_N_Predictions, CV_Precision, CV_N_Predictions)
+    print(f"Z-Test Two Proportions: Z-Score: {z_score}, P-Value: {p_value}")
+    # Interpretation of p-value
+    alpha = 0.05
+    if p_value < alpha:
+        print("There is a significant difference between the precision of the two models.")
+    else:
+        print("There is no significant difference between the precision of the two models.")
+
+
+    contingency_table = [[0, b], [c, 0]]
+    contingency_table2 = [[0, b2], [c2, 0]]
+    print("Contingency Table 1:", contingency_table)
+    print("Contingency Table 2:", contingency_table2)
+
+    result = mcnemar(contingency_table, exact=True)
+    result2 = mcnemar(contingency_table2, exact=True)
+    
 
     print("CNN Model Aggregate Metrics:", metrics_CNN)
     print("CV Model Aggregate Metrics:", metrics_CV)
+
+
+    print(f'McNemar test statistic: {result.statistic}')
+    print(f'P-value: {result.pvalue}')
+
+    # Interpretation of p-value
+    if result.pvalue < 0.05:
+        print("There is a significant difference between the performance of the two models.")
+    else:
+        print("There is no significant difference between the performance of the two models.")
+
+
+
+    print(f'McNemar test statistic 2: {result2.statistic}')
+    print(f'P-value 2: {result2.pvalue}')
+
+    # Interpretation of p-value
+    if result2.pvalue < 0.05:
+        print("There is a significant difference between the performance of the two models.")
+    else:
+        print("There is no significant difference between the performance of the two models.")
 
 
 
