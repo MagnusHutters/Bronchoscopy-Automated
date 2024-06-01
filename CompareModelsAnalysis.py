@@ -8,7 +8,7 @@ import os
 import cv2
 import random
 from scipy.optimize import linear_sum_assignment
-from scipy.stats import norm
+from scipy.stats import norm, ttest_rel
 from statsmodels.stats.contingency_tables import mcnemar
 
 from Training.BasicPaths import *
@@ -86,7 +86,7 @@ def z_test_two_proportions(p1, n1, p2, n2):
     return z_score, p_value
 
 def main():
-    n=1000
+    n=200
     tolerance_radius=0.25
 
     path = "Training/Data/PathData"
@@ -123,7 +123,8 @@ def main():
     TP_CV, FP_CV, FN_CV = 0, 0, 0
     b, c = 0, 0  # Initialize counts for the contingency table
     b2, c2 = 0, 0  # Initialize counts for the contingency table
-
+    totalErrorsCV = []
+    totalErrorsCNN = []
 
     for i in range(n):
         #print(f"Image {i}")
@@ -159,6 +160,9 @@ def main():
         tp_CNN, fp_CNN, fn_CNN, matched_gt_CNN, matched_pred_CNN = calculate_metrics(label, predictionNN, tolerance_radius)
         tp_CV, fp_CV, fn_CV,  matched_gt_CV, matched_pred_CV  = calculate_metrics(label, predictionCV, tolerance_radius)
         
+        totalErrorsCNN.append(fp_CNN + fn_CNN)
+        totalErrorsCV.append(fp_CV + fn_CV)
+
         TP_CNN += tp_CNN
         FP_CNN += fp_CNN
         FN_CNN += fn_CNN
@@ -222,6 +226,13 @@ def main():
         print("There is a significant difference between the precision of the two models.")
     else:
         print("There is no significant difference between the precision of the two models.")
+
+
+    print("")
+    t_stat, p_value = ttest_rel(totalErrorsCNN, totalErrorsCV)
+
+    print(f'Paired t-test statistic: {t_stat}, P-value: {p_value}')
+    print("")
 
 
     contingency_table = [[0, b], [c, 0]]
