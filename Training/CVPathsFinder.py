@@ -195,7 +195,6 @@ def doCVPathFinding(image):
     
 
 
-
 def main():
     directory = 'Training/Data/PathData'  # Change this to your images' directory
     images = find_images(directory)

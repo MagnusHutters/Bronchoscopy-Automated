@@ -88,7 +88,7 @@ def rotate_image_90_degrees(image, labels):
 
 
 # Load labels from JSON
-def load_labels(dataPath, image_width, image_height):
+def load_labels(dataPath, image_width, image_height, maxLabels=None):
 
     episodes = os.listdir(dataPath)
 
@@ -123,6 +123,11 @@ def load_labels(dataPath, image_width, image_height):
             
             #print(label)
             labels.append(label)
+
+            if maxLabels is not None and len(labels) >= maxLabels:
+                return np.array(labels)
+
+
     return np.array(labels)
 
 
@@ -170,7 +175,7 @@ def load_images_single_episode(dataPath, imageSize, saveOriginalImages=False):
     return np.array(images), realImageSize
 
 # Load and preprocess images
-def load_images(dataPath, imageSize, saveOriginalImages=False):
+def load_images(dataPath, imageSize, saveOriginalImages=False, maxImages=None):
 
 
     episodes = os.listdir(dataPath)
@@ -209,9 +214,14 @@ def load_images(dataPath, imageSize, saveOriginalImages=False):
             
             
 
-            #image = preprocess_image(image, imageSize)
+            image = preprocess_image(image, imageSize)
 
             images.append(image)
+
+            if maxImages is not None and len(images) >= maxImages:
+                if saveOriginalImages:
+                    return np.array(images), realImageSize, np.array(originalImages)
+                return np.array(images), realImageSize
             
     if saveOriginalImages:
         return np.array(images), realImageSize, np.array(originalImages)
