@@ -30,9 +30,12 @@ class Interface:
         self.currentFrame = self.camera.get_frame()
         return self.currentFrame
     
-    def updateInput(self, input, doStart, doStop):
+    def updateInput(self, input, doStart, doStop,screenImage=None):
         
         self.currentInput=input
+        
+        if(screenImage is not None):
+            self.currentFrame=screenImage
         
         
         

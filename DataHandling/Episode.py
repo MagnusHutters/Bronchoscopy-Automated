@@ -8,6 +8,7 @@ import json
 from DataHandling.Options import *
 from DataHandling.Frame import Frame
 
+import numpy as np
 from PIL import Image
 import multiprocessing
 
@@ -78,6 +79,14 @@ class Episode:
     
 
     def addFrame(self, image, data={}):
+        
+        #convert data to compatiple types
+        for key in data:
+            #convert float32 to float
+            if type(data[key])==np.float32:
+                data[key]=float(data[key])
+        
+        #print(data)
 
         pil_image = Image.fromarray(image)
         frame = Frame.fromImage(self.length,self.dir_path, pil_image, data)
@@ -156,6 +165,7 @@ class Episode:
         
         jsonPath = f"{self.dir_path}/data.json"
         with open(jsonPath, 'w') as f:
+            #print(data)
             json.dump(data, f, indent=4)
             
 

@@ -19,8 +19,9 @@ from ModelController import *
 
 
 
-#controller = PygameController()
 try:
+    
+    #controller = PygameController()
     
     controller = ModelController()
 except Exception as e:

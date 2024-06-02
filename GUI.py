@@ -20,7 +20,7 @@ import time
 
 
 class JoystickData:
-    def __init__(self, forwards, rotate,bend,l1,r1,l2,r2):
+    def __init__(self, forwards, rotate,bend,l1,r1,l2,r2, start, stop):
         self.forwards=forwards
         self.rotation=rotate
         self.bend=bend
@@ -29,6 +29,8 @@ class JoystickData:
         self.l2=l2
         self.r2=r2
         self.dir=[self.rotation,self.bend]
+        self.start=start
+        self.stop=stop
         
         
     #from joystick
@@ -56,10 +58,13 @@ class JoystickData:
         l2=buttons[6]
         r2=buttons[7]
         
+        start = buttons[9]
+        stop = buttons[8]
         
         
         
-        return JoystickData(forwards, rotate,bend,l1,r1,l2,r2)
+        
+        return JoystickData(forwards, rotate,bend,l1,r1,l2,r2, start,stop)
 
 class GUI:
     def __init__(self, size=None):
@@ -214,7 +219,7 @@ class GUI:
     
 
     def drawBar(self, value):
-        print(f"Drawing bar with value: {value}")
+        #print(f"Drawing bar with value: {value}")
             
         value=value*self.size[1]    
             
@@ -271,7 +276,16 @@ class GUI:
         #draw image on screen
         self.screen.blit(surface, (0, 0))
 
-    def update(self, originalImage, objects, state):
+    def drawRecording(self,currentFrame):
+        pygame.draw.circle(self.screen, (255,0,0), (12,12), 6)
+        
+        #display current frame number on screen
+        
+        text = self.font.render(f'Frame: {currentFrame}', True, (255, 255, 255))
+        self.screen.blit(text, (24,6))
+
+
+    def update(self, originalImage, objects, state, recording,currentFrame):
 
 
         self.refreshScreen(originalImage)
@@ -347,9 +361,21 @@ class GUI:
         self.drawBar(state[0])
         
         
+        if recording:
+            self.drawRecording(currentFrame)
+        
+        
+        screen_image = pygame.surfarray.array3d(self.screen)
+
+        # Convert from (width, height, channel) to (height, width, channel)
+        screen_image = np.transpose(screen_image, (1, 0, 2))
+
+        # Convert the image from RGB (Pygame format) to BGR (OpenCV format)
+        #screen_image = cv2.cvtColor(screen_image, cv2.COLOR_RGB2BGR)
+        
         pygame.display.flip()
         
-        return self.current_index, False, joystick, self.manual
+        return self.current_index, False, joystick, self.manual, screen_image
     
             
         #time.sleep(0.1)

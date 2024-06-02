@@ -1,6 +1,7 @@
 
 import time
 import numpy as np
+import traceback
 from Input import *
 from Interface import *
 class Controller:
@@ -16,7 +17,7 @@ class Controller:
     def doStep(self, image):
 
         #return Input(0,0,0)
-        return Input(0,0,0), 0, 0
+        return Input(0,0,0), 0, 0, None
 
     def update(self):
 
@@ -26,10 +27,11 @@ class Controller:
 
 
         #input = self.doStep(image)
-        input, doStart, doStop = self.doStep(image)
+        input, doStart, doStop, sceenImage = self.doStep(image)
 
         #self.interface.updateInput(input)
-        self.interface.updateInput(input, doStart, doStop)
+        
+        self.interface.updateInput(input, doStart, doStop,sceenImage)
 
     def run(self, interval =0.1):
 
@@ -58,6 +60,8 @@ class Controller:
                 self.closed=True
         except Exception as e:
             print("Error closing controller: ", e)
+            traceback.print_exc()
+            raise e
 
 
 

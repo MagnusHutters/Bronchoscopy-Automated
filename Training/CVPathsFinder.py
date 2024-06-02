@@ -65,7 +65,7 @@ def preprocess_image_tresholding(original, target_size=(64, 64)):
 
         if(len(points) >0):
             count+=1
-        if count > 8:
+        if count > 9:
             break
 
         _,threshold = cv2.threshold(image,i,255,cv2.THRESH_BINARY_INV)
@@ -95,13 +95,13 @@ def preprocess_image_tresholding(original, target_size=(64, 64)):
                 cX = int(M["m10"] / M["m00"])
                 cY = int(M["m01"] / M["m00"])
 
-                distFromCenter = np.sqrt((cX-target_size[0]/2)**2 + (cY-target_size[1]/2)**2)
+                #distFromCenter = np.sqrt((cX-target_size[0]/2)**2 + (cY-target_size[1]/2)**2)
                 
 
-                nomalizedDistFromCenter = distFromCenter / np.sqrt((target_size[0]/2)**2 + (target_size[1]/2)**2)
-                invNormalizedDistFromCenter = 1-nomalizedDistFromCenter
+                #nomalizedDistFromCenter = distFromCenter / np.sqrt((target_size[0]/2)**2 + (target_size[1]/2)**2)
+                #invNormalizedDistFromCenter = 1-nomalizedDistFromCenter
                 #print(f"Area: {area}")
-                if area*((invNormalizedDistFromCenter**2)+0.1) > 10:
+                if area > 12:
 
                     
                     
@@ -111,7 +111,7 @@ def preprocess_image_tresholding(original, target_size=(64, 64)):
     for point in points:
         cv2.circle(image, point, 5, 255, 1)
 
-    display_images(image, threshold)
+    #display_images(image, threshold)
 
 
     # Combine the thresholded images into a single multi-channel image

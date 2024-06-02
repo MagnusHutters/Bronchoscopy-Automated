@@ -34,9 +34,42 @@ class ModelController(Controller):
         self.model = TFLiteModel("BronchoModel.tflite")
         
         
+        self.override_end_time = 0
+        self.override_active = False
+        self.override_type = None
+        self.last_nonzero_rotation = 1
+        
+        self.save_directory = "Override_images"
+        self.override_timestamp = None
+        
+        if not os.path.exists(self.save_directory):
+            os.makedirs(self.save_directory)
         
         
         
+        
+        
+    def save_image(self, image, override_type, timing):
+        prefix = "exp6"
+        
+        timestamp=0
+        if timing =="before":
+            self.override_timestamp = int(time.time() * 1000)  # Milliseconds timestamp for uniqueness
+        timestamp = self.override_timestamp
+        
+        
+        
+        dir = f"{self.save_directory}/{prefix}_{override_type}_{timestamp}"
+        
+        #if dir does not exist, create it
+        if not os.path.exists(dir):
+            os.makedirs(dir)
+        
+        
+        # Convert the image to a format that can be saved (if needed)
+        filename = f"{dir}/{timing}.png"
+        cv2.imwrite(filename, image)
+        print(f"Saved image: {filename}")
         
         
        
@@ -54,11 +87,20 @@ class ModelController(Controller):
         
         state = self.interface.currentState
         
-        currentKey, doExit, joystick, manual=self.gui.update(image,objects,state)
+        
+        recording = False
+        currentFrame=0
+        if self.interface.currentEpisode is not None:
+            recording = True
+            currentFrame = self.interface.currentEpisode.length
+        
+        
+        currentKey, doExit, joystick, manual, screenImage=self.gui.update(image,objects,state, recording,currentFrame)
         #print(f"Current Key: {currentKey}, keys: {objects.keys()}")
         
         
-
+        doStart = joystick.start
+        doStop=joystick.stop
 
 
 
@@ -75,12 +117,14 @@ class ModelController(Controller):
             self.override_active = True
             self.override_end_time = time.time() + 1  # Set override for 1 second
             self.override_type = 'extension'
+            self.save_image(image, self.override_type, "before")
         
         # Check for joystick.l2 change from 0 to 1 and activate rotation override
         if joystick.l2 == 1 and not self.override_active:
             self.override_active = True
             self.override_end_time = time.time() + 1  # Set override for 1 second
             self.override_type = 'rotation'
+            self.save_image(image, self.override_type, "before")
         
 
         if self.override_active:
@@ -92,6 +136,7 @@ class ModelController(Controller):
             
             if time.time() >= self.override_end_time:
                 self.override_active = False
+                self.save_image(image, self.override_type, "post")
                 self.override_type = None
         else:
 
@@ -161,7 +206,7 @@ class ModelController(Controller):
         
         
         
-        return input, doStart, doStop
+        return input, doStart, doStop, None
     
     def close(self):
         #pygame shutdown

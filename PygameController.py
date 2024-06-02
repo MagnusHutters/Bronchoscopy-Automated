@@ -183,7 +183,7 @@ class PygameController(Controller):
         pygame.display.flip()  
         
         
-        return input, doStart, doStop
+        return input, doStart, doStop, None
     
     def close(self):
         #pygame shutdown

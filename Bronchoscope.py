@@ -216,7 +216,7 @@ class Bronchoscope:
 
     def rotate(self,rotation):
         
-        rot=(rotation*20)
+        rot=(rotation*15)
         
         
         self.m_rot+=int(rot)
@@ -325,7 +325,7 @@ class Bronchoscope:
             
             dir=1
             if(toMove<0): dir=0
-            sleepTime=0.012
+            sleepTime=0.006
             #print(f"toMove: {toMove}")
             self.pi.write(self.fwd_dir, dir)
             if(toMove is not 0):
@@ -377,7 +377,7 @@ class Bronchoscope:
             
             
             
-            time.sleep(0.005)
+            time.sleep(0.004)
             
             
     def close(self):
