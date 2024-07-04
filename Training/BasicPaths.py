@@ -38,7 +38,7 @@ def createModel(sampleImage=None):
     x = Flatten()(x)
 
     # Shared dense layers
-    x = Dense(128, activation='relu')(x)
+    #x = Dense(128, activation='relu')(x)
     x = Dense(64, activation='relu')(x)
 
     # Single output layer for all holes
@@ -266,14 +266,17 @@ def augment_data(images, labels):
     return np.array(augmented_images), np.array(augmented_labels)
 
 
-def train_model(model, images, labels, epochs=10):
+def train_model(model, images, labels, epochs=20):
 
     #augment the data
     #without validation data
     #model.fit(images, labels, epochs=epochs)
     
     #with validation data
-    model.fit(images, labels, epochs=epochs, validation_split=0.2)
+    history = model.fit(images, labels, epochs=epochs, validation_split=0.1)
+
+    with open('branchModelTrainingHistory.json', 'w') as f:
+        json.dump(history.history, f)
 
     return model
 
@@ -351,7 +354,7 @@ def main():
     
     tf.get_logger().setLevel('DEBUG')
 
-    model = train_model(model, images, labels, epochs=10)
+    model = train_model(model, images, labels, epochs=50)
 
     #save the model
     tf.saved_model.save(model, "path_model_label")

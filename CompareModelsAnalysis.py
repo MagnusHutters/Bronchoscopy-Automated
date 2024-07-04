@@ -235,19 +235,20 @@ def main():
     print("")
 
 
-    contingency_table = [[0, b], [c, 0]]
-    contingency_table2 = [[0, b2], [c2, 0]]
-    print("Contingency Table 1:", contingency_table)
-    print("Contingency Table 2:", contingency_table2)
+    #contingency_table = [[0, b], [c, 0]]
+    #contingency_table2 = [[0, b2], [c2, 0]]
+    #print("Contingency Table 1:", contingency_table)
+    #print("Contingency Table 2:", contingency_table2)
 
-    result = mcnemar(contingency_table, exact=True)
-    result2 = mcnemar(contingency_table2, exact=True)
+    #result = mcnemar(contingency_table, exact=True)
+    #result2 = mcnemar(contingency_table2, exact=True)
     
 
     print("CNN Model Aggregate Metrics:", metrics_CNN)
     print("CV Model Aggregate Metrics:", metrics_CV)
 
 
+    return
     print(f'McNemar test statistic: {result.statistic}')
     print(f'P-value: {result.pvalue}')
 

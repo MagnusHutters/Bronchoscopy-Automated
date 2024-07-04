@@ -178,7 +178,7 @@ def prepEpisode(episodePath):
 
 
         #load model and predict
-        model = tf.keras.models.load_model("pathModel.keras")
+        #model = tf.keras.models.load_model("pathModel.keras")
         
 
         images_array = np.array(images)  # Convert list of images to a numpy array for efficient processing

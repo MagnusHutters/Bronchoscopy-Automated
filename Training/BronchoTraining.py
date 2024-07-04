@@ -3,7 +3,8 @@
 import cv2
 import tensorflow as tf
 from tensorflow.keras.layers import Input, Conv2D, MaxPooling2D, Flatten, Dense, concatenate, Reshape
-
+import numpy as np
+import json
 
 
 from Training.EpisodeLoader import *
@@ -159,12 +160,20 @@ def train():
     combined_dataset = tf.data.Dataset.zip((imageDataset, pathDataset, stateDataset, labelInput))
     #combined_dataset = tf.data.Dataset.zip((imageDataset, labelInput))
 
+
+
+
     print(f"Mapping dataset...")
     combined_dataset = combined_dataset.map(
         lambda img, arr1, arr2, label: (
             (img, arr1, arr2), label
             )
     )
+
+    
+
+
+
 
     # combined_dataset = combined_dataset.map(
     #     lambda img_path, label: (
@@ -174,14 +183,32 @@ def train():
     
 
     buffer_size = 1000  # This is just an example; adjust based on your dataset size and memory constraints
-    batch_size = 4
+    batch_size = 32
     print(f"Shuffling and batching dataset...")
-    combined_dataset = combined_dataset.shuffle(buffer_size).batch(batch_size).prefetch(tf.data.AUTOTUNE)
+    combined_dataset = combined_dataset.shuffle(buffer_size)
+
+
+    dataSetSize = len(images)
+    trainSize = int(dataSetSize * 0.9)
+    valSize = dataSetSize - trainSize
+
+
+    train_dataset = combined_dataset.take(trainSize)
+    val_dataset = combined_dataset.skip(trainSize)
+
+    train_dataset = train_dataset.batch(batch_size).prefetch(tf.data.AUTOTUNE)
+    val_dataset = val_dataset.batch(batch_size).prefetch(tf.data.AUTOTUNE)
+
+
 
     print(f"Creating model...")
     model = create_model()
 
-    model.fit(combined_dataset, epochs=20)
+    history = model.fit(train_dataset, epochs=50, validation_data=val_dataset)
+
+    with open('bronchoModelTrainingHistory.json', 'w') as f:
+        json.dump(history.history, f)
+
 
     print(f"Saving model...")
     model.save("BronchoModel.keras")
