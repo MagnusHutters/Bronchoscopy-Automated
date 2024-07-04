@@ -20,21 +20,11 @@ from ModelController import *
 
 
 #controller = PygameController()
-try:
-    
-    controller = ModelController()
-except Exception as e:
-    print("Error creating controller: ", e)
-    quit()
+
+controller = ModelController()
 
 
 
 #try except keyboard interupt
 
-try:
-    controller.run()
-except KeyboardInterrupt:
-    print("Controlled Keyboard interupt")
-    print(f"Shutting down")
-    controller.close()
-    quit()
+controller.run()

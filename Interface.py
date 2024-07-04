@@ -15,7 +15,7 @@ class Interface:
         self.camera=Camera()
         
         self.currentEpisode=None
-        self.currentState=self.broncho.getState()
+        self.currentState=(0,0) #self.broncho.getState()
         self.currentInput=None
         
         
@@ -36,7 +36,7 @@ class Interface:
         
         
         
-        self.currentState=self.broncho.getState()
+        self.currentState=(0,0) #self.broncho.getState()
         self.broncho.rotate(input.rotation)
         
         self.broncho.changeBend(input.bend)
