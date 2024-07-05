@@ -37,11 +37,8 @@ class Interface:
         
         
         self.currentState=(0,0) #self.broncho.getState()
-        self.broncho.rotate(input.rotation)
         
-        self.broncho.changeBend(input.bend)
-        
-        self.broncho.move(input.extend)   
+        self.broncho.send(input.toChar())
         
         
         if(doStart):
