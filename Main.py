@@ -25,6 +25,5 @@ controller = ModelController()
 
 
 
-#try except keyboard interupt
 
 controller.run()

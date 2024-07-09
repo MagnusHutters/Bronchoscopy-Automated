@@ -9,7 +9,9 @@ class Camera:
         # Initialize the video capture with the given camera index
         self.cap = cv2.VideoCapture(camera)
         self.cap.set(cv2.CAP_PROP_BUFFERSIZE, 2)
-        self.cap.set(cv2.CAP_PROP_AUTO_EXPOSURE, 0.25)  # Manual mode
+        #self.cap.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)  # Manual mode
+        self.cap.set(cv2.CAP_PROP_AUTO_EXPOSURE, 3)  # Manual mode
+        #self.cap.set(cv2.CAP_PROP_AUTO_EXPOSURE, 0.25)  # Manual mode
         #self.cap.set(cv2.CAP_PROP_EXPOSURE, -40) 
         #self.cap.set(cv2.CAP_PROP_EXPOSURE, 0.25)
         

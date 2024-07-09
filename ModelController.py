@@ -70,7 +70,13 @@ class ModelController(Controller):
             currentFrame = len(self.interface.episodeManager.currentEpisode)
             
         
+        
+        
+        
+        
+        Timer.point("beforeGUIUpdate")
         currentKey, doExit, joystick, manual=self.gui.update(image,objects,state, recording, currentFrame, topImage)
+        Timer.point("afterGUIUpdate")
         #print(f"Current Key: {currentKey}, keys: {objects.keys()}")
         
         

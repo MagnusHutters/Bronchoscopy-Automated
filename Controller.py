@@ -46,6 +46,7 @@ class Controller:
 
         self.interval = interval
         
+            
         while not self.closed:
             
             Timer.point("Start")
@@ -70,7 +71,10 @@ class Controller:
             
             Timer.point("End")
             report=Timer.reset()
-            #print(report)
+            print(report)
+        
+        
+        
                 
                 
     def close(self):

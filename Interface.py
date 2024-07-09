@@ -1,7 +1,7 @@
 
 
 from Bronchoscope import *
-from Camera import *
+from Camera import Camera
 from CameraTop import CameraTop
 from DataHandling.Episode import *
 from Timer import Timer
@@ -110,6 +110,10 @@ class Interface:
         print("Closing Interface")
         #self.camera.release()
         self.episodeManager.endEpisode()
+        
+        self.bronchoCamera.release()
+        
+        
         
         self.broncho.close()
         

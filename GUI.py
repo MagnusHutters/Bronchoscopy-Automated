@@ -35,6 +35,10 @@ class JoystickData:
     #from joystick
     @staticmethod
     def fromJoystick(js):
+        if js is None:
+            return JoystickData(0,0,0,0,0,0,0,0,0)
+        
+        
         num_axes = js.get_numaxes()
         axes = [js.get_axis(i) for i in range(num_axes)]
         
@@ -285,7 +289,7 @@ class GUI:
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         image = np.transpose(image, (1, 0, 2))
         
-        image=cv2.GaussianBlur(image, (5, 5), 0)
+        #image=cv2.GaussianBlur(image, (5, 5), 0)
         
         
         
@@ -325,7 +329,7 @@ class GUI:
 
         for event in pygame.event.get():
             if event.type == QUIT:
-                pygame.quit()
+                
                 #exit the program
                 doQuit = True
             if event.type == KEYDOWN:
@@ -343,8 +347,7 @@ class GUI:
                     doQuit = True
                     
                     
-                    
-                    
+        #joystick = None      
         joystick = JoystickData.fromJoystick(self.js)
         
         
@@ -356,6 +359,8 @@ class GUI:
             self.manual = False
             print("Auto")
     
+    
+        
         
         return doQuit, selectEvent, joystick, self.manual
 
@@ -412,6 +417,11 @@ class GUI:
         
         
         pygame.display.flip()
+        
+        
+        
+        if doQuit:
+            pygame.quit()
         
         return self.current_index, doQuit, joystick, self.manual
     
