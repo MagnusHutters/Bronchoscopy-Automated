@@ -1,0 +1,17 @@
+:Base Cubes.hlp
+1 Main Index=main_index
+1 Data Collection
+2 Continuous Collection=HID_RUN
+2 Single Point Collection=HID_POINT
+1 Saving Parameters
+2 Saving System Parameters=HID_FILE_SAVE
+2 Restoring System Parameters=HID_FILE_OPEN
+1 Views
+2 Cube Display=HIDR_CUBE_WINDOW
+2 Plotting Display=HIDR_PLOT_WINDOW
+2 Position / Orientation Display=HIDR_TEXT_WINDOW
+2 Statistics Display=HIDR_STATISTICS_WINDOW
+2 Quality Display=HIDR_QUALITY_WINDOW
+1 Parameters
+2 System Parameters=HIDD_SYSTEMPARAM
+2 Sensor Parameters=HIDD_SENSORPARAM

@@ -1,0 +1,33 @@
+
+
+
+
+
+*.zip
+
+#Database folder
+
+Database/*
+
+
+
+#images
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+*.tiff
+
+
+#venv folder
+venv/
+
+#pycache folder
+__pycache__/
+
+.vscode/
+
+
+
+

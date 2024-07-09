@@ -2,13 +2,22 @@ import cv2
 import numpy as np
 
 class Camera:
-    def __init__(self, camera_index=0):
+    def __init__(self, camera):
+        
+        self.camera = camera
+        print(f"Camera: {camera}")
         # Initialize the video capture with the given camera index
-        self.cap = cv2.VideoCapture(camera_index)
+        self.cap = cv2.VideoCapture(camera)
+        self.cap.set(cv2.CAP_PROP_BUFFERSIZE, 2)
+        self.cap.set(cv2.CAP_PROP_AUTO_EXPOSURE, 0.25)  # Manual mode
+        #self.cap.set(cv2.CAP_PROP_EXPOSURE, -40) 
+        #self.cap.set(cv2.CAP_PROP_EXPOSURE, 0.25)
+        
+        self.cap.set(cv2.CAP_PROP_AUTOFOCUS, 0)
         #self.cameraOpened=True
         if not self.cap.isOpened():
             #self.cameraOpened=False
-            raise ValueError("Unable to open video source", camera_index)
+            raise ValueError("Unable to open video source")
             
 
     def get_frame(self):
@@ -19,6 +28,15 @@ class Camera:
         #    return None
         
         ret, frame = self.cap.read()
+        
+        
+        #darken the image
+        
+        
+        #display the captured image
+        #cv2.imshow(str(self.camera), frame)
+        #cv2.waitKey(1)
+        
         
         #frame = np.rot90(frame)
         if not ret:

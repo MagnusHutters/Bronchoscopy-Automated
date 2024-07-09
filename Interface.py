@@ -2,7 +2,9 @@
 
 from Bronchoscope import *
 from Camera import *
-from DataHandling.EpisodeOld import *
+from CameraTop import CameraTop
+from DataHandling.Episode import *
+from Timer import Timer
 
 
 
@@ -11,14 +13,20 @@ class Interface:
     
     def __init__(self):
         
-        self.broncho=Bronchoscope()
-        self.camera=Camera()
+        self.broncho=Bronchoscope(port='/dev/broncho', baudrate=115200)
+        self.broncho.start()
+        self.bronchoCamera=Camera('/dev/broncho_camera')
+        
+        self.topCamera=CameraTop(exposure=50)
         
         self.currentEpisode=None
-        self.currentState=(0,0) #self.broncho.getState()
+        self.currentState= self.broncho.getDict()
         self.currentInput=None
         
+        self.episodeManager=EpisodeManager()
         
+        self.oldDoStart=False
+        self.oldDoStop=False
         #self.startEpisode()
         
         
@@ -27,8 +35,15 @@ class Interface:
     def getImage(self):
         
         
-        self.currentFrame = self.camera.get_frame()
-        return self.currentFrame
+        
+        
+        self.currentImage = self.bronchoCamera.get_frame()
+        Timer.point("gotBrocnhoImage")
+        self.topImage = self.topCamera.get_frame()
+        Timer.point("gotTopImage")
+        
+        
+        return self.currentImage, self.topImage
     
     def updateInput(self, input, doStart, doStop):
         
@@ -36,58 +51,65 @@ class Interface:
         
         
         
-        self.currentState=(0,0) #self.broncho.getState()
+        #self.currentState=(0,0) #self.broncho.getState()
         
-        self.broncho.send(input.toChar())
+        self.currentState= self.broncho.getDict()
+        self.broncho.send(input)
         
         
         if(doStart):
-            self.startEpisode()
             print("Starting Episode")
         if(doStop):
-            self.endEpisode()
             print("Ending Episode")
+            
+            
+        self.handleEpisode(doStart, doStop)
         
         self.doStoreCurrentFrame()
         
         
+        
+    def handleEpisode(self, doStart, doStop):
+        if doStart and not self.oldDoStart:
+            self.episodeManager.newEpisode()
+            
+        if doStop and not self.oldDoStop:
+            self.episodeManager.endEpisode()
+            
+        self.oldDoStart=doStart
+        self.oldDoStop=doStop
+            
+        
     def doStoreCurrentFrame(self):
         
         
-        frameDict=self.currentInput.toDict()
-        frameDict['currentBend']=self.currentState[0]
-        frameDict['currentRot']=self.currentState[1]
         
         
-        if(self.currentEpisode is not None):
+        if(self.episodeManager.hasEpisode()):
             
-            self.currentEpisode.addFrame(self.currentFrame,frameDict)
+            #frameDict=self.currentInput.toDict()
+        
+            stateDict = self.currentState
+            inputDict = self.currentInput.toDict()
+            miscDict = {}
         
         
         
-    def startEpisode(self):
+            newFrame = Frame(self.currentImage, state=stateDict, action=inputDict, data=miscDict, topImage=self.topImage)
         
-        self.currentEpisode=Episode()
-        
-        
-    def endEpisode(self):
-        if self.currentEpisode != None:
-            self.currentEpisode.saveEpisode()
             
-        #delete current episode
+            self.episodeManager.append(newFrame)
         
-        self.currentEpisode=None
+        
+        
     
-    def nextEpisode(self):
-        
-        self.endEpisode()
-        self.startEpisode()
+    
         
         
     def close(self):
         print("Closing Interface")
-        self.camera.release()
-        self.endEpisode()
+        #self.camera.release()
+        self.episodeManager.endEpisode()
         
         self.broncho.close()
         

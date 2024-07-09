@@ -20,16 +20,17 @@ import time
 
 
 class JoystickData:
-    def __init__(self, forwards, rotate,bend,l1,r1,l2,r2):
-        self.forwards=forwards
-        self.rotation=rotate
-        self.bend=bend
+    def __init__(self, forwards, rotate,bend,l1,r1,l2,r2, start, select):
+        self.forwards=forwards #from -1 to 1
+        self.rotation=rotate #from -1 to 1
+        self.bend=bend #from -1 to 1
         self.l1=l1
         self.r1=r1
         self.l2=l2
         self.r2=r2
         self.dir=[self.rotation,self.bend]
-        
+        self.start=start
+        self.select=select
         
     #from joystick
     @staticmethod
@@ -45,7 +46,9 @@ class JoystickData:
         
         hat=js.get_hat(0)
         rotate=axes[0]+hat[0]
-        bend = axes[1]+hat[1]
+        bend = -axes[1]+hat[1]
+        
+        
         
         #clip rotate and bend to [-1,1]
         rotate = np.clip(rotate, -1, 1)
@@ -56,19 +59,24 @@ class JoystickData:
         l2=buttons[6]
         r2=buttons[7]
         
+        start = buttons[9]
+        select = buttons[8]
+        
+        #print(f"Joystick: {start}, {select}")
         
         
         
-        return JoystickData(forwards, rotate,bend,l1,r1,l2,r2)
+        
+        return JoystickData(forwards, rotate,bend,l1,r1,l2,r2, start, select)
 
 class GUI:
     def __init__(self, size=None):
         
         self.hasWindow = False
-        self.size = size
-
-        if size is not None:
-            self.create_window(size)
+        
+        size = (1600,800)
+        
+        self.create_window(size)
 
 
         self.manual=True
@@ -214,9 +222,19 @@ class GUI:
     
 
     def drawBar(self, value):
-        print(f"Drawing bar with value: {value}")
+        #print(f"Drawing bar with value: {value}")
             
-        value=value*self.size[1]    
+        
+        
+        oldDomain = [-180, 180]
+        
+        newDomain = [-400, 400]
+        
+        value = (value - oldDomain[0]) * (newDomain[1] - newDomain[0]) / (oldDomain[1] - oldDomain[0]) + newDomain[0]
+            
+            
+            
+            
             
         # Calculate bar dimensions
         bar_width = 20
@@ -237,8 +255,8 @@ class GUI:
 
         # Position the bar in the middle of the screen
         bar_rect = bar_surface.get_rect()
-        bar_rect.centery = 200+(value/4)
-        bar_rect.right = 400
+        bar_rect.centery = 400+(value/4)
+        bar_rect.right = 800
 
         # Blit the bar onto the screen
         self.screen.blit(bar_surface, bar_rect)
@@ -246,15 +264,27 @@ class GUI:
 
 
 
-    def refreshScreen(self, image):
+    def refreshScreen(self, image, topImage=None):
         
         
-        if not self.hasWindow:
-            self.create_window(image.shape[:2])
+        #if not self.hasWindow:
+            #self.create_window(image.shape[:2])
+            
+        #reset screen
+        self.screen.fill((0, 0, 0))
+            
             
         image=np.array(image, dtype=np.uint8)
+        #resize image to 800x800
+        image = cv2.resize(image, (800, 800), interpolation=cv2.INTER_AREA)
+        
         
         #blur
+        
+        #correct colors
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        image = np.transpose(image, (1, 0, 2))
+        
         image=cv2.GaussianBlur(image, (5, 5), 0)
         
         
@@ -270,20 +300,26 @@ class GUI:
 
         #draw image on screen
         self.screen.blit(surface, (0, 0))
-
-    def update(self, originalImage, objects, state):
-
-
-        self.refreshScreen(originalImage)
-
-
-
-        #create window if it does not exist using the size of the image
         
+        
+        
+        
+        topImage=np.array(topImage, dtype=np.uint8)
+        topImage = cv2.resize(topImage, (800, 800), interpolation=cv2.INTER_AREA)
+        
+        topImage = cv2.cvtColor(topImage, cv2.COLOR_BGR2RGB)
+        topImage = np.transpose(topImage, (1, 0, 2))
+        
+        
+        topSurface = pygame.surfarray.make_surface(topImage)
+        self.screen.blit(topSurface, (800, 0))
 
+
+
+    def doHandleEvents(self):
         pygame.event.pump() #update the event queue
 
-
+        doQuit = False
 
         selectEvent = -1
 
@@ -291,7 +327,7 @@ class GUI:
             if event.type == QUIT:
                 pygame.quit()
                 #exit the program
-                return True
+                doQuit = True
             if event.type == KEYDOWN:
                 if event.key == K_UP:
                     selectEvent = 0
@@ -303,12 +339,15 @@ class GUI:
                     selectEvent = 3
                 if event.key == K_SPACE:
                     selectEvent = -2
-            
-        
-        
-        
+                if event.key == K_ESCAPE:
+                    doQuit = True
+                    
+                    
+                    
+                    
         joystick = JoystickData.fromJoystick(self.js)
-    
+        
+        
         manualSwitch=joystick.r1-joystick.l1
         if manualSwitch < -0.5:
             self.manual = True
@@ -317,7 +356,32 @@ class GUI:
             self.manual = False
             print("Auto")
     
-        if(self.manual):
+        
+        return doQuit, selectEvent, joystick, self.manual
+
+
+    def drawRecording(self, recording, currentFrame):
+        if recording:
+            pygame.draw.circle(self.screen, (255,0,0), (12,12), 6)
+            
+            #display current frame number on screen
+            
+            text = self.font.render(f'Frame: {currentFrame}', True, (255, 255, 255))
+            self.screen.blit(text, (24,6))
+
+    def update(self, originalImage, objects, state, recording=False, currentFrame=0, topImage=None):
+
+
+        self.refreshScreen(originalImage, topImage)
+
+
+
+        #create window if it does not exist using the size of the image
+        
+
+        doQuit, selectEvent, joystick, manual = self.doHandleEvents()
+              
+        if(manual):
             pass
             
         else:
@@ -326,8 +390,6 @@ class GUI:
             #Select path point to choose
             
             self.current_index = self.select_point(objects, self.current_index, self.get_key_press_from_dir(joystick.dir))
-            
-
 
             #draw path points
             for key, value in objects.items():
@@ -341,15 +403,17 @@ class GUI:
                 else:
                     pygame.draw.circle(self.screen, (255, 0, 0), (x, y), 5)
             
-
+        self.drawBar(state["bendReal_deg"])
         
-            
-        self.drawBar(state[0])
+        
+        
+        self.drawRecording(recording, currentFrame)
+        
         
         
         pygame.display.flip()
         
-        return self.current_index, False, joystick, self.manual
+        return self.current_index, doQuit, joystick, self.manual
     
             
         #time.sleep(0.1)

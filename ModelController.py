@@ -6,6 +6,8 @@ from pygame.locals import *
 
 #import tensorflow as tf
 
+
+from Timer import Timer
 import time
 from Controller import*
 #from TFLiteModel import TFLiteModel
@@ -33,7 +35,7 @@ class ModelController(Controller):
         # Load the TFLite model and allocate tensors
         self.model = None #TFLiteModel("BronchoModel.tflite")
         
-        
+        self.override_active=False
         
         
         
@@ -41,7 +43,9 @@ class ModelController(Controller):
         
        
         
-    def doStep(self, image):
+    def doStep(self, image, topImage=None):
+        
+        Timer.point("doStepStart")
         debug = False
         
         
@@ -49,21 +53,34 @@ class ModelController(Controller):
         doStop = False
         
         
-        _, doExit, objects = self.pathInterface.predictAndTrack(image,image)
+        #_, doExit, objects = self.pathInterface.predictAndTrack(image,image)
         
+        
+        
+        objects=[]
         
         state = self.interface.currentState
         
-        currentKey, doExit, joystick, manual=self.gui.update(image,objects,state)
+        
+        
+        recording = False
+        currentFrame=0
+        if self.interface.episodeManager.hasEpisode():
+            recording = True
+            currentFrame = len(self.interface.episodeManager.currentEpisode)
+            
+        
+        currentKey, doExit, joystick, manual=self.gui.update(image,objects,state, recording, currentFrame, topImage)
         #print(f"Current Key: {currentKey}, keys: {objects.keys()}")
         
         
-
+        doStart = joystick.start
+        doStop = joystick.select
 
 
 
         
-        input=Input(0,0,0)
+        input=Input()
 
 
         # Track last non-zero joystick.rotation
@@ -85,10 +102,11 @@ class ModelController(Controller):
 
         if self.override_active:
             if self.override_type == 'extension':
-                input = Input(0, 0, 1)
+                #input = Input(0, 0, 1)
+                pass
             elif self.override_type == 'rotation':
                 rotation_direction = 1 if self.last_nonzero_rotation > 0 else -1
-                input = Input(rotation_direction, 0, 0)
+                #input = Input(rotation_direction, 0, 0)
             
             if time.time() >= self.override_end_time:
                 self.override_active = False
@@ -96,7 +114,8 @@ class ModelController(Controller):
         else:
 
             if manual:
-                input=Input(joystick.rotation,joystick.bend,joystick.forwards)
+                input=Input.fromJoystick(joystick)
+                #print(f"Manual: {input}")
                 
             else:
                 
@@ -158,8 +177,11 @@ class ModelController(Controller):
         
         
         
-        
-        
+        if doExit:
+            self.running = False
+            self.close()
+            
+        Timer.point("doStepEnd")
         
         return input, doStart, doStop
     
