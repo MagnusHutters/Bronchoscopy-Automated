@@ -1,21 +1,39 @@
 import cv2
 import numpy as np
+from pygrabber.dshow_graph import FilterGraph
+
+
+
+
 
 class Camera:
+
+    @staticmethod
+    def get_camera_id_by_name(camera_name):
+        graph = FilterGraph()
+        devices = graph.get_input_devices()
+        
+        for i, device in enumerate(devices):
+            if camera_name in device:
+                return i
+        return None
+
+
     def __init__(self, camera):
         
         self.camera = camera
         print(f"Camera: {camera}")
         # Initialize the video capture with the given camera index
         self.cap = cv2.VideoCapture(camera)
-        self.cap.set(cv2.CAP_PROP_BUFFERSIZE, 2)
+        #self.cap = cv2.VideoCapture(3)
+        #self.cap.set(cv2.CAP_PROP_BUFFERSIZE, 2)
         #self.cap.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)  # Manual mode
-        self.cap.set(cv2.CAP_PROP_AUTO_EXPOSURE, 3)  # Manual mode
+        #self.cap.set(cv2.CAP_PROP_AUTO_EXPOSURE, 3)  # Manual mode
         #self.cap.set(cv2.CAP_PROP_AUTO_EXPOSURE, 0.25)  # Manual mode
         #self.cap.set(cv2.CAP_PROP_EXPOSURE, -40) 
         #self.cap.set(cv2.CAP_PROP_EXPOSURE, 0.25)
         
-        self.cap.set(cv2.CAP_PROP_AUTOFOCUS, 0)
+        #self.cap.set(cv2.CAP_PROP_AUTOFOCUS, 0)
         #self.cameraOpened=True
         if not self.cap.isOpened():
             #self.cameraOpened=False
@@ -30,6 +48,9 @@ class Camera:
         #    return None
         
         ret, frame = self.cap.read()
+
+        #rotate 180 degrees
+        #frame = cv2.rotate(frame, cv2.ROTATE_180)
         
         
         #darken the image

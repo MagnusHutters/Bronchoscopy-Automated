@@ -2,6 +2,7 @@
 import time
 import numpy as np
 from Input import *
+import traceback
 
 
 from Timer import Timer
@@ -44,34 +45,57 @@ class Controller:
 
     def run(self, interval =0.05):
 
+
+
         self.interval = interval
+
+        start_time = time.time()
+        end_time = time.time()
         
+        try:    
+            while not self.closed:
+                
+                
+                #start_time = time.time()  # Record start time
+                self.update()  # Execute the task
+                
+                
+                
+                end_time = time.time()  # Record end time
+                elapsed_time = end_time - start_time  # Calculate elapsed time
+
+
+                #print(elapsed_time)
+                sleep_time = self.interval - elapsed_time  # Calculate remaining time to sleep
+                start_time = end_time + sleep_time  # Update start time for next iteration
+                
+                Timer.point("BeforeSleep")
+                if sleep_time > 0:
+                    time.sleep(sleep_time)  # Sleep for the remaining time of the interval
+                else:
+                    # Processing took longer than the interval
+                    #print("Warning: Processing time exceeded the interval.")
+                    pass
+                
+                Timer.point("End")
+                report, num=Timer.reset()
+                Timer.point("Start")
+                #print(report)
+                #print(num)
+
+
+                #os.system('cls' if os.name == 'nt' else 'clear')
+
+                # Print the entire frame at once
+                #print(report, end='', flush=True)
+
+
+        except Exception as e:
+            print(f"Error in main loop: {e}")
+            self.close()
+            #traceback.print_exc()
             
-        while not self.closed:
-            
-            Timer.point("Start")
-            start_time = time.time()  # Record start time
-            self.update()  # Execute the task
-            
-            
-            
-            end_time = time.time()  # Record end time
-            elapsed_time = end_time - start_time  # Calculate elapsed time
-            #print(elapsed_time)
-            sleep_time = self.interval - elapsed_time  # Calculate remaining time to sleep
-            
-            
-            Timer.point("BeforeSleep")
-            if sleep_time > 0:
-                time.sleep(sleep_time)  # Sleep for the remaining time of the interval
-            else:
-                # Processing took longer than the interval
-                #print("Warning: Processing time exceeded the interval.")
-                pass
-            
-            Timer.point("End")
-            report=Timer.reset()
-            print(report)
+            raise e
         
         
         

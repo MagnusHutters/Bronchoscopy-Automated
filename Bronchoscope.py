@@ -63,9 +63,8 @@ class Bronchoscope(threading.Thread):
 
     def home(self):
         # Home the robot
-        self.send_serial_command('i')
         
-        self.query_joint_positions()
+        self.query_joint_positions(doForce=True)
         
                     
         
@@ -82,7 +81,7 @@ class Bronchoscope(threading.Thread):
         self.home()
         
         time.sleep(0.5)
-        self.query_joint_positions()
+        self.query_joint_positions(doForce=True)
         
         while self.running:
             try:
@@ -169,22 +168,39 @@ class Bronchoscope(threading.Thread):
             print(f"Serial write error: {e}")
     
     
-    def query_joint_positions(self):
-        self.send_serial_command('j')  # Send 'j' command to query positions
-        try:
-            responses = []
-            for _ in range(3):
-                response = self.serial.readline().decode().strip()
-                position = int(response)
-                responses.append(position)
+    def query_joint_positions(self, doForce=False):
+
+        success = False
+        while not success:
+            #flush input buffer
+            self.serial.flushInput()
             
-            self.current_position = responses
-            print(f"Initialized current positions: {self.current_position}")
-        
-        except ValueError as e:
-            print(f"Error parsing position response: {e}")
-        except serial.SerialException as e:
-            print(f"Serial error while reading response: {e}")
+            self.send_serial_command('j')  # Send 'j' command to query positions
+            try:
+                responses = []
+                for _ in range(3):
+                    response = self.serial.readline().decode().strip()
+                    position = int(response)
+                    responses.append(position)
+                
+                self.current_position = responses
+                print(f"Initialized current positions: {self.current_position}")
+                success = True
+            
+            except ValueError as e:
+                print(f"Failed to get joint positions")
+                if doForce:
+                    print("Retrying...")
+                success = False
+            except serial.SerialException as e:
+                print(f"Serial error while reading response: {e}")
+                if doForce:
+                    print("Retrying...")
+            if not doForce:
+                break
+            else:
+                
+                time.sleep(0.1)
     
     def send(self, command):
         #print(command)

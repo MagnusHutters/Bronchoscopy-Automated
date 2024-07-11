@@ -21,9 +21,18 @@ from ModelController import *
 
 #controller = PygameController()
 
-controller = ModelController()
+
+
+
+def main():
+    controller = ModelController()
+
+    controller.run()
+
+    pass
 
 
 
 
-controller.run()
+if __name__ == "__main__":
+    main()

@@ -9,6 +9,7 @@ from pygame.locals import *
 
 import numpy as np
 import cv2
+from Timer import Timer
 
 
 
@@ -378,7 +379,7 @@ class GUI:
 
 
         self.refreshScreen(originalImage, topImage)
-
+        Timer.point("screenRefreshed")
 
 
         #create window if it does not exist using the size of the image
@@ -386,6 +387,8 @@ class GUI:
 
         doQuit, selectEvent, joystick, manual = self.doHandleEvents()
               
+        Timer.point("eventsHandled")
+        
         if(manual):
             pass
             
@@ -409,15 +412,16 @@ class GUI:
                     pygame.draw.circle(self.screen, (255, 0, 0), (x, y), 5)
             
         self.drawBar(state["bendReal_deg"])
-        
+        Timer.point("drawnBar")
         
         
         self.drawRecording(recording, currentFrame)
-        
+        Timer.point("drawnRecording")
         
         
         pygame.display.flip()
         
+        Timer.point("displayed")
         
         
         if doQuit:

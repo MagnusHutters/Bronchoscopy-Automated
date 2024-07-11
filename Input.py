@@ -48,7 +48,14 @@ class Input:
     def __init__(self, axis=None, change=0):
         self.axis = axis # None, 0, 1, 2 - None (no input), bend, rotation, extension
         self.change = change # -127 to 127 number of steps to move. 0 is no movement, positive is forward, negative is backward
+
+        if self.axis is not None:
+            self.axis = int(self.axis)
         
+        self.change = int(self.change)
+
+
+
         #false if axis is None, true otherwise
         self.hasInput = axis is not None
         

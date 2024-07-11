@@ -121,6 +121,9 @@ class ModelController(Controller):
 
             if manual:
                 input=Input.fromJoystick(joystick)
+
+                if joystick.l2:
+                    self.interface.broncho.home() # Reset the broncho to the home position
                 #print(f"Manual: {input}")
                 
             else:

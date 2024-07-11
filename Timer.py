@@ -11,11 +11,17 @@ class Timer:
 
     @staticmethod
     def reset():
+
+
+        numOfPoints = len(Timer.checkpoints)
         # Generate the report and clear checkpoints
         if not Timer.checkpoints:
             return "No checkpoints to report."
 
         report = []
+        report.append("")
+        report.append("Time report:")
+
         sorted_checkpoints = sorted(Timer.checkpoints.items(), key=lambda x: x[1])
 
         # Calculate the total time from the first to the last checkpoint
@@ -33,4 +39,4 @@ class Timer:
         # Clear the checkpoints for the next run
         Timer.checkpoints.clear()
         
-        return "\n".join(report)
+        return "\n".join(report), numOfPoints

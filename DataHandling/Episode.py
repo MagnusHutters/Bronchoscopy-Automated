@@ -7,8 +7,29 @@ import numpy as np
 import time
 import cv2
 import multiprocessing
+import subprocess
+
 
 from PIL import Image
+
+import compileVideo
+
+def check_serializable(obj, path):
+
+    if isinstance(obj, dict):
+        for key, value in obj.items():
+            check_serializable(value, path + f".{key}")
+    elif isinstance(obj, list):
+        for i, item in enumerate(obj):
+            check_serializable(item, path + f"[{i}]")
+    else:
+        try:
+            json.dumps(obj)
+        except Exception as e:
+            print(f"Object at path {path} is not serializable: {obj}")
+            raise e
+
+                
 
 
 
@@ -25,6 +46,8 @@ def saveToDiskThreadSafe(image, path):
     image = Image.fromarray(image)
     image.save(path)
 
+
+
 class Frame:
     def __init__(self, image, state, action, data, topImage=None):
         # Ensure all attributes are numpy arrays
@@ -37,6 +60,25 @@ class Frame:
         self.action = action
         self.data = data
         self.topImage = topImage
+
+
+
+
+
+
+
+    
+
+    
+
+    def check(self):
+
+        check_serializable(self.data, "data")
+        check_serializable(self.state, "state")
+        check_serializable(self.action, "action")
+
+
+
 
     def __repr__(self):
         return f"Frame(image={self.image}, state={self.state}, action={self.action}, data={self.data}, topImage={self.topImage})"
@@ -56,7 +98,7 @@ class Episode:
 
 
 
-    def __init__(self, doAskForLabel=True, doAskForSave=True):
+    def __init__(self, pool ,doAskForLabel=True, doAskForSave=True):
         
 
         self.doAskForLabel = doAskForLabel
@@ -66,17 +108,17 @@ class Episode:
         #Create a new temporary directory for the episode
 
         self.path = tempfile.mkdtemp()
-        self.dataPath = os.path.join(self.path, "_episodeData.json")
+        self.dataPath = os.path.join(self.path, "00_episodeData.json")
 
         self.episodeProbertyLabels = {"Section": None, "Branch": None}
 
 
         #Setup the episode's properties
         self.isSaved = False
-        self.isLabeled = False
+        self.isLabeled = True
         self.label = None
         
-        self.pool = multiprocessing.Pool(processes=8)
+        self.pool=pool
 
 
         #data
@@ -171,6 +213,11 @@ class Episode:
     
 
     def _addFrame(self, frame):
+
+
+        #frame.clean()
+        frame.check()
+
         self.images.append(frame.image.copy())
         self.states.append(frame.state.copy())
         self.actions.append(frame.action.copy())
@@ -265,6 +312,23 @@ class Episode:
                 
             
 
+    def analyseDict(self, dictionary, indent=0):
+
+        for key, value in dictionary.items():
+            
+            if isinstance(value, dict):
+                print(f"{' '*indent} dict {key} :")
+                self.analyseDict(value, indent=indent+4)
+            elif isinstance(value, list):
+                print(f"{' '*indent} list {key} :")
+                for item in value:
+                    if isinstance(item, dict):
+                        self.analyseDict(item, indent=indent+4)
+                    else:
+                        print(f"{' '*(indent+4)}{type(item)} : {item}")
+            else:
+                print(f"{' '*(indent+4)}{type(value)} {key} : {value}")
+
 
     def save(self, directory=None):
         
@@ -300,9 +364,12 @@ class Episode:
         #save the frames
         frames = {}
         
-        
+        print(f"Compiling episode with {len(self.images)} frames")
+
         for frame, index in self:
             
+
+            print(f"\rSaving frame {index} of {len(self.images)}", end="")
             
             #print(f"Saving frame {frame} at index {index}")
             frameData = {}
@@ -317,15 +384,24 @@ class Episode:
             
         episodeData["frames"] = frames
         
+        
+        
+        #print(f"Frame 0 example: {frames[0]}")
         #save the episode data to a json file
         
+
+        #find_non_serializable(self, episodeData)
+        
+
+        print("\nSaving episode data to json file")
+
         with open(self.dataPath, 'w') as f:
             json.dump(episodeData, f, indent=4)
             
             
         #save the episode to a zip file
         
-        name = time.strftime("20%y-%m-%d - %H:%M:%S")
+        name = time.strftime("20%y-%m-%d - %H-%M-%S")
         
         #if a directory is given, save the episode there
         
@@ -333,11 +409,30 @@ class Episode:
         #print the objects in the directory
         
         
+        
+        print("Compresing episode to zip file")
+        name = os.path.join(directory, name)
         if directory is not None:
-            name = os.path.join(directory, name)
+            
             
             print(f"Saving episode to {name}")
             shutil.make_archive(name, 'zip', self.path)
+
+
+
+
+
+        #render the video
+        print("Rendering video")
+
+
+
+        #compileVideo.create_videos_from_folder(name, create_combined=True)
+        name = name + ".zip"
+        #render the video in a new process using pool
+        self.pool.apply_async(compileVideo.create_videos_from_folder, args=(name, True))
+    
+
 
 
 
@@ -352,8 +447,12 @@ class Episode:
 
 
         try:
-            shutil.rmtree(self.path)
-            print(f"Temporary folder at {self.path} deleted.")
+            #delete the temporary folder, if it exists  
+            if os.path.exists(self.path):
+                shutil.rmtree(self.path)
+                print(f"Temporary folder at {self.path} deleted.")
+            else: 
+                print(f"Temporary folder at {self.path} already deleted")
         except Exception as e:
             print(f"Error deleting temporary folder: {e}")
 
@@ -366,6 +465,7 @@ class EpisodeManager:
         self.currentEpisode = None
 
         self.episodeDatabasePath = "Database/"
+        self.pool = multiprocessing.Pool(processes=8)
 
 
         allEpisodePaths = self.findAllEpisodes(self.episodeDatabasePath)
@@ -391,7 +491,7 @@ class EpisodeManager:
             else:
                 return
         
-        self.currentEpisode = Episode()
+        self.currentEpisode = Episode(self.pool)
         return
         
 
