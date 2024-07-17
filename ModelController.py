@@ -89,24 +89,24 @@ class ModelController(Controller):
         input=Input()
 
 
-        # Track last non-zero joystick.rotation
-        if joystick.rotation != 0:
-            self.last_nonzero_rotation = joystick.rotation
-        
-        # Check for joystick.r2 change from 0 to 1 and activate extension override
-        if joystick.r2 == 1 and not self.override_active:
-            self.override_active = True
-            self.override_end_time = time.time() + 1  # Set override for 1 second
-            self.override_type = 'extension'
-        
-        # Check for joystick.l2 change from 0 to 1 and activate rotation override
-        if joystick.l2 == 1 and not self.override_active:
-            self.override_active = True
-            self.override_end_time = time.time() + 1  # Set override for 1 second
-            self.override_type = 'rotation'
+        ## Track last non-zero joystick.rotation
+        #if joystick.rotation != 0:
+        #    self.last_nonzero_rotation = joystick.rotation
+        #
+        ## Check for joystick.r2 change from 0 to 1 and activate extension override
+        #if joystick.r2 == 1 and not self.override_active:
+        #    self.override_active = True
+        #    self.override_end_time = time.time() + 1  # Set override for 1 second
+        #    self.override_type = 'extension'
+        #
+        ## Check for joystick.l2 change from 0 to 1 and activate rotation override
+        #if joystick.l2 == 1 and not self.override_active:
+        #    self.override_active = True
+        #    self.override_end_time = time.time() + 1  # Set override for 1 second
+        #    self.override_type = 'rotation'
         
 
-        if self.override_active:
+        if False: #self.override_active:
             if self.override_type == 'extension':
                 #input = Input(0, 0, 1)
                 pass

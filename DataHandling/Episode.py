@@ -423,14 +423,14 @@ class Episode:
 
 
         #render the video
-        print("Rendering video")
+        #print("Rendering video")
 
 
 
         #compileVideo.create_videos_from_folder(name, create_combined=True)
-        name = name + ".zip"
+        #name = name + ".zip"
         #render the video in a new process using pool
-        self.pool.apply_async(compileVideo.create_videos_from_folder, args=(name, True))
+        #self.pool.apply_async(compileVideo.create_videos_from_folder, args=(name, True))
     
 
 

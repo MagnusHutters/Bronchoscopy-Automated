@@ -59,12 +59,25 @@ class Bronchoscope(threading.Thread):
         self.serial = None
         self.running = False
 
+        self.doHome = False
+
 
 
     def home(self):
+        self.doHome = True
+
+    def _home(self):
         # Home the robot
         
+
+        print("Homing the robot...")
+        command="i"
+        self.serial.write(command.encode() + b'\n')
+
+
+        time.sleep(0.5)
         self.query_joint_positions(doForce=True)
+        self.doHome = False
         
                     
         
@@ -85,7 +98,14 @@ class Bronchoscope(threading.Thread):
         
         while self.running:
             try:
+                if self.doHome:
+                    self._home()
+                    continue
+                
+                
                 # Process commands from the queue
+
+
                 if not self.command_queue.empty():
                     command = self.command_queue.get()
                     self.handle_command(command)
@@ -173,7 +193,11 @@ class Bronchoscope(threading.Thread):
         success = False
         while not success:
             #flush input buffer
+            time.sleep(0.1)
             self.serial.flushInput()
+            time.sleep(0.1)
+            self.serial.flushInput()
+            time.sleep(0.1)
             
             self.send_serial_command('j')  # Send 'j' command to query positions
             try:
@@ -185,6 +209,16 @@ class Bronchoscope(threading.Thread):
                 
                 self.current_position = responses
                 print(f"Initialized current positions: {self.current_position}")
+
+                #check if the values are within the limits
+                for i in range(3):
+                    if self.current_position[i] < self.jointStepLimits[i][0] or self.current_position[i] > self.jointStepLimits[i][1]:
+                        print(f"Joint {i} position {self.current_position[i]} is out of limits [{self.jointStepLimits[i][0]}, {self.jointStepLimits[i][1]}]")
+                        print("Homing the robot...")
+                        
+                        self._home()
+
+
                 success = True
             
             except ValueError as e:
