@@ -164,6 +164,7 @@ class Episode:
         self.states[index] = frame.state
         self.actions[index] = frame.action
         self.data[index] = frame.data
+        self.topImages[index] = frame.topImage
         
         if frame.topImage is not None:
             self.topImages[index] = frame.topImage
@@ -279,8 +280,8 @@ class Episode:
             shutil.rmtree(self.path)
             print(f"Temporary folder at {self.path} deleted.")
         except Exception as e:
-            print(f"Error deleting temporary folder: {e}")
-
+            #print(f"Error deleting temporary folder: {e}")
+            pass
 
 
     def askForLabel(self):
@@ -328,6 +329,8 @@ class Episode:
                         print(f"{' '*(indent+4)}{type(item)} : {item}")
             else:
                 print(f"{' '*(indent+4)}{type(value)} {key} : {value}")
+
+
 
 
     def save(self, directory=None):
@@ -401,7 +404,7 @@ class Episode:
             
         #save the episode to a zip file
         
-        name = time.strftime("20%y-%m-%d - %H-%M-%S")
+        name = time.strftime("20%y-%m-%d - %H-%M-%S", time.localtime(self.timeStart))
         
         #if a directory is given, save the episode there
         
@@ -433,13 +436,76 @@ class Episode:
         #self.pool.apply_async(compileVideo.create_videos_from_folder, args=(name, True))
     
 
+    #create a Episode.load method that loads an episode from a given path
+    @classmethod
+    def load(cls, path, pool=None):
+        
+        #create a new episode object
+        episode = cls(pool)
 
+        #extract the zip file to the temporary folder created by the episode
+        shutil.unpack_archive(path, episode.path)
+
+        #load the episode data from the json file
+
+        with open(episode.dataPath, 'r') as f:
+            episodeData = json.load(f)
+
+
+
+        #load the header data
+        header = episodeData["header"]
+        episode.timeStart = header["timeStart"]
+        episode.timeEnd = header["timeEnd"]
+        #episode.duration = header["duration"]
+        
+        episode.episodeProbertyLabels = {key: header[key] for key in episode.episodeProbertyLabels.keys()}
+
+
+
+        #load the frames
+
+        frames = episodeData["frames"]
+
+        for index, frameData in frames.items():
+            #load the frame data
+            state = frameData["state"]
+            action = frameData["action"]
+            data = frameData["data"]
+            imagePath = os.path.join(episode.path, frameData["imagePath"])
+            topImagePath = os.path.join(episode.path, frameData["topImagePath"])
+            #load the image
+            image = cv2.imread(imagePath)
+            topImage = cv2.imread(topImagePath)
+
+            if image is None or topImage is None:
+                print(f"Error loading image at path {imagePath}")
+                continue
+            print(f"Loading frame {index} with image of shape {image.shape}")
+            #create a new frame
+            frame = Frame(image=image, state=state, action=action, data=data, topImage=topImage)
+            episode._addFrame(frame)
+
+
+        return episode
+
+
+        
 
 
     
 
     def clear(self):
+
+        
+
+
+
+
         #clear the episode's data and empty the temporary folder
+
+
+
         self.images = []
         self.states = []
         self.actions = []
@@ -461,27 +527,50 @@ class Episode:
 
 class EpisodeManager:
 
-    def __init__(self):
+    def __init__(self, mode = "Recording", saveLocation="Database/", loadLocation="Database/"):
         self.currentEpisode = None
+        self.mode = mode
 
-        self.episodeDatabasePath = "Database/"
+        self.defaultSaveLocation = saveLocation
+        self.defaultLoadLocation = loadLocation
         self.pool = multiprocessing.Pool(processes=8)
 
+        self.currentIndex = -1
 
-        allEpisodePaths = self.findAllEpisodes(self.episodeDatabasePath)
+        
 
 
-    def findAllEpisodes(self, episodeDatabasePath): #returns a list of all episodes in the database. Each episode is a zip file
+        self.findAllEpisodes()
+
+
+    def findAllEpisodes(self, episodeDatabasePath=None): #returns a list of all episodes in the database. Each episode is a zip file
+        if episodeDatabasePath is None:
+            episodeDatabasePath = self.defaultLoadLocation
+
+
         episodes = []
         #Search each folder and file in the database
         for root, dirs, files in os.walk(episodeDatabasePath):
             for file in files:
                 if file.endswith(".zip"):
                     episodes.append(os.path.join(root, file))
+
+        self.allEpisodes = episodes
         return episodes
     
 
+    def loadEpisode(self, indexOrPath):
+        
+        if isinstance(indexOrPath, int):
+            #check if the index is in range
+            if indexOrPath < 0 or indexOrPath >= len(self.allEpisodes):
+                return None
+            path = self.allEpisodes[indexOrPath]
+        else:
+            path = indexOrPath
 
+        self.currentEpisode = Episode.load(path, self.pool)
+        return self.currentEpisode
 
 
     def newEpisode(self, force=False):
@@ -497,9 +586,12 @@ class EpisodeManager:
 
         
                 
-    def endEpisode(self, discard=False):
+    def endEpisode(self, discard=False, saveLocation=None):
         if self.currentEpisode is None:
             return
+        
+        if saveLocation is None:
+            saveLocation = self.defaultSaveLocation
         
         #save the episode to the database
         if discard is True:
@@ -511,19 +603,39 @@ class EpisodeManager:
 
         if self.currentEpisode.isSaved is False:
             
-            self.currentEpisode.save(self.episodeDatabasePath)
+            self.currentEpisode.save(saveLocation)
 
         self.currentEpisode.clear()
         self.currentEpisode = None
-        
-        
 
+        self.findAllEpisodes()
+        
+        
+    def getCurrentEpisode(self):
+        return self.currentEpisode
 
     def nextEpisode(self):
         self.endEpisode()
-        self.newEpisode()
 
 
+        if self.mode == "Recording":    
+
+            self.newEpisode()
+        elif self.mode == "Labelling":  
+            self.currentIndex += 1
+            if self.currentIndex >= len(self.allEpisodes):
+                self.currentIndex = len(self.allEpisodes) - 1
+
+            self.loadEpisode(self.currentIndex)
+
+
+    def previousEpisode(self):
+        self.endEpisode()
+        self.currentIndex -= 1
+        if self.currentIndex < 0:
+            self.currentIndex = 0
+
+        self.loadEpisode(self.currentIndex)
 
     def hasEpisode(self):
         return self.currentEpisode is not None
