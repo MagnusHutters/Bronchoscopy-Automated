@@ -4,7 +4,7 @@ import time
 
 class brochoRobClass(object):
 
-    def __init__(self, usbPort = 'COM7', baundrate = 115200, timestep = 0.05, jointlimits = [170,170,250], vellimits = [25,25,100]):
+    def __init__(self, usbPort = 'COM4', baundrate = 115200, timestep = 0.05, jointlimits = [170,170,250], vellimits = [25,25,100]):
 
         self.ser = serial.Serial(usbPort, baundrate, timeout=1)
         time.sleep(0.5)
