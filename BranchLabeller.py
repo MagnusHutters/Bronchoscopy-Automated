@@ -69,7 +69,7 @@ def extractContoursFromBranchData(branchData):
 
 def constructBranchData(image, previousImage = None, previousBranchData= [], currentBranchData = []):
 
-    candidateBranches = FindBranches.findBranches(image, contourDepth=0.3,doDraw=False)
+    candidateBranches = FindBranches.findBranches(image, contourDepth=0,doDraw=True)
 
 
     newBranchData = contsructBranchDataFromCandidates(candidateBranches)

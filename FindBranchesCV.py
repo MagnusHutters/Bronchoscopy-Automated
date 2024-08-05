@@ -166,10 +166,10 @@ class Point:
                 child.subnodes = self.subNodes + child.subNodes
 
 
-                #child.contour = self.contour
-                #child.area = self.area
-                #child.circumference = self.circumference
-                #child.roundness = self.roundness
+                child.contour = self.contour
+                child.area = self.area
+                child.circumference = self.circumference
+                child.roundness = self.roundness
 
                 self.parent.removeChild(self)
                 self.parent.addChild(child)
@@ -360,8 +360,8 @@ def findBranches(originalImage, contourDepth=0.5, doDraw=False):
 
 
     #cv2.imshow("ImagePre", drawImagePre)
-    trim=5
-    iterations = 3
+    trim=7
+    iterations = 4
     for i in range(iterations):
         progress = (i+1) / iterations
         toTrim = int(trim*progress)
@@ -405,16 +405,23 @@ def findBranches(originalImage, contourDepth=0.5, doDraw=False):
         if not point.hasGrandChildren and point.hasParent:
             
 
+
             #Contruct the candidate from relevant subnode
             amountSubNodes = len(point.subNodes)
             relevantSubNode = int(amountSubNodes*contourDepth)
             subnode=point.subNodes[relevantSubNode]
 
-            contour = subnode.contour
-            area = subnode.area
-            circumference = subnode.circumference
-            roundness = subnode.roundness
+            contour = point.contour
+            area = point.area
+            circumference = point.circumference
+            roundness = point.roundness
             center = point.coords
+            
+            if area < 4:
+                continue
+
+            if area > 0.5 * image.shape[0] * image.shape[1]:
+                continue
 
             candidate = Point(center, contour, point.depth, area, circumference, roundness)
 
