@@ -21,7 +21,7 @@ class brochoRobClass(object):
         self.vel_limits = vellimits # deg/s, deg/s, mm
         #self.accelaration = accelaration # mm/s2, deg/s2, deg/s2
 
-        self.jointBendingConvert = [956,1554] # valores pwd, representa [-170,170]
+        self.jointBendingConvert = [850,1750] # valores pwd, representa [-170,170]
         self.jointRotationConvert = [544,2400] # valores pwd, representa [-170,170]
         self.jointTranslationConvert = [0,3600] # valores step, 250 mm
 

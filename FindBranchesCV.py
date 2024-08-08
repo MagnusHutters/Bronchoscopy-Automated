@@ -8,7 +8,7 @@ from scipy.stats import gaussian_kde
 from scipy.ndimage import gaussian_filter, maximum_filter
 from scipy.optimize import linear_sum_assignment
 
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
 
 

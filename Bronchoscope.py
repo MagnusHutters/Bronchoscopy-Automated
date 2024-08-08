@@ -23,12 +23,12 @@ class Bronchoscope(threading.Thread):
     
     
     
-    jointBendingConvert = [956,1554] # valores pwd, representa [-170,170]
+    jointBendingConvert = [850,1750] # valores pwd, representa [-170,170]
     jointRotationConvert = [544,2400] # valores pwd, representa [-170,170]
     jointTranslationConvert = [0,3600] # valores step, 250 mm
     
     
-    jointStepLimits = [[956,1554], [544,2400], [0,3600]]
+    jointStepLimits = [[850,1750], [544,2400], [0,3600]]
     
     bendingInitial = ((jointStepLimits[0][1]-jointStepLimits[0][0])/2)+jointStepLimits[0][0]
     rotationInitial = ((jointStepLimits[1][1]-jointStepLimits[1][0])/2)+jointStepLimits[1][0]

@@ -17,7 +17,7 @@ class Interface:
 
         #check os
         if os.name == 'nt': #windows
-            self.broncho=Bronchoscope(port='COM4', baudrate=115200)
+            self.broncho=Bronchoscope(port='COM3', baudrate=115200)
             #self.bronchoCamera=Camera(1)
             self.bronchoCamera=Camera(Camera.get_camera_id_by_name("PC Camera"))
         elif os.name == 'posix': #linux

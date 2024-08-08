@@ -176,7 +176,7 @@ def drawBranches(image, branchData, selectedIndex):
 
 def main():
     global mouse_x, mouse_y, mouse_clicked
-    episodeManager = EpisodeManager(mode = "Labelling", saveLocation="DatabaseLabelledPost/", loadLocation="DatabaseLabelled/")
+    episodeManager = EpisodeManager(mode = "Labelling", saveLocation="DatabaseLabelled/", loadLocation="Database/")
 
 
     episodeManager.nextEpisode()
