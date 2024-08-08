@@ -20,10 +20,21 @@ def mouse_callback(event, x, y, flags, param):
         mouse_clicked = True
 
 def serializeContour(contour):
-    return contour.tolist()
+
+    listContour = []
+    for point in contour:
+        listContour.append((int(point[0][0]), int(point[0][1])))
+    
+    return listContour
 
 def deserializeContour(contour):
-    return np.array(contour)
+
+    newContour = []
+    for point in contour:
+        newContour.append([[point[0], point[1]]])
+
+    
+    return np.array(newContour, dtype=np.int32)
 
 
 def contsructBranchDataFromCandidates(candidateBranches):
@@ -33,23 +44,37 @@ def contsructBranchDataFromCandidates(candidateBranches):
 
     for branch in candidateBranches:
 
-        contour = serializeContour(branch.contour)
-        depth = branch.depth
-        coords = branch.coords
-        area = branch.area
-        roundness = branch.roundness
-        size = branch.size
+        
+        contour, area, circumference, roundness, center, lowestPoint, size, depth,index, numChildren, numSiblings, childrenIndices, siblingIndices, parentIndex = branch.getStats()
 
+        #print(f"==================================================================================================")
+        #print (f"Pre-Serialization: {contour}")
+        contour = serializeContour(contour)
+        #print (f"Post-Serialization: {contour}")
+        #dcontour =deserializeContour(contour)
 
+        #print (f"Post-Deserialization: {dcontour}")
+
+        #print(f"")
+        #print(f"")
+        #print(f"")
 
 
         branchData.append({
             "Contour": contour,
-            "Depth": depth,
-            "Coords": coords,
             "Area": area,
+            "Circumference": circumference,
             "Roundness": roundness,
+            "Coords": center,
+            "LowestPoint": lowestPoint,
             "Size": size,
+            "Depth": depth,
+            "Index": index,
+            "NumChildren": numChildren,
+            "NumSiblings": numSiblings,
+            "ChildrenIndices": childrenIndices,
+            "SiblingIndices": siblingIndices,
+            "ParentIndex": parentIndex,
             "enabled": False
         })
 
@@ -67,11 +92,34 @@ def extractContoursFromBranchData(branchData):
 
     return contours
 
+
+def enableFromPrevious(currentBranchData, previousBranchData):
+
+    if len(previousBranchData) == 0:
+        return currentBranchData
+
+    for i, oldBranch in enumerate(previousBranchData):#check through the old branch data
+
+        if oldBranch["enabled"]: #if the branch was enabled in the previous frame, check if it is close to a branch in the current frame
+            oldContour = deserializeContour(oldBranch["Contour"])
+
+            newContours = extractContoursFromBranchData(currentBranchData)
+
+            index = FindBranches.matchContour(oldContour, newContours)
+
+            if index != -1:
+                currentBranchData[index]["enabled"] = True
+
+    return currentBranchData
+
+        
+
+
 def constructBranchData(image, previousImage = None, previousBranchData= [], currentBranchData = []):
 
-    candidateBranches = FindBranches.findBranches(image, contourDepth=0,doDraw=True)
+    candidateBranches = FindBranches.thresholdTree(image)
 
-
+    
     newBranchData = contsructBranchDataFromCandidates(candidateBranches)
 
     
@@ -82,15 +130,10 @@ def constructBranchData(image, previousImage = None, previousBranchData= [], cur
 
     if len(currentBranchData) > 0:
         
-        newContours = extractContoursFromBranchData(newBranchData)
-        currentContours = extractContoursFromBranchData(currentBranchData)
 
-        matches = FindBranches.matchBranches(newContours, currentContours)
+        currentBranchData = enableFromPrevious(newBranchData, currentBranchData)
 
-        for match in matches:
-            newBranchData[match[0]]["enabled"] = currentBranchData[match[1]]["enabled"]
-
-        currentBranchData = newBranchData
+        pass
 
 
 
@@ -98,13 +141,8 @@ def constructBranchData(image, previousImage = None, previousBranchData= [], cur
     elif len(previousBranchData) > 0:
         currentBranchData = newBranchData
 
-        currentContours = extractContoursFromBranchData(newBranchData)
-        previousContours = extractContoursFromBranchData(previousBranchData)
 
-        matches = FindBranches.matchBranches(currentContours, previousContours)
-
-        for match in matches:
-            currentBranchData[match[0]]["enabled"] = previousBranchData[match[1]]["enabled"]
+        currentBranchData = enableFromPrevious(newBranchData, previousBranchData)
 
     else:
         currentBranchData = newBranchData
@@ -118,7 +156,7 @@ def constructBranchData(image, previousImage = None, previousBranchData= [], cur
 
 def findSelectedBranch(branchData, x, y):
     selectedIndex = -1
-    minDistance = float("inf")
+    bestDepth = 100000 # depth 0 is best depth
 
     for i, branch in enumerate(branchData):
         #print(f"Checking branch: {i}, at coords: {(x, y)}")
@@ -126,13 +164,14 @@ def findSelectedBranch(branchData, x, y):
 
         if cv2.pointPolygonTest(contour, (x, y), False) > 0:
             #print(f"Point in contour: {i}")
-            
-            center = branch["Coords"]
-            distance = np.linalg.norm(np.array(center) - np.array([x, y]))
 
-            if distance < minDistance:
+            depth = branch["Depth"]
+            if depth < bestDepth:
+                bestDepth = depth
                 selectedIndex = i
-                minDistance = distance
+            
+            
+            
 
     return selectedIndex
 
@@ -176,7 +215,7 @@ def drawBranches(image, branchData, selectedIndex):
 
 def main():
     global mouse_x, mouse_y, mouse_clicked
-    episodeManager = EpisodeManager(mode = "Labelling", saveLocation="DatabaseLabelledPost/", loadLocation="DatabaseLabelled/")
+    episodeManager = EpisodeManager(mode = "Labelling", saveLocation="DatabaseLabelled/", loadLocation="DatabaseLabelled/")
 
 
     episodeManager.nextEpisode()
@@ -212,6 +251,8 @@ def main():
 
         #print(f"currentBranchData: {currentBranchData}")
         #print(f"previousBranchData: {previousBranchData}")
+
+        
 
 
         if newFrame:
@@ -275,12 +316,14 @@ def main():
         elif key == 3014656: #delete
             #remove branch data from current frame
 
-            episode.data[currentIndex]["Branches"] = []
+            episode._data[currentIndex]["Branches"] = []
 
             #if shift is held, remove all data from future frames
             if keyboard.is_pressed('shift'):
                 for i in range(currentIndex+1, len(episode)):
-                    episode.data[i]["Branches"] = []
+                    episode._data[i]["Branches"] = []
+
+            newFrame = True
 
         elif key == 13: #enter
             #save the episode
