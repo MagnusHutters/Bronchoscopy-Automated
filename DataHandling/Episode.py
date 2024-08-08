@@ -51,8 +51,10 @@ def saveToDiskThreadSafe(image, path):
 class Frame:
     def __init__(self, image, state, action, data, topImage=None):
         # Ensure all attributes are numpy arrays
-        if not isinstance(image, np.ndarray):
-            image = np.array(image)
+        if not isinstance(image, np.ndarray) and not isinstance(image, str):
+            raise ValueError("Image must be a numpy array or a string")
+        if not isinstance(topImage, np.ndarray) and not isinstance(topImage, str) and topImage is not None:
+            raise ValueError("Top image must be a numpy array or a string or None")
         
 
         self.image = image
@@ -122,11 +124,13 @@ class Episode:
 
 
         #data
-        self.images = []
-        self.states = []
-        self.actions = []
-        self.data = []
-        self.topImages = []
+        self._images = []
+        self._states = []
+        self._actions = []
+        self._data = []
+        self._topImages = []
+
+        self._imagesLoaded = []
         
         self.doSave=True
 
@@ -141,14 +145,26 @@ class Episode:
 
     def get_frame(self, index):
         #print(f"Getting frame at index {index}")
-        if index < 0 or index >= len(self.images):
+        if index < 0 or index >= len(self._images):
             raise IndexError("Index out of range")
+        
+
+
+        #print(f"Getting frame image: {self._images[index]}, of type {type(self._images[index])}")
+
+        #check if either image is a string, in which case it is a path to the image, and load it
+        if isinstance(self._images[index], str):
+            self._images[index] = cv2.imread(self._images[index])
+
+        if isinstance(self._topImages[index], str):
+            self._topImages[index] = cv2.imread(self._topImages[index])
+
         return Frame(
-            image=self.images[index],
-            state=self.states[index],
-            action=self.actions[index],
-            data=self.data[index],
-            topImage=self.topImages[index]
+            image=self._images[index],
+            state=self._states[index],
+            action=self._actions[index],
+            data=self._data[index],
+            topImage=self._topImages[index]
         )
 
     #overload the [] operator to construct and get the frame at the given index
@@ -158,16 +174,16 @@ class Episode:
     #overload the [] operator to set the frame at the given index
     def __setitem__(self, index, frame):
 
-        imageHasChanged = not np.array_equal(self.images[index], frame.image)
+        imageHasChanged = not np.array_equal(self._images[index], frame.image)
 
-        self.images[index] = frame.image
-        self.states[index] = frame.state
-        self.actions[index] = frame.action
-        self.data[index] = frame.data
-        self.topImages[index] = frame.topImage
+        self._images[index] = frame.image
+        self._states[index] = frame.state
+        self._actions[index] = frame.action
+        self._data[index] = frame.data
+        self._topImages[index] = frame.topImage
         
         if frame.topImage is not None:
-            self.topImages[index] = frame.topImage
+            self._topImages[index] = frame.topImage
             self.saveImage(frame.topImage, index, prefix="top")
 
         if imageHasChanged:
@@ -184,7 +200,7 @@ class Episode:
         return self
 
     def __next__(self):
-        if self._index < len(self.images):
+        if self._index < len(self._images):
             result = self[self._index]
             self._index += 1
             
@@ -194,7 +210,7 @@ class Episode:
             raise StopIteration
 
     def __len__(self):
-        return len(self.images)
+        return len(self._images)
 
 
 
@@ -219,13 +235,31 @@ class Episode:
         #frame.clean()
         frame.check()
 
-        self.images.append(frame.image.copy())
-        self.states.append(frame.state.copy())
-        self.actions.append(frame.action.copy())
-        self.data.append(frame.data.copy())
-        self.topImages.append(frame.topImage.copy())
 
-        Index = len(self.images) - 1
+        #copy images if they are images, otherwise save the path
+        if isinstance(frame.image, np.ndarray):
+            self._images.append(frame.image.copy())
+        else:
+            self._images.append(frame.image)
+
+        if isinstance(frame.topImage, np.ndarray):
+            self._topImages.append(frame.topImage.copy())
+        else:
+            self._topImages.append(frame.topImage)
+
+
+        self._states.append(frame.state.copy())
+        self._actions.append(frame.action.copy())
+
+        
+        
+
+
+        self._data.append(frame.data.copy())
+
+        
+
+        Index = len(self._images) - 1
         self.saveImage(frame.image,Index, prefix="broncho")
         self.saveImage(frame.topImage,Index, prefix="top")
 
@@ -247,7 +281,7 @@ class Episode:
         
         #populate the frame with meta data
         
-        frame.data["index"] = len(self.images)
+        frame.data["index"] = len(self._images)
         
         
         currentTimestamp = time.time()
@@ -259,7 +293,7 @@ class Episode:
         frame.data["Raw_Timestamp"] = currentTimestamp
         frame.data["timeReadable"] = time.strftime("%Y-%m-%d %H:%M:%S")+f".{str(currentTimestamp%1)[2:5]}"
         
-        lastTimestamp = self.data[-1]["Raw_Timestamp"] if len(self.data) > 0 else None
+        lastTimestamp = self._data[-1]["Raw_Timestamp"] if len(self._data) > 0 else None
         frame.data["timeDelta"] = currentTimestamp - lastTimestamp if lastTimestamp is not None else 0
         
         
@@ -349,7 +383,7 @@ class Episode:
         header = {}
         
         
-        self.timeEnd = self.data[-1]["Raw_Timestamp"]
+        self.timeEnd = self._data[-1]["Raw_Timestamp"]
         
         header["timeStart"] = self.timeStart
         header["timeEnd"] = self.timeEnd
@@ -367,12 +401,12 @@ class Episode:
         #save the frames
         frames = {}
         
-        print(f"Compiling episode with {len(self.images)} frames")
+        print(f"Compiling episode with {len(self._images)} frames")
 
         for frame, index in self:
             
 
-            print(f"\rSaving frame {index} of {len(self.images)}", end="")
+            print(f"\rSaving frame {index} of {len(self._images)}", end="")
             
             #print(f"Saving frame {frame} at index {index}")
             frameData = {}
@@ -475,13 +509,12 @@ class Episode:
             imagePath = os.path.join(episode.path, frameData["imagePath"])
             topImagePath = os.path.join(episode.path, frameData["topImagePath"])
             #load the image
-            image = cv2.imread(imagePath)
-            topImage = cv2.imread(topImagePath)
+            #image = cv2.imread(imagePath)
+            #topImage = cv2.imread(topImagePath)
+            image = imagePath
+            topImage = topImagePath
 
-            if image is None or topImage is None:
-                print(f"Error loading image at path {imagePath}")
-                continue
-            print(f"Loading frame {index} with image of shape {image.shape}")
+            #print(f"Loading frame {index} with image of shape {image.shape}")
             #create a new frame
             frame = Frame(image=image, state=state, action=action, data=data, topImage=topImage)
             episode._addFrame(frame)
@@ -506,10 +539,10 @@ class Episode:
 
 
 
-        self.images = []
-        self.states = []
-        self.actions = []
-        self.data = []
+        self._images = []
+        self._states = []
+        self._actions = []
+        self._data = []
 
 
         try:
@@ -615,13 +648,21 @@ class EpisodeManager:
         return self.currentEpisode
 
     def nextEpisode(self):
-        self.endEpisode()
+        
 
 
         if self.mode == "Recording":    
-
+            self.endEpisode()
             self.newEpisode()
-        elif self.mode == "Labelling":  
+        elif self.mode == "Labelling": 
+            self.endEpisode() 
+            self.currentIndex += 1
+            if self.currentIndex >= len(self.allEpisodes):
+                self.currentIndex = len(self.allEpisodes) - 1
+
+            self.loadEpisode(self.currentIndex)
+        elif self.mode == "Read":
+            self.endEpisode(discard=True)
             self.currentIndex += 1
             if self.currentIndex >= len(self.allEpisodes):
                 self.currentIndex = len(self.allEpisodes) - 1
@@ -639,6 +680,9 @@ class EpisodeManager:
 
     def hasEpisode(self):
         return self.currentEpisode is not None
+    
+    def hasNextEpisode(self):
+        return self.currentIndex < len(self.allEpisodes) - 1
     
     
     #pass append on to current episode
