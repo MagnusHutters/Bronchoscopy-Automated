@@ -10,7 +10,7 @@ from scipy.optimize import linear_sum_assignment
 from skimage.feature import peak_local_max
 import time
 
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
 from collections import defaultdict
 
