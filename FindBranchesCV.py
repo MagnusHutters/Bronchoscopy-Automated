@@ -24,7 +24,7 @@ def createVignetteMask(image):
     rows, cols = image.shape
 
 
-    radius_ratio=1.15
+    radius_ratio=1.0
     strength = 1 # bigger makes the vignette softer, smaller makes it harder
 
     # Generate vignette mask using Gaussian kernels
@@ -853,7 +853,7 @@ class Contour:
 def thresholdTree(image, downscaleFactor=1):
 
 
-    minimumAreaSize = 4
+    minimumAreaSize = 14
     minimumAreaSize = minimumAreaSize // downscaleFactor
     minimumArea=minimumAreaSize*minimumAreaSize
     image = preProcessImage(image, downscaleFactor)
@@ -861,7 +861,7 @@ def thresholdTree(image, downscaleFactor=1):
 
     minimumIntensity = int(np.min(image))
 
-    maximumIntensitySearchThreshold = 100
+    maximumIntensitySearchThreshold = 255
 
     finalContours = []
 
@@ -869,9 +869,9 @@ def thresholdTree(image, downscaleFactor=1):
 
     stepSize = 2
 
-    pruneSize = 4
+    pruneSize = 6
 
-    maxSize = 32
+    maxSize = 255
 
     
     for threshold in range(minimumIntensity, maximumIntensitySearchThreshold, stepSize):
@@ -934,10 +934,14 @@ def thresholdTree(image, downscaleFactor=1):
             
             if len(containedContours) == 1:
                 #consume the active contour
-                if containedContours[0].size > maxSize:
+                if containedContours[0].size > maxSize or len(containedContours[0].children) > 1:
                     finalContours.append(containedContours[0])
                     contour.addChild(containedContours[0])
                     #print(f"Above max size, Contour {contour.index} added {containedContours[0].index} as child")
+                elif cv2.contourArea(containedContours[0].contour) > minimumArea*15 and len(containedContours[0].children) == 0:
+                    finalContours.append(containedContours[0])
+                    contour.addChild(containedContours[0])
+                    #print(f"Contour {contour.index} added {containedContours[0].index} as child")
                 else:
                     contour.consume(containedContours[0])
                     #print(f"Contour {contour.index} consumed {containedContours[0].index}")
@@ -950,7 +954,8 @@ def thresholdTree(image, downscaleFactor=1):
 
 
         
-
+        #add the remaining active contours to the finalContours
+        finalContours += activeContours
 
         #drawImage = image.copy()
         #for contour in contours:
@@ -965,7 +970,7 @@ def thresholdTree(image, downscaleFactor=1):
 
         activeContours = contours
 
-    finalContours += activeContours
+    #finalContours += activeContours
 
     #sort out those wo have grand children
     #finalContours = [contour for contour in finalContours if not contour.hasGrandChildren()]
@@ -974,7 +979,7 @@ def thresholdTree(image, downscaleFactor=1):
     #
 
 
-    
+    #finalContours = [contour for contour in finalContours if not contour.hasGrandChildren()]
 
 
     #draw the tree
@@ -993,14 +998,17 @@ def thresholdTree(image, downscaleFactor=1):
 
 
 
-        cv2.drawContours(drawImage, [contour.contour], 0, color, 1)
+        #cv2.drawContours(drawImage, [contour.contour], 0, color, 1)
+
+        boundingBox = cv2.boundingRect(contour.contour)
+        cv2.rectangle(drawImage, (boundingBox[0], boundingBox[1]), (boundingBox[0]+boundingBox[2], boundingBox[1]+boundingBox[3]), color, 1)
 
         if contour.hasParent():
             cv2.line(drawImage, contour.center, contour.parent.center, (255, 255, 255), 1)
 
     cv2.imshow("Threshold Tree", drawImage)
 
-    finalContours = [contour for contour in finalContours if not contour.hasGrandChildren()]
+    #
 
     #resize contours
     i = 0
