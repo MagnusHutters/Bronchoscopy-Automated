@@ -51,10 +51,10 @@ def saveToDiskThreadSafe(image, path):
 class Frame:
     def __init__(self, image, state, action, data, topImage=None):
         # Ensure all attributes are numpy arrays
-        if not isinstance(image, np.ndarray) and not isinstance(image, str):
-            raise ValueError("Image must be a numpy array or a string")
+        if not isinstance(image, np.ndarray) and not isinstance(image, str) and image is not None:
+            raise ValueError(f"Image must be a numpy array or a string, its type is {type(image)}")
         if not isinstance(topImage, np.ndarray) and not isinstance(topImage, str) and topImage is not None:
-            raise ValueError("Top image must be a numpy array or a string or None")
+            raise ValueError(f"Top image must be a numpy array or a string or None, its type is {type(topImage)}")
         
 
         self.image = image
@@ -147,6 +147,7 @@ class Episode:
         #print(f"Getting frame at index {index}")
         if index < 0 or index >= len(self._images):
             raise IndexError("Index out of range")
+            return None
         
 
 
@@ -159,13 +160,20 @@ class Episode:
         if isinstance(self._topImages[index], str):
             self._topImages[index] = cv2.imread(self._topImages[index])
 
-        return Frame(
+
+
+        frame= Frame(
             image=self._images[index],
             state=self._states[index],
             action=self._actions[index],
             data=self._data[index],
             topImage=self._topImages[index]
         )
+
+        if frame.image is None:
+            print(f"Image at index {index} is None")
+            return None
+        return frame
 
     #overload the [] operator to construct and get the frame at the given index
     def __getitem__(self, index):

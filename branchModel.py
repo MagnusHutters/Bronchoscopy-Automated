@@ -11,7 +11,7 @@ import BranchLabeller as BranchLabeller
 def createModel():
     
 
-    imageInput = Input(shape=(50, 50, 3))
+    imageInput = Input(shape=(50, 50, 4))
     detailsInput = Input(shape=(30))
 
 
@@ -65,6 +65,11 @@ def prepareData(path):
         episodeManager.nextEpisode()
         episode = episodeManager.getCurrentEpisode()
 
+
+
+        images = []
+
+
         for index in range(len(episode)):
 
             frame = episode[index]
@@ -86,16 +91,21 @@ def prepareData(path):
                 break
 
             branches = frame.data.get("Branches")
+            image = frame.image
 
 
-            branchImages, branchDetails, branchOutputs = extractModelInput(branches, modelImageSize, originalImageSize)
+            branchImages, branchDetails, branchOutputs = extractModelInput(branches, image,modelImageSize, originalImageSize)
 
             inputImages.extend(branchImages)
             inputDetails.extend(branchDetails)
             outputs.extend(branchOutputs)
 
+            if index>100:
+                pass
+                break
 
-        #break
+
+        break
 
     print(f"Converting to numpy arrays...")
     inputImages = np.array(inputImages)
@@ -106,7 +116,7 @@ def prepareData(path):
 
     return inputImages, inputDetails, outputs
 
-def extractModelInput(branches, modelImageSize, originalImageSize):
+def extractModelInput(branches,image, modelImageSize, originalImageSize):
 
     
     scalingFactor = modelImageSize[0]/originalImageSize[0]
@@ -228,6 +238,12 @@ def extractModelInput(branches, modelImageSize, originalImageSize):
                 #childContours = childContours.astype(np.int32)
 
                 #reconstruct threshold images from contours using cv2.drawContours
+
+
+        primaryImage = cv2.resize(image, modelImageSize)
+        #convert to grayscale
+        primaryImage = cv2.cvtColor(primaryImage, cv2.COLOR_BGR2GRAY)
+
         selfImage = np.zeros(modelImageSize)
         parentImage = np.zeros(modelImageSize)
         childImage = np.zeros(modelImageSize)
@@ -240,7 +256,7 @@ def extractModelInput(branches, modelImageSize, originalImageSize):
         cv2.drawContours(childImage, childContours, -1, 1, -1)
 
                 #stack the images in different channels
-        image = np.stack([selfImage, parentImage, childImage], axis=-1)
+        image = np.stack([primaryImage,selfImage, parentImage, childImage], axis=-1)
         image = image.astype(np.float32)
 
         enabled = branch.get("enabled", False)
@@ -253,6 +269,14 @@ def extractModelInput(branches, modelImageSize, originalImageSize):
     return branchImages,branchDetails,branchOutputs
 
 
+
+
+class Prediction:
+    def __init__(self, branch, contour, point, certainty):
+        self.branch = branch
+        self.contour = contour
+        self.certainty = certainty
+        self.point = point
 
 
 class BranchModel:
@@ -280,7 +304,28 @@ class BranchModel:
 
         predictions = self.model.predict([branchImages, branchDetails])
 
-        return predictions
+
+        perdictionContours = []
+
+        allPredictions = []
+        correctPredictions = []
+        wrongPredictions = []
+
+        for branch, prediction in zip(branchData, predictions):
+
+            contour = branch.get("Contour")
+            contour = BranchLabeller.deserializeContour(contour)
+            newPrediction = Prediction(branch, contour, branch.get("LowestPoint"), prediction)
+            allPredictions.append(newPrediction)
+            if prediction > 0.5:
+                correctPredictions.append(newPrediction)
+            else:
+                wrongPredictions.append(newPrediction)
+                
+            
+
+
+        return correctPredictions, wrongPredictions, allPredictions
 
 
                 
@@ -312,7 +357,7 @@ def main():
 
 
 
-    model.fit([inputImages, inputDetails], output, epochs=10, batch_size=32, validation_data=([inputImagesValidation, inputDetailsValidation], outputValidation))
+    model.fit([inputImages, inputDetails], output, epochs=20, batch_size=32, validation_data=([inputImagesValidation, inputDetailsValidation], outputValidation))
 
     model.save("BranchModel.h5")
 
