@@ -13,6 +13,19 @@ from Timer import Timer
 
 
 
+from DataHandling.Episode import EpisodeManager, Episode
+
+import time
+
+
+
+import warnings
+
+
+from BranchModelTracker import BranchModelTracker
+
+
+
 import time
 
 #from Training.PathTrackerInterfaceCV import PathTrackerInterface
@@ -110,9 +123,9 @@ class GUI:
 
     def get_key_press_from_dir(self, dir): #dir is a x,y vector
         if dir[0] > 0.5:
-            return 2
-        if dir[0] < -0.5:
             return 0
+        if dir[0] < -0.5:
+            return 2
         if dir[1] > 0.5:
             return 1
         if dir[1] < -0.5:
@@ -137,22 +150,22 @@ class GUI:
 
         # Key mappings and their orthogonal directions for lateral calculations
         directions = {
-            0: np.array([0, -1]),    # Up
-            1: np.array([1, 0]),    # Right
-            2: np.array([0, 1]),   # Down
-            3: np.array([-1, 0])    # Left
+            0: np.array([1, 0]),    # Right
+            1: np.array([0, -1]),    # Up
+            2: np.array([-1, 0]),   # Left
+            3: np.array([0, 1])    # Down
         }
         orthogonal = {
-            0: np.array([1, 0]),    # Lateral for Up/Down
-            1: np.array([0, 1]),    # Lateral for Right/Left
-            2: np.array([1, 0]),    # Lateral for Up/Down
-            3: np.array([0, 1])     # Lateral for Right/Left
+            0: np.array([0, 1]),    # Lateral for Up/Down
+            1: np.array([1, 0]),    # Lateral for Right/Left
+            2: np.array([0, 1]),    # Lateral for Up/Down
+            3: np.array([1, 0])     # Lateral for Right/Left
         }
         directionNames = {
-            0: "Up",
-            1: "Right",
-            2: "Down",
-            3: "Left"
+            0: "Right",
+            1: "Up",
+            2: "Left",
+            3: "Down"
         }
 
 
@@ -378,6 +391,10 @@ class GUI:
     def update(self, originalImage, objects, state, recording=False, currentFrame=0, topImage=None):
 
 
+        objects, detections = objects
+
+
+
         self.refreshScreen(originalImage, topImage)
         Timer.point("screenRefreshed")
 
@@ -386,6 +403,7 @@ class GUI:
         
 
         doQuit, selectEvent, joystick, manual = self.doHandleEvents()
+        doQuit=False
               
         Timer.point("eventsHandled")
         
@@ -396,20 +414,48 @@ class GUI:
             
     
             #Select path point to choose
+
+            print(f"Joystick: {joystick.dir}")
             
             self.current_index = self.select_point(objects, self.current_index, self.get_key_press_from_dir(joystick.dir))
 
             #draw path points
             for key, value in objects.items():
-                y, x = value
+                x, y = value
+                x=x
+                y=y
                 
-                x = int(((x + 1) / 2) * self.size[0])
-                y = int(((y + 1) / 2) * self.size[1])
-
+                color = (255, 0, 0)
                 if key == self.current_index:
-                    pygame.draw.circle(self.screen, (0, 255, 0), (x, y), 5)
-                else:
-                    pygame.draw.circle(self.screen, (255, 0, 0), (x, y), 5)
+                    color = (0, 255, 0)
+                    #pygame.draw.circle(self.screen, (0, 255, 0), (x, y), 5)
+
+                pygame.draw.circle(self.screen, color, (x*2, y*2), 5)
+
+
+                if not detections[key].inView:
+
+
+                    pX = detections[key].polygon.centroid.x
+                    pY = detections[key].polygon.centroid.y
+
+                    #line from point to centroid
+                    pygame.draw.line(self.screen, color, (x*2, y*2), (pX*2, pY*2), 2)
+                    #draw text with distance at point
+
+                    distance = np.sqrt((x-pX)**2 + (y-pY)**2)
+                    text = self.font.render(f'{distance:.2f}', True, color)
+                    self.screen.blit(text, (x*2+5, y*2+5))
+
+
+                polygon = detections[key].polygon #shapely polygon
+                polygon = np.array(polygon.exterior.coords)
+
+                for i in range(len(polygon)):
+                    x1, y1 = polygon[i]
+                    x2, y2 = polygon[(i+1)%len(polygon)]
+                    pygame.draw.line(self.screen, color, (x1*2, y1*2), (x2*2, y2*2), 2)
+
             
         self.drawBar(state["bendReal_deg"])
         Timer.point("drawnBar")
@@ -439,62 +485,77 @@ class GUI:
 
 
 
-'''
+
 def main():
+
+    episodeManager = EpisodeManager(mode = "Labelling", saveLocation="DatabaseLabelled/", loadLocation="DatabaseLabelled/")
+
+    episodeManager.currentIndex = 20
+    episodeManager.nextEpisode()
+    #episodeManager.nextEpisode()
+
+    episode = episodeManager.getCurrentEpisode()
+
+
+    branchModelTracker = BranchModelTracker("BronchoYolo/yolov5/runs/train/branchTraining3/weights/best.pt")
     
-
-
-
-    pathInterface= PathTrackerInterface("Training/model.keras")
-    input_shape = pathInterface.getInputShape()
-
-        #val_images, realImageSize, originalImages = load_images("Training/Data/PathData", input_shape, saveOriginalImages=True)
-    val_images, realImageSize, originalImages = load_images_single_episode("Training/Data/PathData/24-03-19-15-59-18_0", input_shape, saveOriginalImages=True)
-
-    pathInterface.realImageSize = realImageSize
-
-    #load images
-    imageFolder = "Training/Data/PathData"
-
-    #images, realSize, originals = load_images(imageFolder, (128, 128), saveOriginalImages=True)
-
     gui = GUI()
 
-    index = 0
+    for index in range(len(episode)):
+        
 
-    while True:
-        #image = images[imageIndex]
-        #gui.update(image,originals[imageIndex])
-        #imageIndex += 1
-        #if imageIndex >= len(images):
-        #    imageIndex = 0
+        if index < 110:
+            continue
 
-
-        val_image = val_images[index]
-
-        displayImage = originalImages[index].copy()    
-        newIndex, doExit, objects = pathInterface.predictAndTrack(val_image,displayImage)
-
-        #Update index
-        index = index+1
-        index = index % len(val_images) # make sure index is within bounds
-
-        #print(f"Index: {index}")
+        frame = episode[index]
 
 
 
-        currentObjectIndex, doExit = gui.update(displayImage, objects)
-        if doExit:
+
+        #print(f"Processing frame {index}")
+        #print(frame.image.shape)
+        #findBranches(frame.image, doDraw=True)
+
+        #watershed(frame.image)
+        #watershed(frame.image)
+
+
+
+        timeStamp1 = time.time()
+        #contours = thresholdTree(frame.image, 1)
+        timeStamp2 = time.time()
+
+        #time taken in seconds
+        #print(f"Time taken: {timeStamp2 - timeStamp1}")
+
+        drawImage = frame.image.copy()
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", category=FutureWarning)
+            detections = branchModelTracker.predict(frame.image)
+
+            gui.update(drawImage, detections, {"bendReal_deg": 0}, recording=False, currentFrame=index, topImage=frame.topImage)
+        
+        cv2.imshow("Threshold Contours", drawImage)
+
+        #create_and_display_contour_tree(frame.image)
+        
+        key = cv2.waitKey(1)
+        # If the user presses 'q', exit the loop
+        if key == ord('q'):
             break
+        # if esc is pressed, exit the loop
+        elif key == 27:
+            break
+
+
         
-        
-        #time.sleep(0.1)
+
+    cv2.destroyAllWindows()
 
 
 if __name__ == "__main__":
     main()
-'''
-
 
 
     

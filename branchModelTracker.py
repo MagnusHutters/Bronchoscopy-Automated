@@ -9,6 +9,7 @@ from shapely.affinity import affine_transform
 
 from math import sqrt, pi
 
+from scipy.optimize import linear_sum_assignment
 
 from DataHandling.Episode import EpisodeManager, Episode
 
@@ -223,8 +224,7 @@ def transform_all_detections(detections, affine_matrix):
     #return transformed_detections_dict
 
 
-import numpy as np
-from scipy.optimize import linear_sum_assignment
+
 
 def match_detections(list1, list2, min_similarity=0.1):
     """
@@ -290,26 +290,26 @@ def match_detections(list1, list2, min_similarity=0.1):
     return matched_pairs
 
 
-def apply_matches(matches, trackedDetections):
-    """
-    Applies matches to a list of detections.
-
-    Parameters:
-    matches (list): A list of tuples, where each tuple contains a detection from list1 and its matched detection
-                    from list2 or None if no match was found.
-    """
-    for det1, det2 in matches:
-        if det1 is not None:
-            det1.apply_match(det2)
-        else:
-            #add the unmatched new detection to the list of tracked detections
-            trackedDetections.append(det2)
 
 
-    trackedDetections = [detection for detection in trackedDetections if detection.confidence > 0]
 
 
-    return trackedDetections
+def buildHierachy(detections):
+
+    for detection in detections:
+        detection.children = []
+        detection.parent = None
+    
+
+    for firstDetection in detections:
+        for secondDetection in detections:
+            if firstDetection is secondDetection:
+                continue
+
+            if firstDetection.contains(secondDetection):
+                firstDetection.children.append(secondDetection)
+                secondDetection.parent = firstDetection
+
 
 
 class Detection:
@@ -325,7 +325,7 @@ class Detection:
 
 
 
-    def __init__(self, class_id, confidence, polygon, bbox=None):
+    def __init__(self, class_id, confidence, polygon, id , bbox=None):
         """
         Initializes a Detection object with the actual values.
 
@@ -335,10 +335,19 @@ class Detection:
         polygon (Polygon): A shapely polygon object representing the detection's area.
         bbox (tuple): The bounding box of the detection (optional).
         """
+
+
+
+        self.children=[]
+        self.parent=None
+        
+        self.id=id
         self.class_id = int(class_id)
         self.confidence = float(confidence)
         self.polygon = polygon
         self.bbox = bbox if bbox is not None else self.polygon.bounds
+
+
 
         self.inView = False
         self.intersectionWithView = Polygon()
@@ -361,7 +370,7 @@ class Detection:
 
 
         polygon = cls.create_polygon_from_bbox(bbox)
-        return cls(class_id, confidence, polygon, bbox)
+        return cls(class_id, confidence, polygon, bbox, None)
 
     @staticmethod
     def create_polygon_from_bbox(bbox):
@@ -376,6 +385,8 @@ class Detection:
         """
         x_min, y_min, x_max, y_max = bbox
         return Polygon([(x_min, y_min), (x_min, y_max), (x_max, y_max), (x_max, y_min)])
+    
+        self.calculateViewIntersection()
 
     def apply_affine_transformation(self, affine_matrix):
         """
@@ -392,6 +403,12 @@ class Detection:
         # Update bounding box after transformation
         self.bbox = self.polygon.bounds
 
+
+    def calculateViewIntersection(self):
+        self.intersectionWithView = self.polygon.intersection(self.viewPolygon)
+
+        self.inView = self.intersectionWithView.area > 1
+
     def apply_match(self, matched_detection, interpolation_factor=0.5):
         """
         Applies the result of a match to this detection, updating the polygon and confidence.
@@ -400,15 +417,9 @@ class Detection:
         matched_detection (Detection or None): The matched detection object, or None if no match.
         """
 
-        
-        self.intersectionWithView = self.polygon.intersection(self.viewPolygon)
-
-        #check if current polygon is comletely in view
-        #if self.polygon.within(viewPolygon):
-        #    self.intersectionWithView = self.polygon
 
 
-        self.inView = self.intersectionWithView.area > 1
+        self.calculateViewIntersection()
 
         if matched_detection is not None:
             # Update polygon (for simplicity, we'll just keep the current polygon, but this could be extended)
@@ -418,6 +429,7 @@ class Detection:
 
             self.polygon = matched_detection.polygon
             self.bbox = matched_detection.bbox
+            self.confidence *= 0.98
 
 
 
@@ -438,7 +450,7 @@ class Detection:
 
 
             else:
-                self.confidence *= 0.97
+                self.confidence *= 0.94
 
                 if self.confidence < 0.1:
                     #remove the detection
@@ -450,8 +462,15 @@ class Detection:
 
                                                              
 
+    def isInsided(self, detection): #check if the other detection is inside this detection, counts as inside if the intersection is more than 80% of this detection and not the opposite
+        intersection = self.polygon.intersection(detection.polygon)
 
-                
+        insideCriteria=0.7
+        return intersection.area > insideCriteria * self.polygon.area  and intersection.area < insideCriteria * detection.polygon.area
+
+    def contains(self, detection): #check if this detection contains the other detection, counts as inside if the intersection is more than 80% of the other detection
+
+        return detection.isInsided(self)      
 
     def get_intersection(self, other_detection):
         """
@@ -495,11 +514,12 @@ class BranchModelTracker:
     def __init__(self, modelPath):
         pass
 
-        self.model = torch.hub.load('BronchoYolo\yolov5', 'custom', path=modelPath, source='local', force_reload=True)
+        self.model = torch.hub.load('BronchoYolo/yolov5', 'custom', path=modelPath, source='local', force_reload=True)
         self.model.eval()
 
 
         self.oldImage = None
+        self.newId = 0
 
 
         self.trackedDetections = None
@@ -508,18 +528,64 @@ class BranchModelTracker:
     def detectionsToPoints(self, detections):
         #takes the center of the bounding box of the detections and returns them as a list of points
 
+        buildHierachy(detections)
+
+
+
+        finalDetections={}
+        points = {}
         if detections is not None:
-            points = []
+            
+            #add point if: 
+                # the detection has no children and more than one sibling 
+                # the detection has exactly one child
+                # the detection has not parent or children
+
 
             for detection in detections:
-                center = detection.polygon.centroid
-                points.append((center.x, center.y))
+
+                numSiblings =0
+                if detection.parent is not None:
+                    numSiblings = len(detection.parent.children)-1
+
+                numChildren = len(detection.children)
+                doAdd=False
+
+                if numSiblings > 0 and numChildren == 0:
+                    doAdd=True
+                elif numChildren == 1:
+                    doAdd=True
+                elif detection.parent is None and numChildren == 0:
+                    doAdd=True
+
+                doAdd=True
+
+                
+                if doAdd:
+                    if detection.inView:
+                            
+                        point = detection.polygon.centroid
+                        points[detection.id] = (point.x, point.y)
+                    else:
+                        viewSize = Detection.imageSize
+
+                        centerX, centerY = viewSize[1]//2, viewSize[0]//2
+                        radius = min(viewSize)//2
+                        radius -= Detection.margin
+
+                        detectionPoint = detection.polygon.centroid
+
+                        closestPoint = closest_point_on_circle(centerX, centerY, radius, detectionPoint.x, detectionPoint.y)
+
+                        points[detection.id] = (int(closestPoint[0]), int(closestPoint[1]))
+
+                    finalDetections[detection.id] = detection
+                
 
 
-            return points
+        return points, finalDetections
 
 
-        return []
 
 
 
@@ -528,7 +594,28 @@ class BranchModelTracker:
 
         return results
 
+    def apply_matches(self,matches, trackedDetections):
+        """
+        Applies matches to a list of detections.
 
+        Parameters:
+        matches (list): A list of tuples, where each tuple contains a detection from list1 and its matched detection
+                        from list2 or None if no match was found.
+        """
+        for det1, det2 in matches:
+            if det1 is not None:
+                det1.apply_match(det2)
+            else:
+                #add the unmatched new detection to the list of tracked detections
+                det2.id = self.newId
+                self.newId += 1
+                trackedDetections.append(det2)
+
+                
+        trackedDetections = [detection for detection in trackedDetections if detection.confidence > 0]
+
+
+        return trackedDetections
 
     def predict(self, image):
 
@@ -551,7 +638,9 @@ class BranchModelTracker:
         time1 = time.time()
         newPredictions = self.getPredictions(newImage)
         time2 = time.time()
-        #print(f"Time taken to predict: {time2 - time1}")
+        print(f"YOLO inference time: {time2-time1} seconds")
+        
+
         
 
         #print(newPredictions)
@@ -559,15 +648,34 @@ class BranchModelTracker:
         Timer.point("createDetections")
         newDetections = create_detections_from_yolo(newPredictions)
 
+        #draw raw predictions
+        newDetectionsImage = newImage.copy()
+
+        for detection in newDetections:
+            cv2.polylines(newDetectionsImage, [np.array(detection.polygon.exterior.coords, np.int32)], True, (0, 0, 255), 1)
+
+            #draw the confidence
+            cv2.putText(newDetectionsImage, f"{detection.confidence:.2f}", (int(detection.bbox[0]), int(detection.bbox[1])), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+
+        cv2.imshow("New Detections", newDetectionsImage)
+        
+
         if self.trackedDetections is None:
             self.trackedDetections = newDetections
+
+            for detection in self.trackedDetections:
+                detection.id = self.newId
+                self.newId += 1
 
             return self.detectionsToPoints(self.trackedDetections)
 
 
         Timer.point("findAffineTransformation")
-        affineTransformation = find_affine_transformation(oldImage, newImage, feature_type='AKAZE')
 
+        time3 = time.time()
+        affineTransformation = find_affine_transformation(oldImage, newImage, feature_type='AKAZE')
+        time4 = time.time()
+        print(f"Affine transformation time: {time4-time3} seconds")
 
 
         #display the affine transformation matrix: transform the old image and overlay it on the new image
@@ -591,16 +699,20 @@ class BranchModelTracker:
         Timer.point("matchDetections")
         matchedPairs = match_detections(self.trackedDetections, newDetections)
 
-
+        Timer.point("applyMatches")
+        self.trackedDetections=self.apply_matches(matchedPairs,self.trackedDetections)
 
         Timer.point("Draw Detections")
         drawImage = newImage.copy()
         for detection in self.trackedDetections:
+
+
+            text = f"id: {detection.id} cfd: {detection.confidence:.2f}"
             if detection.inView:
                 cv2.polylines(drawImage, [np.array(detection.polygon.exterior.coords, np.int32)], True, (0, 255, 0), 1)
 
                 #draw the confidence
-                cv2.putText(drawImage, f"{detection.confidence:.2f}", (int(detection.bbox[0]), int(detection.bbox[1])), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+                cv2.putText(drawImage, text, (int(detection.bbox[0]), int(detection.bbox[1])-4), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 255, 0), 1)
 
             else: 
                 #find the closest point of the view to the detection polygon, when they do not intersect
@@ -616,7 +728,7 @@ class BranchModelTracker:
                 closestPoint = closest_point_on_circle(centerX, centerY, radius, detectionPoint.x, detectionPoint.y)
 
                 cv2.circle(drawImage, (int(closestPoint[0]), int(closestPoint[1])), 3, (0, 0, 255), -1)
-                cv2.putText(drawImage, f"{detection.confidence:.2f}", (closestPoint[0], closestPoint[1]), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+                cv2.putText(drawImage, text, (closestPoint[0], closestPoint[1]), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 255), 1)
                 
         
 
@@ -630,8 +742,7 @@ class BranchModelTracker:
 
 
 
-        Timer.point("applyMatches")
-        self.trackedDetections=apply_matches(matchedPairs,self.trackedDetections)
+        
 
 
         #draw the detections on the image
@@ -680,7 +791,7 @@ def main():
     episode = episodeManager.getCurrentEpisode()
 
 
-    branchModelTracker = BranchModelTracker("C:/Users/magnu/OneDrive/Misc/Bronchoscopy-Automated/BronchoYolo/yolov5/runs/train/branchTraining3/weights/best.pt")
+    branchModelTracker = BranchModelTracker("BronchoYolo/yolov5/runs/train/branchTraining3/weights/best.pt")
 
     for index in range(len(episode)):
         
