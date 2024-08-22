@@ -1,0 +1,5 @@
+train: C:/Users/magnu/OneDrive/Misc/BronchoYolo/4-TrainingImages/train
+val: C:/Users/magnu/OneDrive/Misc/BronchoYolo/4-TrainingImages/val
+
+nc: 1  # number of classes
+names: ['branch']  # list of class names

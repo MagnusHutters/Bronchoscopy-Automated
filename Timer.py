@@ -39,4 +39,4 @@ class Timer:
         # Clear the checkpoints for the next run
         Timer.checkpoints.clear()
         
-        return "\n".join(report), numOfPoints
+        return "\n".join(report)
