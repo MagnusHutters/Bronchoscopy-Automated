@@ -218,11 +218,13 @@ def main():
     episodeManager = EpisodeManager(mode = "Labelling", saveLocation="DatabaseLabelled/", loadLocation="Database/")
 
 
+    episodeManager.currentIndex=5
+
     episodeManager.nextEpisode()
 
     episode = episodeManager.getCurrentEpisode()
 
-    currentIndex = 0
+    currentIndex = 360
 
     cv2.namedWindow('Labeller')
     cv2.setMouseCallback('Labeller', mouse_callback)
@@ -232,7 +234,10 @@ def main():
 
     while True:
 
-        #print(f"Current Index: {currentIndex}")
+        
+
+        if newFrame:
+            print(f"Current index: {currentIndex} of {len(episode)}")
         episode = episodeManager.getCurrentEpisode()
 
         
@@ -241,6 +246,13 @@ def main():
         previousIndex = max(currentIndex-1, 0)
 
         frame = episode[currentIndex]
+        if frame is None:
+            print("Invalid frame, going back")
+            currentIndex-=1
+            if currentIndex < 0:
+                currentIndex = 0
+            continue
+
         previousFrame = episode[previousIndex]
 
         drawImage = frame.image.copy()
