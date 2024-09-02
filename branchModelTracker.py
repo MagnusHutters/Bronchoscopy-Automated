@@ -751,7 +751,7 @@ class BranchModelTracker:
         
 
 
-        return self.detectionsToPoints(self.trackedDetections)
+        return self.detectionsToPoints(self.trackedDetections), self.trackedDetections
 
 
 
