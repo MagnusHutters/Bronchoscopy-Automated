@@ -100,7 +100,7 @@ class Episode:
 
 
 
-    def __init__(self, pool ,doAskForLabel=True, doAskForSave=True):
+    def __init__(self, pool=None ,doAskForLabel=True, doAskForSave=True, cacheImages=True):
         
 
         self.doAskForLabel = doAskForLabel
@@ -113,6 +113,8 @@ class Episode:
         self.dataPath = os.path.join(self.path, "00_episodeData.json")
 
         self.episodeProbertyLabels = {"Section": None, "Branch": None}
+
+        self.cacheImages = cacheImages
 
 
         #Setup the episode's properties
@@ -146,28 +148,35 @@ class Episode:
     def get_frame(self, index):
         #print(f"Getting frame at index {index}")
         if index < 0 or index >= len(self._images):
-            raise IndexError("Index out of range")
+            raise IndexError(f"Index out of range: index {index} size is {len(self._images)}")
             return None
         
 
 
         #print(f"Getting frame image: {self._images[index]}, of type {type(self._images[index])}")
+        image = self._images[index]
 
         #check if either image is a string, in which case it is a path to the image, and load it
         if isinstance(self._images[index], str):
-            self._images[index] = cv2.imread(self._images[index])
+            image = cv2.imread(self._images[index])
 
+        topImage = self._topImages[index]
         if isinstance(self._topImages[index], str):
-            self._topImages[index] = cv2.imread(self._topImages[index])
+            topImage = cv2.imread(self._topImages[index])
+
+
+        if self.cacheImages:
+            self._images[index] = image
+            self._topImages[index] = topImage
 
 
 
         frame= Frame(
-            image=self._images[index],
+            image=image,
             state=self._states[index],
             action=self._actions[index],
             data=self._data[index],
-            topImage=self._topImages[index]
+            topImage=topImage
         )
 
         if frame.image is None:
@@ -231,8 +240,17 @@ class Episode:
         
         
         #save the image to the disk in seperate process
-        
-        self.pool.apply_async(saveToDiskThreadSafe, args=(image, imagePath))
+        if self.pool is None:
+            if isinstance(image, str):
+                return
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    
+    
+    
+            image = Image.fromarray(image)
+            image.save(imagePath)
+        else:
+            self.pool.apply_async(saveToDiskThreadSafe, args=(image, imagePath))
         
         
     
@@ -480,10 +498,10 @@ class Episode:
 
     #create a Episode.load method that loads an episode from a given path
     @classmethod
-    def load(cls, path, pool=None):
+    def load(cls, path, pool=None, cacheImages=True):
         
         #create a new episode object
-        episode = cls(pool)
+        episode = cls(pool, cacheImages=cacheImages)
 
         #extract the zip file to the temporary folder created by the episode
         shutil.unpack_archive(path, episode.path)
@@ -513,6 +531,8 @@ class Episode:
             #load the frame data
             state = frameData["state"]
             action = frameData["action"]
+            #print(action)
+
             data = frameData["data"]
             imagePath = os.path.join(episode.path, frameData["imagePath"])
             topImagePath = os.path.join(episode.path, frameData["topImagePath"])
@@ -521,6 +541,12 @@ class Episode:
             #topImage = cv2.imread(topImagePath)
             image = imagePath
             topImage = topImagePath
+
+            #make sure both images exists
+            if not os.path.exists(imagePath) or not os.path.exists(topImagePath):
+                print(f"Image at {imagePath} or top image at {topImagePath} does not exist")
+                break
+
 
             #print(f"Loading frame {index} with image of shape {image.shape}")
             #create a new frame
@@ -568,13 +594,23 @@ class Episode:
 
 class EpisodeManager:
 
-    def __init__(self, mode = "Recording", saveLocation="Database/", loadLocation="Database/"):
+    def __init__(self, mode = "Recording", saveLocation="Database/", loadLocation="Database/", multiProcessing=False):
         self.currentEpisode = None
+
+
+        #set mode to lower case
+        mode = mode.lower()
+
         self.mode = mode
 
         self.defaultSaveLocation = saveLocation
         self.defaultLoadLocation = loadLocation
-        self.pool = multiprocessing.Pool(processes=8)
+        
+        self.multiProcessing = multiProcessing
+        if self.multiProcessing:
+            self.pool = multiprocessing.Pool(processes=8)
+        else:
+            self.pool = None
 
         self.currentIndex = -1
 
@@ -600,7 +636,7 @@ class EpisodeManager:
         return episodes
     
 
-    def loadEpisode(self, indexOrPath):
+    def loadEpisode(self, indexOrPath, cacheImages=True):
         
         if isinstance(indexOrPath, int):
             #check if the index is in range
@@ -610,8 +646,30 @@ class EpisodeManager:
         else:
             path = indexOrPath
 
-        self.currentEpisode = Episode.load(path, self.pool)
+        self.currentEpisode = Episode.load(path, self.pool, cacheImages=cacheImages)
         return self.currentEpisode
+    
+    def loadAllEpisodes(self, maxEpisodes=None, cacheImages=True):
+        episodes = []
+        episodeFrameIndexStart = []
+        totalFrames = 0
+        for i in range(len(self.allEpisodes)):
+            if maxEpisodes is not None and i >= maxEpisodes:
+                break
+            
+            print(f"\rLoading episode {i} of {len(self.allEpisodes)} with name: {self.allEpisodes[i]}", end="")
+
+            episode = self.loadEpisode(i, cacheImages=cacheImages)
+            episodes.append(episode)
+            episodeFrameIndexStart.append(totalFrames)
+            totalFrames += len(episode)
+
+        print("")
+        print(f"Loaded {len(episodes)} episodes with a total of {totalFrames} frames")
+        print("")
+        
+        
+        return episodes, totalFrames, episodeFrameIndexStart
 
 
     def newEpisode(self, force=False):
@@ -659,23 +717,29 @@ class EpisodeManager:
         
 
 
-        if self.mode == "Recording":    
+        if self.mode == "recording":    
             self.endEpisode()
             self.newEpisode()
-        elif self.mode == "Labelling": 
+        elif self.mode == "labelling": 
             self.endEpisode() 
             self.currentIndex += 1
             if self.currentIndex >= len(self.allEpisodes):
                 self.currentIndex = len(self.allEpisodes) - 1
 
             self.loadEpisode(self.currentIndex)
-        elif self.mode == "Read":
+        elif self.mode == "read":
             self.endEpisode(discard=True)
             self.currentIndex += 1
             if self.currentIndex >= len(self.allEpisodes):
                 self.currentIndex = len(self.allEpisodes) - 1
 
             self.loadEpisode(self.currentIndex)
+        else:
+            print("Invalid mode")
+            
+            return None
+
+        return self.currentEpisode
 
 
     def previousEpisode(self):
