@@ -1,5 +1,5 @@
 
-
+import copy
 import numpy as np
 import cv2
 import torch
@@ -14,6 +14,7 @@ from scipy.optimize import linear_sum_assignment
 from DataHandling.Episode import EpisodeManager, Episode
 
 import time
+import warnings
 
 
 from Timer import Timer
@@ -352,6 +353,20 @@ class Detection:
         self.inView = False
         self.intersectionWithView = Polygon()
 
+
+    def toDict(self):
+        #return a json serializable dictionary of the detection
+        return {
+            "class_id": self.class_id,
+            "confidence": self.confidence,
+            "polygon": list(self.polygon.exterior.coords),
+            "bbox": self.bbox,
+            "id": self.id,
+            "inView": self.inView,
+            "parent": self.parent.id if self.parent is not None else -1,
+            "children": [child.id for child in self.children]
+        }
+
     @classmethod
     def from_yolo_detection(cls, yolo_detection):
         """
@@ -579,7 +594,7 @@ class BranchModelTracker:
 
                         points[detection.id] = (int(closestPoint[0]), int(closestPoint[1]))
 
-                    finalDetections[detection.id] = detection
+                    finalDetections[detection.id] = copy.deepcopy(detection)
                 
 
 
@@ -590,7 +605,12 @@ class BranchModelTracker:
 
 
     def getPredictions(self, image):
-        results = self.model(image)
+
+        #disable warnings
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", category=FutureWarning)
+        
+            results = self.model(image)
 
         return results
 
@@ -638,7 +658,7 @@ class BranchModelTracker:
         time1 = time.time()
         newPredictions = self.getPredictions(newImage)
         time2 = time.time()
-        print(f"YOLO inference time: {time2-time1} seconds")
+        #print(f"YOLO inference time: {time2-time1} seconds")
         
 
         
@@ -651,6 +671,7 @@ class BranchModelTracker:
         #draw raw predictions
         newDetectionsImage = newImage.copy()
 
+        '''
         for detection in newDetections:
             cv2.polylines(newDetectionsImage, [np.array(detection.polygon.exterior.coords, np.int32)], True, (0, 0, 255), 1)
 
@@ -658,7 +679,7 @@ class BranchModelTracker:
             cv2.putText(newDetectionsImage, f"{detection.confidence:.2f}", (int(detection.bbox[0]), int(detection.bbox[1])), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
 
         cv2.imshow("New Detections", newDetectionsImage)
-        
+        '''
 
         if self.trackedDetections is None:
             self.trackedDetections = newDetections
@@ -675,20 +696,21 @@ class BranchModelTracker:
         time3 = time.time()
         affineTransformation = find_affine_transformation(oldImage, newImage, feature_type='AKAZE')
         time4 = time.time()
-        print(f"Affine transformation time: {time4-time3} seconds")
+        #print(f"Affine transformation time: {time4-time3} seconds")
 
 
         #display the affine transformation matrix: transform the old image and overlay it on the new image
         Timer.point("displayAffineTransformation")
         transformedOldImage = cv2.warpAffine(oldImage, affineTransformation, (newImage.shape[1], newImage.shape[0]))
 
+        '''
         combinedImage = cv2.addWeighted(newImage, 0.5, transformedOldImage, 0.5, 0)
 
         #stacke 3 images horizontally
         combinedImage = np.hstack((newImage, combinedImage, transformedOldImage))
 
         cv2.imshow("Combined Image", combinedImage)
-
+'''
 
         #apply the affine transformation to the detections
 
@@ -702,6 +724,8 @@ class BranchModelTracker:
         Timer.point("applyMatches")
         self.trackedDetections=self.apply_matches(matchedPairs,self.trackedDetections)
 
+
+        '''
         Timer.point("Draw Detections")
         drawImage = newImage.copy()
         for detection in self.trackedDetections:
@@ -729,7 +753,7 @@ class BranchModelTracker:
 
                 cv2.circle(drawImage, (int(closestPoint[0]), int(closestPoint[1])), 3, (0, 0, 255), -1)
                 cv2.putText(drawImage, text, (closestPoint[0], closestPoint[1]), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 255), 1)
-                
+                '''
         
 
 
@@ -737,7 +761,7 @@ class BranchModelTracker:
         #    cv2.polylines(drawImage, [np.array(detection.polygon.exterior.coords, np.int32)], True, (0, 0, 255), 1)
 
 
-        cv2.imshow("Tracked Detections", drawImage)
+        #cv2.imshow("Tracked Detections", drawImage)
 
 
 
@@ -784,7 +808,7 @@ def closest_point_on_circle(Cx, Cy, R, Px, Py):
 def main():
     episodeManager = EpisodeManager(mode = "Labelling", saveLocation="DatabaseLabelled/", loadLocation="DatabaseLabelled/")
 
-    episodeManager.currentIndex = 20
+    #episodeManager.currentIndex = 
     episodeManager.nextEpisode()
     #episodeManager.nextEpisode()
 
@@ -821,13 +845,22 @@ def main():
 
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", category=FutureWarning)
-            branchModelTracker.predict(frame.image)
-        
+            points, detections =branchModelTracker.predict(frame.image)
+
+
+            for key, detection in detections.items():
+                cv2.polylines(drawImage, [np.array(detection.polygon.exterior.coords, np.int32)], True, (0, 255, 0), 1)
+
+                #draw the confidence
+                cv2.putText(drawImage, f"{detection.confidence:.2f}", (int(detection.bbox[0]), int(detection.bbox[1])), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+
+                #print bbox
+                print(f"bbox {key}: {detection.bbox}")
         cv2.imshow("Threshold Contours", drawImage)
 
         #create_and_display_contour_tree(frame.image)
         
-        key = cv2.waitKey(1)
+        key = cv2.waitKey(0)
         # If the user presses 'q', exit the loop
         if key == ord('q'):
             break

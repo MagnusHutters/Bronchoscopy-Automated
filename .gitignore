@@ -29,5 +29,8 @@ __pycache__/
 .vscode/
 
 
-
+!runs/
+!runs/**/*.jpg
+!runs/**/*.png
+!runs/**/*.gif
 
