@@ -4,6 +4,7 @@ import numpy as np
 import cv2
 import torch
 import time
+import os
 from shapely.geometry import Polygon
 from shapely.affinity import affine_transform
 
@@ -637,7 +638,7 @@ class BranchModelTracker:
 
         return trackedDetections
 
-    def predict(self, image):
+    def predict(self, image, doDebug=False, doVideo=False, videoWriter=None):
 
         report=Timer.reset()
         #print(report)
@@ -671,15 +672,15 @@ class BranchModelTracker:
         #draw raw predictions
         newDetectionsImage = newImage.copy()
 
-        '''
-        for detection in newDetections:
-            cv2.polylines(newDetectionsImage, [np.array(detection.polygon.exterior.coords, np.int32)], True, (0, 0, 255), 1)
+        if doDebug:
+            for detection in newDetections:
+                cv2.polylines(newDetectionsImage, [np.array(detection.polygon.exterior.coords, np.int32)], True, (0, 0, 255), 1)
 
-            #draw the confidence
-            cv2.putText(newDetectionsImage, f"{detection.confidence:.2f}", (int(detection.bbox[0]), int(detection.bbox[1])), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+                #draw the confidence
+                cv2.putText(newDetectionsImage, f"{detection.confidence:.2f}", (int(detection.bbox[0]), int(detection.bbox[1])), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
 
-        cv2.imshow("New Detections", newDetectionsImage)
-        '''
+            cv2.imshow("New Detections", newDetectionsImage)
+            
 
         if self.trackedDetections is None:
             self.trackedDetections = newDetections
@@ -703,14 +704,14 @@ class BranchModelTracker:
         Timer.point("displayAffineTransformation")
         transformedOldImage = cv2.warpAffine(oldImage, affineTransformation, (newImage.shape[1], newImage.shape[0]))
 
-        '''
-        combinedImage = cv2.addWeighted(newImage, 0.5, transformedOldImage, 0.5, 0)
+        if doDebug:
+            combinedImage = cv2.addWeighted(newImage, 0.5, transformedOldImage, 0.5, 0)
 
-        #stacke 3 images horizontally
-        combinedImage = np.hstack((newImage, combinedImage, transformedOldImage))
+            #stacke 3 images horizontally
+            combinedImage = np.hstack((newImage, combinedImage, transformedOldImage))
 
-        cv2.imshow("Combined Image", combinedImage)
-'''
+            cv2.imshow("Combined Image", combinedImage)
+
 
         #apply the affine transformation to the detections
 
@@ -725,51 +726,52 @@ class BranchModelTracker:
         self.trackedDetections=self.apply_matches(matchedPairs,self.trackedDetections)
 
 
-        '''
+        
         Timer.point("Draw Detections")
-        drawImage = newImage.copy()
-        for detection in self.trackedDetections:
+        if doDebug or doVideo:
+            drawImage = newImage.copy()
+            for detection in self.trackedDetections:
 
 
-            text = f"id: {detection.id} cfd: {detection.confidence:.2f}"
-            if detection.inView:
-                cv2.polylines(drawImage, [np.array(detection.polygon.exterior.coords, np.int32)], True, (0, 255, 0), 1)
+                text = f"id: {detection.id} cfd: {detection.confidence:.2f}"
+                if detection.inView:
+                    cv2.polylines(drawImage, [np.array(detection.polygon.exterior.coords, np.int32)], True, (0, 255, 0), 1)
 
-                #draw the confidence
-                cv2.putText(drawImage, text, (int(detection.bbox[0]), int(detection.bbox[1])-4), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 255, 0), 1)
+                    #draw the confidence
+                    cv2.putText(drawImage, text, (int(detection.bbox[0]), int(detection.bbox[1])-4), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 255, 0), 1)
 
-            else: 
-                #find the closest point of the view to the detection polygon, when they do not intersect
+                else: 
+                    #find the closest point of the view to the detection polygon, when they do not intersect
 
-                viewSize = Detection.imageSize
+                    viewSize = Detection.imageSize
 
-                centerX, centerY = viewSize[1]//2, viewSize[0]//2
-                radius = min(viewSize)//2
-                radius -= Detection.margin
+                    centerX, centerY = viewSize[1]//2, viewSize[0]//2
+                    radius = min(viewSize)//2
+                    radius -= Detection.margin
 
-                detectionPoint = detection.polygon.centroid
+                    detectionPoint = detection.polygon.centroid
 
-                closestPoint = closest_point_on_circle(centerX, centerY, radius, detectionPoint.x, detectionPoint.y)
+                    closestPoint = closest_point_on_circle(centerX, centerY, radius, detectionPoint.x, detectionPoint.y)
 
-                cv2.circle(drawImage, (int(closestPoint[0]), int(closestPoint[1])), 3, (0, 0, 255), -1)
-                cv2.putText(drawImage, text, (closestPoint[0], closestPoint[1]), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 255), 1)
-                '''
+                    cv2.circle(drawImage, (int(closestPoint[0]), int(closestPoint[1])), 3, (0, 0, 255), -1)
+                    cv2.putText(drawImage, text, (closestPoint[0], closestPoint[1]), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 255), 1)
+                
+            trackedDetectionsImage = drawImage.copy()
+
+            if doVideo:
+                videoWriter.write(trackedDetectionsImage)
+        if doDebug:
+            for detection in newDetections:
+                cv2.polylines(drawImage, [np.array(detection.polygon.exterior.coords, np.int32)], True, (0, 0, 255), 1)
+
+
+            cv2.imshow("Tracked Detections", drawImage)
+
+
+
+
         
 
-
-        #for detection in newDetections:
-        #    cv2.polylines(drawImage, [np.array(detection.polygon.exterior.coords, np.int32)], True, (0, 0, 255), 1)
-
-
-        #cv2.imshow("Tracked Detections", drawImage)
-
-
-
-
-        
-
-
-        #draw the detections on the image
 
 
         
@@ -809,14 +811,31 @@ def main():
     episodeManager = EpisodeManager(mode = "Labelling", saveLocation="DatabaseLabelled/", loadLocation="DatabaseLabelled/")
 
     #episodeManager.currentIndex = 
-    episodeManager.nextEpisode()
+    episodeManager.nextEpisode(6)
     #episodeManager.nextEpisode()
 
     episode = episodeManager.getCurrentEpisode()
 
+    doVideo = True
+    name = episode.name
+    videoOutputPath = f"runs/{name}.mp4"
+    fps = 10
+    video_writer = None
+    if doVideo:
+        frame = episode[0].image
+        height, width, layers = frame.shape
+        #delete the video if it already exists
+        
+        if os.path.exists(videoOutputPath):
+            os.remove(videoOutputPath)
+        video_writer = cv2.VideoWriter(videoOutputPath, cv2.VideoWriter_fourcc(*'mp4v'), fps, (width, height))
 
-    branchModelTracker = BranchModelTracker("BronchoYolo/yolov5/runs/train/branchTraining3/weights/best.pt")
 
+
+
+
+    branchModelTracker = BranchModelTracker("C:/Users/magnu/OneDrive/Misc/BronchoYolo/yolov5/runs/train/branchTraining8-XL/weights/best.pt")
+    
     for index in range(len(episode)):
         
 
@@ -845,7 +864,7 @@ def main():
 
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", category=FutureWarning)
-            points, detections =branchModelTracker.predict(frame.image)
+            points, detections =branchModelTracker.predict(frame.image, doDebug=False, doVideo=doVideo, videoWriter=video_writer)
 
 
             for key, detection in detections.items():
@@ -860,7 +879,7 @@ def main():
 
         #create_and_display_contour_tree(frame.image)
         
-        key = cv2.waitKey(0)
+        key = cv2.waitKey(1)
         # If the user presses 'q', exit the loop
         if key == ord('q'):
             break
@@ -870,7 +889,10 @@ def main():
 
 
         
-
+    
+    if doVideo:
+        video_writer.release()
+        print(f"Video saved to {videoOutputPath}")
     cv2.destroyAllWindows()
 
 

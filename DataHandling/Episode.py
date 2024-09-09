@@ -137,6 +137,7 @@ class Episode:
         self.doSave=True
 
         self._index = 0
+        self.name = None
         
         
         
@@ -465,6 +466,7 @@ class Episode:
         #save the episode to a zip file
         
         name = time.strftime("20%y-%m-%d - %H-%M-%S", time.localtime(self.timeStart))
+        self.name = name
         
         #if a directory is given, save the episode there
         
@@ -502,6 +504,9 @@ class Episode:
         
         #create a new episode object
         episode = cls(pool, cacheImages=cacheImages)
+
+        #find name from path: file name without extension
+        episode.name = os.path.splitext(os.path.basename(path))[0]
 
         #extract the zip file to the temporary folder created by the episode
         shutil.unpack_archive(path, episode.path)
@@ -713,8 +718,9 @@ class EpisodeManager:
     def getCurrentEpisode(self):
         return self.currentEpisode
 
-    def nextEpisode(self):
-        
+    def nextEpisode(self, index=None):
+        if index is not None:
+            self.currentIndex = index-1
 
 
         if self.mode == "recording":    
