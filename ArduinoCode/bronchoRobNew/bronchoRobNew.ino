@@ -70,7 +70,7 @@ void setup()
 {
   servoBend.attach(8); // arduino pin where the servo is attatched
   delay(1);
-  servoRot.attach(9);
+  servoRot.attach(10);
   delay(1);
   analogWriteResolution(12);
   delay(1);

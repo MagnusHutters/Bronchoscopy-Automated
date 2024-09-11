@@ -16,6 +16,7 @@ from GUI import *
 from Input import Input
 #from Training.ImageMod import preprocess_image
 #from PathTrackerInterfaceCV import PathTrackerInterface
+from branchModelTracker import BranchModelTracker
 
 
 class ModelController(Controller):
@@ -28,6 +29,7 @@ class ModelController(Controller):
         self.gui = GUI()
         #self.pathInterface= PathTrackerInterface("Training/model.keras")
         #self.input_shape = self.pathInterface.getInputShape()
+        self.branchModelTracker = BranchModelTracker("C:/Users/magnu/OneDrive/Misc/Ny mappe/Bronchoscopy-Automated/BronchoYolo/yolov5/runs/train/branchTraining11-X/weights/best.pt")
         
         #load tf-lite model
 
@@ -55,6 +57,7 @@ class ModelController(Controller):
         
         #_, doExit, objects = self.pathInterface.predictAndTrack(image,image)
         
+        branchPoints, branchPredictions = self.branchModelTracker.predict(image)
         
         
         objects=[]
@@ -75,7 +78,7 @@ class ModelController(Controller):
         
         
         Timer.point("beforeGUIUpdate")
-        currentKey, doExit, joystick, manual=self.gui.update(image,objects,state, recording, currentFrame, topImage)
+        currentKey, doExit, joystick, manual=self.gui.update(image,(branchPoints, branchPredictions),state, recording, currentFrame, topImage)
         Timer.point("afterGUIUpdate")
         #print(f"Current Key: {currentKey}, keys: {objects.keys()}")
         
