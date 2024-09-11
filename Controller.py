@@ -78,9 +78,9 @@ class Controller:
                     pass
                 
                 Timer.point("End")
-                report, num=Timer.reset()
+                report=Timer.reset()
                 Timer.point("Start")
-                #print(report)
+                print(report)
                 #print(num)
 
 
