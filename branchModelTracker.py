@@ -86,7 +86,7 @@ def detect_features(image, feature_type = "AKAZE"):
     return keypoints, descriptors
 
 
-def find_affine_transformation(img1, img2, feature_type='AKAZE'):
+def find_affine_transformation(img2, oldKeypoints, oldDescriptors, feature_type='AKAZE'):
     """
     Finds the affine transformation between two images by detecting and matching features.
     
@@ -100,13 +100,29 @@ def find_affine_transformation(img1, img2, feature_type='AKAZE'):
     """
 
     #if img1 is None return a affine transformation matrix that does nothing
-    if img1 is None:
-        return np.array([[1, 0, 0], [0, 1, 0]], dtype=np.float32)
+
+    doDownsample = True
+    downSampleFactor = 0.25
+
+    if doDownsample:
+        img2 = cv2.resize(img2, (0, 0), fx=downSampleFactor, fy=downSampleFactor)
+
+        
+    
 
 
     # Detect features in both images
-    keypoints1, descriptors1 = detect_features(img1, feature_type)
-    keypoints2, descriptors2 = detect_features(img2, feature_type)
+    #keypoints1, descriptors1 = detect_features(img1, feature_type)
+    newKeypoints, newDescriptors = detect_features(img2, feature_type)
+
+    if doDownsample:
+        #upsample the keypoints to the original size
+
+        for keypoint in newKeypoints:
+            keypoint.pt = (keypoint.pt[0]/downSampleFactor, keypoint.pt[1]/downSampleFactor)
+
+    if oldKeypoints is None or oldDescriptors is None:
+        return np.array([[1, 0, 0], [0, 1, 0]], dtype=np.float32), newKeypoints, newDescriptors
     
     # Match features between the two images
     if feature_type == 'SIFT':
@@ -118,26 +134,26 @@ def find_affine_transformation(img1, img2, feature_type='AKAZE'):
     else:
         bf = cv2.BFMatcher(cv2.NORM_L2, crossCheck=True)
     
-    matches = bf.match(descriptors1, descriptors2)
+    matches = bf.match(oldDescriptors, newDescriptors)
     matches = sorted(matches, key=lambda x: x.distance)
     
     # Extract location of good matches
-    src_pts = np.float32([keypoints1[m.queryIdx].pt for m in matches]).reshape(-1, 1, 2)
-    dst_pts = np.float32([keypoints2[m.trainIdx].pt for m in matches]).reshape(-1, 1, 2)
+    src_pts = np.float32([oldKeypoints[m.queryIdx].pt for m in matches]).reshape(-1, 1, 2)
+    dst_pts = np.float32([newKeypoints[m.trainIdx].pt for m in matches]).reshape(-1, 1, 2)
     
     #print(f"Number of matches: {len(matches)}")
 
 
     #display the matches
-    img_matches = cv2.drawMatches(img1, keypoints1, img2, keypoints2, matches[:20], None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
-    cv2.imshow("Matches", img_matches)
+    #img_matches = cv2.drawMatches(img1, oldKeypoints, img2, keypoints2, matches[:20], None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
+    #cv2.imshow("Matches", img_matches)
 
 
     # Compute the affine transformation matrix
     affine_matrix, _ = cv2.estimateAffinePartial2D(src_pts, dst_pts)
 
     if affine_matrix is None:
-        return np.array([[1, 0, 0], [0, 1, 0]], dtype=np.float32)
+        return np.array([[1, 0, 0], [0, 1, 0]], dtype=np.float32), newKeypoints, newDescriptors
     
 
 
@@ -169,12 +185,12 @@ def find_affine_transformation(img1, img2, feature_type='AKAZE'):
         tooLarge = True
 
     if tooLarge:
-        return np.array([[1, 0, 0], [0, 1, 0]], dtype=np.float32)
+        return np.array([[1, 0, 0], [0, 1, 0]], dtype=np.float32), newKeypoints, newDescriptors
 
 
 
     
-    return affine_matrix
+    return affine_matrix, newKeypoints, newDescriptors
 
 
 
@@ -539,6 +555,9 @@ class BranchModelTracker:
 
 
         self.trackedDetections = None
+
+        self.oldSescriptors = None
+        self.oldKeypoints = None
     
 
     def detectionsToPoints(self, detections):
@@ -695,16 +714,22 @@ class BranchModelTracker:
         Timer.point("findAffineTransformation")
 
         time3 = time.time()
-        affineTransformation = find_affine_transformation(oldImage, newImage, feature_type='AKAZE')
+
+        
+        #affineTransformation = find_affine_transformation(oldImage, newImage, feature_type='AKAZE')
+        affineTransformation, self.oldKeypoints, self.oldSescriptors = find_affine_transformation(newImage, self.oldKeypoints, self.oldSescriptors, feature_type='AKAZE')
+
+
+        
         time4 = time.time()
         #print(f"Affine transformation time: {time4-time3} seconds")
 
 
         #display the affine transformation matrix: transform the old image and overlay it on the new image
         Timer.point("displayAffineTransformation")
-        transformedOldImage = cv2.warpAffine(oldImage, affineTransformation, (newImage.shape[1], newImage.shape[0]))
 
         if doDebug:
+            transformedOldImage = cv2.warpAffine(oldImage, affineTransformation, (newImage.shape[1], newImage.shape[0]))
             combinedImage = cv2.addWeighted(newImage, 0.5, transformedOldImage, 0.5, 0)
 
             #stacke 3 images horizontally
