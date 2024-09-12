@@ -5,6 +5,9 @@
 
 import numpy as np
 from branchModelTracker import BranchModelTracker
+from DataHandling.Episode import EpisodeManager, Episode
+
+from Input import Input
 
 
 
@@ -129,6 +132,13 @@ def labelEpisode(episode, modelPath):
 
         detections.append(frameDetections)
 
+
+
+        #fix action(input)
+
+        input = Input.fromDict(frame.action)
+        frame.action = input.toDict()
+
     print("")
 
 
@@ -165,7 +175,7 @@ def labelEpisode(episode, modelPath):
 
 
 
-from DataHandling.Episode import EpisodeManager, Episode
+
 
 def main():
 

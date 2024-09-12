@@ -12,6 +12,7 @@ from scipy.ndimage import gaussian_filter1d
 
 
 from PIL import Image
+from Input import Input
 
 import compileVideo
 
@@ -352,9 +353,13 @@ class Episode:
             if not input_action.hasAction():
                 indices_to_remove.append(index)
 
+            print(f"\rFiltering frames by action: {index+1}/{len(self._images)}, to remove: {len(indices_to_remove)} to keep: {len(self._images) - len(indices_to_remove)}", end="")
+        print("")
+        print(f"Removing {len(indices_to_remove)} frames with invalid actions")
         # Remove frames in reverse order to avoid index shifting issues
         for index in sorted(indices_to_remove, reverse=True):
             self._remove_frame(index)  
+        print(f"Filtered frames by action: {len(self._images)} frames remaining")
     
     def _remove_frame(self, index):
         """

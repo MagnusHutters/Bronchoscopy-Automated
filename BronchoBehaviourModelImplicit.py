@@ -517,10 +517,13 @@ class BronchoBehaviourModelImplicit:
         self.action_to_index = {"u": 0, "d": 1, "l": 2, "r": 3, "f": 4, "b": 5}
 
     def predict(self, image, state, paths, selected_path_key):
+        #print(image)
         # 1. Transform the image
         image_tensor = self._transform_image(image)
 
         # 2. Extract the relevant state information (bend, rotation, extension)
+
+        state = [state["bendReal_deg"], state["rotationReal_deg"], state["extensionReal_mm"]]
         state_tensor = torch.tensor(state, dtype=torch.float32).to(self.device)
 
         # 3. Get the goal from the selected path
@@ -545,7 +548,9 @@ class BronchoBehaviourModelImplicit:
         if isinstance(image, Image.Image):
             return self.transform(image)
         else:
-            raise ValueError("Input image must be a PIL Image.")
+            # Convert to PIL Image if it's a numpy array
+            image = Image.fromarray(image)
+            return self.transform(image)
 
     def _extract_goal_from_path(self, paths, selected_path_key):
         """Extracts the goal from the path dictionary using the selected path key."""
@@ -569,6 +574,24 @@ class BronchoBehaviourModelImplicit:
         """Sample an action from the output probabilities."""
         probabilities = probabilities.squeeze().cpu().numpy()  # Convert to numpy array
         action_index = random.choices(range(len(probabilities)), probabilities)[0]
+
+        #print out the probabilities
+        actionToName = {
+            -1: "No Input",
+            0: "D",
+            1: "U",
+            2: "R",
+            3: "L",
+            4: "F",
+            5: "B"
+        }
+
+        probabilityString = ", ".join([f"{actionToName[i]}: {probabilities[i]:.2f}" for i in range(len(probabilities))])
+
+        print(f"Action Probabilities: {probabilityString}, Selected Action: {actionToName[action_index]} with probability {probabilities[action_index]:.2f}")
+
+        
+
         return action_index
 
 

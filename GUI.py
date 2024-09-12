@@ -415,7 +415,7 @@ class GUI:
     
             #Select path point to choose
 
-            print(f"Joystick: {joystick.dir}")
+            #print(f"Joystick: {joystick.dir}")
             
             self.current_index = self.select_point(objects, self.current_index, self.get_key_press_from_dir(joystick.dir))
 

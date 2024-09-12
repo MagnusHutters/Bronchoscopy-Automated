@@ -5,7 +5,7 @@ import cv2
 import torch
 import time
 import os
-from shapely.geometry import Polygon
+from shapely.geometry import Polygon, box, Point
 from shapely.affinity import affine_transform
 
 from math import sqrt, pi
@@ -163,8 +163,8 @@ def find_affine_transformation(img2, oldKeypoints, oldDescriptors, feature_type=
 
     overallScaleY = sqrt(affine_matrix[0, 1] ** 2 + affine_matrix[1, 1] ** 2)
 
-    maxScale = 2
-    minScale = 0.5
+    maxScale = 2.5
+    minScale = 0.4
     maxRotation = pi/4
 
 
@@ -244,7 +244,7 @@ def transform_all_detections(detections, affine_matrix):
 
 
 
-def match_detections(list1, list2, min_similarity=0.1):
+def match_detections(list1, list2, min_similarity=0.2):
     """
     Matches detections between two lists using the Hungarian algorithm.
 
@@ -337,8 +337,9 @@ class Detection:
 
     margin = 20
     
-    viewPolygon = Polygon([(margin, margin), (margin, imageSize[1]-margin), (imageSize[0]-margin, imageSize[1]-margin), (imageSize[0]-margin, margin)])
+    viewPolygonWithMargin = Polygon([(margin, margin), (margin, imageSize[1]-margin), (imageSize[0]-margin, imageSize[1]-margin), (imageSize[0]-margin, margin)])
 
+    viewPolygon = Polygon([(0, 0), (0, imageSize[1]), (imageSize[0], imageSize[1]), (imageSize[0], 0)])
 
 
 
@@ -363,13 +364,16 @@ class Detection:
         self.class_id = int(class_id)
         self.confidence = float(confidence)
         self.polygon = polygon
+
+
         self.bbox = bbox if bbox is not None else self.polygon.bounds
+
+
 
 
 
         self.inView = False
         self.intersectionWithView = Polygon()
-
 
     def toDict(self):
         #return a json serializable dictionary of the detection
@@ -432,22 +436,73 @@ class Detection:
         xoff, yoff = affine_matrix[0, 2], affine_matrix[1, 2]
         affine_params = (a, b, d, e, xoff, yoff)
         self.polygon = affine_transform(self.polygon, affine_params)
+        #self.polygonOutsideView = affine_transform(self.polygonOutsideView, affine_params)
+
+
+        #self.polygonOutsideView = self.calculatePartOfPolygonOutsideView()
+
+        #self.totalPolygon = self.polygon.union(self.polygonOutsideView)
         # Update bounding box after transformation
         self.bbox = self.polygon.bounds
 
 
     def calculateViewIntersection(self):
-        self.intersectionWithView = self.polygon.intersection(self.viewPolygon)
+        self.intersectionWithView = self.polygon.intersection(self.viewPolygonWithMargin)
 
         self.inView = self.intersectionWithView.area > 1
 
-    def apply_match(self, matched_detection, interpolation_factor=0.5):
+    def apply_match(self, matched_detection, interpolation_factor=0.8):
         """
         Applies the result of a match to this detection, updating the polygon and confidence.
 
         Parameters:
         matched_detection (Detection or None): The matched detection object, or None if no match.
         """
+        def interpolate_box(box1, box2, t=0.5):
+            """Interpolate two bounding boxes"""
+            minx = box1[0] * (1 - t) + box2[0] * t
+            miny = box1[1] * (1 - t) + box2[1] * t
+            maxx = box1[2] * (1 - t) + box2[2] * t
+            maxy = box1[3] * (1 - t) + box2[3] * t
+            return (minx, miny, maxx, maxy)
+
+        def apply_interpolation(orignial_box, target_box, mask_poly):
+            
+            """Directly adjust vertices to new positions from the interpolated box if inside the mask polygon."""
+            new_coords = []
+            
+
+            maskMinX, maskMinY, maskMaxX, maskMaxY = mask_poly.bounds
+
+
+            origMinX, origMinY, origMaxX, origMaxY = orignial_box
+            targetMinX, targetMinY, targetMaxX, targetMaxY = target_box
+
+            if maskMinX < origMinX < maskMaxX:
+                newMinX = targetMinX
+            else:
+                newMinX = origMinX
+
+            if maskMinY < origMinY < maskMaxY:
+                newMinY = targetMinY
+            else:
+                newMinY = origMinY
+
+            if maskMinX < origMaxX < maskMaxX:
+                newMaxX = targetMaxX
+            else:
+                newMaxX = origMaxX
+
+            if maskMinY < origMaxY < maskMaxY:
+                newMaxY = targetMaxY
+            else:
+                newMaxY = origMaxY
+
+            #create polygon from bounds
+            new_coords = [(newMinX, newMinY), (newMinX, newMaxY), (newMaxX, newMaxY), (newMaxX, newMinY)]
+
+            
+            return Polygon(new_coords)
 
 
 
@@ -459,9 +514,25 @@ class Detection:
             self.confidence += matched_detection.confidence
 
 
-            self.polygon = matched_detection.polygon
-            self.bbox = matched_detection.bbox
+            unionPolygon = self.polygon.union(matched_detection.polygon)
+            unionBbox = unionPolygon.bounds
+
+            interpolatedBbox = interpolate_box(unionPolygon.bounds, matched_detection.bbox, interpolation_factor)
+
+            self.polygon = apply_interpolation(unionBbox, interpolatedBbox, self.viewPolygon)
+
+            self.bbox = self.polygon.bounds
+
+
+            #if polygon has more than 10 points, simplify it
+            #if len(self.polygon.exterior.coords) > 4:
+            #    self.polygon = self.polygon.simplify(1)
+
+            self.bbox = self.polygon.bounds
             self.confidence *= 0.98
+
+
+
 
 
 
@@ -480,6 +551,35 @@ class Detection:
 
                     self.confidence = 0
 
+                viewArea = self.viewPolygon.area
+                detectionArea = self.polygon.area
+
+                detectionToViewRatio = detectionArea/viewArea
+
+
+                detectionHeight = self.polygon.bounds[3] - self.polygon.bounds[1]
+                detectionWidth = self.polygon.bounds[2] - self.polygon.bounds[0]
+
+                maxDetectionSide = max(detectionHeight, detectionWidth)
+                maxDetectionSideRation = maxDetectionSide / 400.0
+
+                rectangleRatio = detectionHeight/detectionWidth
+                if rectangleRatio < 1:
+                    rectangleRatio = 1/rectangleRatio
+
+                rectangleRatioLimit = 2 #if more than twice as high as wide, or opposite, decrease confidence
+                if rectangleRatio > rectangleRatioLimit:
+                    decay = 0.5 * (rectangleRatio-rectangleRatioLimit)
+                    self.confidence *= 1-decay
+
+                if detectionToViewRatio > 0.25:
+                    decay = 0.5 * detectionToViewRatio
+                    self.confidence *= 1-decay
+
+                if maxDetectionSideRation > 0.5:
+                    decay = 0.5 * maxDetectionSideRation
+                    self.confidence *= 1-decay
+
 
             else:
                 self.confidence *= 0.94
@@ -488,6 +588,12 @@ class Detection:
                     #remove the detection
 
                     self.confidence = 0
+
+                
+
+        #extra decay depending on size compared to view
+        
+
 
             
 
@@ -514,7 +620,9 @@ class Detection:
         Returns:
         float: The intersection area.
         """
-        return self.polygon.intersection(other_detection.polygon).area
+        
+
+        return self.polygon.intersection(other_detection.polygon)
 
     def get_union(self, other_detection):
         """
@@ -526,7 +634,7 @@ class Detection:
         Returns:
         float: The union area.
         """
-        return self.polygon.union(other_detection.polygon).area
+        return self.polygon.union(other_detection.polygon)
 
     def get_similarity(self, other_detection):
         """
@@ -538,8 +646,21 @@ class Detection:
         Returns:
         float: The similarity score (IoU).
         """
-        intersection_area = self.get_intersection(other_detection)
-        union_area = self.get_union(other_detection)
+
+        
+        
+
+        intersection = self.get_intersection(other_detection)
+        union = self.get_union(other_detection)
+
+        #only use part in view
+        intersection = intersection.intersection(self.viewPolygon)
+        union = union.intersection(self.viewPolygon)
+
+        intersection_area = intersection.area
+        union_area = union.area
+
+
         return intersection_area / union_area if union_area != 0 else 0
 
 class BranchModelTracker:

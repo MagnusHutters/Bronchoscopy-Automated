@@ -34,7 +34,7 @@ class ModelController(Controller):
         
         #behavioir model
         
-        self.model = BronchoBehaviourModelImplicit(model_path="runs/implicitTraining_14/modelImplicit.pth")
+        self.model = BronchoBehaviourModelImplicit(model_path="C:/Users/magnu/OneDrive/Misc/Ny mappe/Bronchoscopy-Automated/runs/implictTraining_14/modelImplicit.pth")
         
         self.override_active=False
         
@@ -133,13 +133,7 @@ class ModelController(Controller):
             else:
                 
 
-                if currentKey in branchPredictions.keys():
                 
-                    action = self.model.predict(state, image, branchPredictions, currentKey)
-                else:
-                    action = -1
-
-                input = Input.fromAction(action)
                 
                 
                 
@@ -165,15 +159,24 @@ class ModelController(Controller):
                 #    input=Input(*prediction)
                     
                     #print prediction on same line
-                if False:
-                    pass
+                if joystick.forwards > 0.5:
+                    if currentKey in branchPredictions.keys():
+                
+                        action = self.model.predict(image, state, branchPredictions, currentKey)
+                    else:
+                        action = -1
+
+                    input = Input.fromActionValue(action)
 
                 elif joystick.forwards < -0.5:
                     
                     # 1 if state[1] is negative and -1 if state[1] is positive
-                    toNeutral = 1 if state[0][0][1] < 0 else -1
+                    #toNeutral = 1 if state[0][0][1] < 0 else -1
                     
-                    input=Input(0,0,-1)
+                    input=Input.fromChar("b")
+
+                else:
+                    input = Input()
             
         
         
