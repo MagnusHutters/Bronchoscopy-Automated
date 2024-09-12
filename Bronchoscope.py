@@ -25,17 +25,18 @@ class Bronchoscope(threading.Thread):
     
     jointBendingConvert = [850,1750] # valores pwd, representa [-170,170]
     jointRotationConvert = [544,2400] # valores pwd, representa [-170,170]
-    jointTranslationConvert = [0,3600] # valores step, 250 mm
+    jointTranlationStepMultiplier = 64
+    jointTranslationConvert = [0,3600*jointTranlationStepMultiplier] # valores step, 250 mm
     
     
-    jointStepLimits = [[850,1750], [544,2400], [0,3600]]
+    jointStepLimits = [[850,1750], [544,2400], [0,3600*jointTranlationStepMultiplier]]
     
     bendingInitial = ((jointStepLimits[0][1]-jointStepLimits[0][0])/2)+jointStepLimits[0][0]
     rotationInitial = ((jointStepLimits[1][1]-jointStepLimits[1][0])/2)+jointStepLimits[1][0]
     translationInitial = jointStepLimits[2][0]
     
     jointStepInitial = [bendingInitial, rotationInitial, translationInitial]
-    jointStepMaxChange = [64,64,64]
+    jointStepMaxChange = [64,64,64*jointTranlationStepMultiplier]
     
     
     axisToJoint = {
@@ -128,6 +129,12 @@ class Bronchoscope(threading.Thread):
         if command.hasInput:
             axis = command.axis
             change = command.change
+
+            #multiply change by multiplier for translation axis
+            if axis == 2:
+                change *= self.jointTranlationStepMultiplier
+
+
             
             #cap change from -max_change to max_change
             change = max(-self.jointStepMaxChange[axis], min(self.jointStepMaxChange[axis], change))
@@ -261,6 +268,7 @@ class Bronchoscope(threading.Thread):
         #self.jointvalues.append(int(data))
         self.jointvalues.append(((int(self.current_position[2]) - self.jointTranslationConvert[0]) / (self.jointTranslationConvert[1] - self.jointTranslationConvert[0])) * self.joint_limits[2]) #((value-min) / (max-min) * jointrange) - halfjointrange
 
+
         return self.jointvalues.copy()
     
     def get_state(self):
@@ -271,7 +279,7 @@ class Bronchoscope(threading.Thread):
         return {
             "bend_steps": self.current_position[0],
             "rotation_steps": self.current_position[1],
-            "extension_steps": self.current_position[2],
+            "extension_steps": self.current_position[2]//self.jointTranlationStepMultiplier,
             
             "bendReal_deg": joints[0],
             "rotationReal_deg": joints[1],

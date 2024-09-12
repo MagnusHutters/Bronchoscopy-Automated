@@ -8,6 +8,7 @@ import time
 import cv2
 import multiprocessing
 import subprocess
+from scipy.ndimage import gaussian_filter1d
 
 
 from PIL import Image
@@ -64,23 +65,11 @@ class Frame:
         self.topImage = topImage
 
 
-
-
-
-
-
-    
-
-    
-
     def check(self):
 
         check_serializable(self.data, "data")
         check_serializable(self.state, "state")
         check_serializable(self.action, "action")
-
-
-
 
     def __repr__(self):
         return f"Frame(image={self.image}, state={self.state}, action={self.action}, data={self.data}, topImage={self.topImage})"
@@ -230,7 +219,79 @@ class Episode:
     def __len__(self):
         return len(self._images)
 
+    def extract_model_values(self):
+        """
+        Extracts the 'model_value' entry from each frame's action dictionary.
+        
+        :return: A list of 'model_value' lists, one per frame.
+        """
+        model_values = []
 
+        for frame in self:
+            action = frame[0].action  # frame[0] because __next__ returns (frame, index)
+            if "model_value" in action:
+                model_values.append(action["model_value"])
+            else:
+                model_values.append([0.0] * 6)  # Default to a zero list if not found
+
+        return np.array(model_values)
+
+
+    def normalize_model_values(model_values):
+        """
+        Normalizes the 'model_value' entries for each frame to ensure they sum to 1.
+        
+        :param model_values: A 2D numpy array where each row is a 'model_value' list for a frame.
+        :return: A normalized version of model_values.
+        """
+        normalized_values = np.zeros_like(model_values)
+        
+        for i, values in enumerate(model_values):
+            sum_values = np.sum(values)
+            if sum_values > 0:
+                normalized_values[i] = values / sum_values  # Normalize by dividing by sum
+            else:
+                normalized_values[i] = values  # If sum is zero, leave it unchanged
+        
+        return normalized_values
+
+
+    def gaussian_blur_model_values(model_values, sigma=1):
+        """
+        Applies a Gaussian blur to the 'model_value' lists across frames.
+
+        :param model_values: A 2D numpy array where each row is a 'model_value' list for a frame.
+        :param sigma: Standard deviation for Gaussian kernel.
+        :return: A blurred version of the model_values.
+        """
+        # Apply Gaussian blur along the time axis (frames) for each of the 6 model_value entries
+        blurred_values = gaussian_filter1d(model_values, sigma=sigma, axis=0)
+        
+        return blurred_values
+
+
+    def apply_gaussian_blur_with_normalization(self, sigma=1):
+        """
+        Extracts, blurs, and normalizes 'model_value' entries across frames.
+
+        :param sigma: Standard deviation for Gaussian kernel in the Gaussian blur.
+        """
+        # Step 1: Extract model values from all frames
+        model_values = self.extract_model_values()
+
+        # Step 2: Normalize the extracted model values
+        normalized_values = self.normalize_model_values(model_values)
+
+        # Step 3: Apply Gaussian blur to the normalized values
+        blurred_values = self.gaussian_blur_model_values(normalized_values, sigma=sigma)
+
+        # Step 4: Normalize the blurred values again to maintain valid probabilities
+        re_normalized_values = self.normalize_model_values(blurred_values)
+
+        # Step 5: Update the episode with the re-normalized blurred model values
+        for i, (frame, index) in enumerate(self):
+            frame.action["model_value"] = re_normalized_values[i].tolist()
+            self[index] = frame  # Update the frame in the episode
 
 
     def saveImage(self, image, index, prefix=""):
@@ -253,8 +314,65 @@ class Episode:
         else:
             self.pool.apply_async(saveToDiskThreadSafe, args=(image, imagePath))
         
+    def filter_frames(self, condition_fn):
+        """
+        Filters frames by removing those that do not meet the condition.
         
+        :param condition_fn: A function that takes a frame as input and returns True if the frame should be kept, False if it should be deleted.
+        """
+        indices_to_remove = []  # To store indices of frames to be removed
+
+        # Iterate through frames and check the condition function
+        for index in range(len(self._images)):
+            frame = self.get_frame(index)
+
+            # If the condition function returns False, mark the frame for removal
+            if not condition_fn(frame):
+                indices_to_remove.append(index)
+        
+        # Remove the frames in reverse order to avoid index shifting issues
+        for index in sorted(indices_to_remove, reverse=True):
+            self._remove_frame(index)  
+
+    def filter_frames_by_action(self):
+        """
+        Filters frames by removing those whose actions do not pass the hasAction() check.
+        This uses the Input class to parse the action and checks if the action is valid.
+        """
+        indices_to_remove = []  # Store indices of frames to be removed
+
+        # Iterate through each frame
+        for index in range(len(self._images)):
+            frame = self.get_frame(index)
+
+            # Convert the frame's action (dict) into an Input object
+            input_action = Input.from_dict(frame.action)
+
+            # If input_action has no valid action, mark this frame for removal
+            if not input_action.hasAction():
+                indices_to_remove.append(index)
+
+        # Remove frames in reverse order to avoid index shifting issues
+        for index in sorted(indices_to_remove, reverse=True):
+            self._remove_frame(index)  
     
+    def _remove_frame(self, index):
+        """
+        Helper function to remove the frame at the specified index.
+        This removes associated image, state, action, and data.
+        
+        :param index: The index of the frame to be removed.
+        """
+        # Remove frame data at the specified index
+        del self._images[index]
+        del self._topImages[index]
+        del self._states[index]
+        del self._actions[index]
+        del self._data[index]
+
+        # Adjust _index for iteration if necessary
+        if self._index > index:
+            self._index -= 1
 
     def _addFrame(self, frame):
 

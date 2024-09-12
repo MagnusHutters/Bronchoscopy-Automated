@@ -185,6 +185,9 @@ def main():
         labelEpisode(episode, "C:/Users/magnu/OneDrive/Misc/BronchoYolo/yolov5/runs/train/branchTraining7-XL/weights/best.pt")
 
 
+    episodeManager.endEpisode()
+
+
 
 
 if __name__ == "__main__":
