@@ -54,15 +54,27 @@ class Input:
         
         self.change = int(self.change)
 
+        self.action = self.toActionValue()
+
+
+
 
 
         #false if axis is None, true otherwise
         self.hasInput = axis is not None
         
-        
+    
         
     @classmethod
     def fromInt(cls, axis, change):
+        return cls(axis, change)
+    
+    @classmethod
+    def fromActionValue(cls, actionValue):
+        if actionValue == -1:
+            return cls(None, 0)
+        axis = actionValue // 2
+        change = cls.numStepsDefault[axis] * (1 if actionValue % 2 == 0 else -1)
         return cls(axis, change)
     
     @classmethod
@@ -85,13 +97,12 @@ class Input:
             raise ValueError("Model values must be an array of six numerical values")
         if np.all(values == 0):  # Check if all values are exactly zero, indicating no input
             return cls(None, 0)
-        max_value = np.max(values)
-        indices = [i for i, v in enumerate(values) if v == max_value]
-        # Select the first index with the maximum value, handling ties by default order
         
-        #take steps from magnitude of max value, minimum of 1
-        steps = max(1, int(abs(max_value)))
-        return cls(indices[0], steps)
+        maxIndex = np.argmax(values)
+
+        
+        
+        return cls.fromActionValue(maxIndex)
     
     
     @classmethod
@@ -106,7 +117,7 @@ class Input:
         model_value = dict_values.get("model_value")
         if model_value is not None:
             return cls.fromModel(model_value)
-        raise ValueError("Dictionary must contain 'axis', 'change', or 'model_value'")
+        raise ValueError("Dictionary must contain 'axis' and 'change', 'char_value' or 'model_value'")
     
     
     @classmethod
@@ -157,19 +168,20 @@ class Input:
         
         
     def toModel(self):
-        if self.axis is None or self.change == 0:
+        
+        
+        action = self.toActionValue()
+        if action == -1:
             return [0] * 6
         
-        
-        values = [0] * 6
-        sign = np.sign(self.change)
-        sign = 1 if sign == 0 else 0
-        axis = self.axis*2
-        
-        activeChannel = axis + sign
-        
-        values[activeChannel] = abs(self.change)
-        return values
+
+        modelValue = [0] * 6
+
+        index = action
+        modelValue[index] = 1
+
+        return modelValue
+
     
     def toDict(self):
         return {
@@ -179,7 +191,8 @@ class Input:
             "model_value": self.toModel()
         }
         
-        
+    def hasAction(self):
+        return self.hasInput
         
     def __repr__(self):
         action = self.toActionValue()
