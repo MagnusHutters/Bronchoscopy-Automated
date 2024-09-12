@@ -1,21 +1,32 @@
+# Standard library imports
 import argparse
-import os
-from PIL import Image
-import shutil
 import csv
+import os
+import random
+import shutil
+import time
 
+# Third-party imports for data handling and transformations
+from PIL import Image
+import numpy as np
+
+# PyTorch related imports
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 import torch.optim as optim
 from torch.amp import GradScaler, autocast
 from torch.utils.data import Dataset, DataLoader
-from torchvision import transforms
-import torch.nn.functional as F
-from sklearn.metrics import precision_score, recall_score, f1_score
-import matplotlib.pyplot as plt
-import numpy as np
-import time
+#import torchvision.transforms as transforms
+import torchvision.transforms as T
 
+# Imports for model evaluation
+from sklearn.metrics import precision_score, recall_score, f1_score
+
+# Visualization imports
+import matplotlib.pyplot as plt
+
+# Local module imports
 from DataHandling.Episode import Episode, EpisodeManager
 
 
@@ -237,11 +248,7 @@ class FilteredUpsampledDataset(Dataset):
         return image, state, goal, label
 
 
-import torch
-from torch.utils.data import Dataset
-import random
-import torchvision.transforms as T
-from PIL import Image
+
 
 
 # Define noise-adding functions
@@ -486,6 +493,85 @@ def plot_and_save_loss_curve(train_loss_values, random_val_loss_values, seq_val_
     plt.legend()
     plt.savefig(os.path.join(output_folder, 'loss_curve.png'))
     plt.close()
+
+
+
+
+class BronchoBehaviourModelImplicit:
+    def __init__(self, model_path, device='cuda'):
+        # Initialize the model and load the weights
+        self.device = torch.device(device if torch.cuda.is_available() else 'cpu')
+        self.model = MultiInputModel(numStates=3, numGoal=4, imageSize=50, channels=3, classes=6)
+        self.model.load_state_dict(torch.load(model_path, map_location=self.device))
+        self.model.to(self.device)
+        self.model.eval()
+
+        # Define the image transform used during inference
+        self.transform = T.Compose([
+            T.Resize((50, 50)),
+            T.ToTensor(),
+            T.Normalize((0.5,), (0.5,))
+        ])
+
+        # Action to index mapping
+        self.action_to_index = {"u": 0, "d": 1, "l": 2, "r": 3, "f": 4, "b": 5}
+
+    def predict(self, image, state, paths, selected_path_key):
+        # 1. Transform the image
+        image_tensor = self._transform_image(image)
+
+        # 2. Extract the relevant state information (bend, rotation, extension)
+        state_tensor = torch.tensor(state, dtype=torch.float32).to(self.device)
+
+        # 3. Get the goal from the selected path
+        goal_tensor = self._extract_goal_from_path(paths, selected_path_key)
+
+        # 4. Feed the inputs to the model to get action probabilities
+        image_tensor = image_tensor.unsqueeze(0).to(self.device)  # Add batch dimension
+        goal_tensor = goal_tensor.to(self.device)
+
+        with torch.no_grad():
+            logits = self.model(image_tensor, state_tensor.unsqueeze(0), goal_tensor.unsqueeze(0))
+
+        probabilities = F.softmax(logits, dim=1)
+
+        # 5. Sample an action based on the probabilities
+        action_index = self._sample_action(probabilities)
+
+        return action_index
+
+    def _transform_image(self, image):
+        """Applies the necessary image transformations."""
+        if isinstance(image, Image.Image):
+            return self.transform(image)
+        else:
+            raise ValueError("Input image must be a PIL Image.")
+
+    def _extract_goal_from_path(self, paths, selected_path_key):
+        """Extracts the goal from the path dictionary using the selected path key."""
+        selected_path = paths[selected_path_key]
+        goal_bbox = selected_path.bbox
+
+        # Convert bbox to center and size, and normalize based on image size (400x400)
+        goal_center = [(goal_bbox[0] + goal_bbox[2]) / 2, (goal_bbox[1] + goal_bbox[3]) / 2]
+        goal_center[0] = (goal_center[0] - 200) / 200  # Normalize x
+        goal_center[1] = (goal_center[1] - 200) / 200  # Normalize y
+
+        goal_size = [goal_bbox[2] - goal_bbox[0], goal_bbox[3] - goal_bbox[1]]
+        goal_size[0] = goal_size[0] / 200  # Normalize width
+        goal_size[1] = goal_size[1] / 200  # Normalize height
+
+        # Combine the center and size as the goal tensor
+        goal_tensor = torch.tensor(goal_center + goal_size, dtype=torch.float32)
+        return goal_tensor
+
+    def _sample_action(self, probabilities):
+        """Sample an action from the output probabilities."""
+        probabilities = probabilities.squeeze().cpu().numpy()  # Convert to numpy array
+        action_index = random.choices(range(len(probabilities)), probabilities)[0]
+        return action_index
+
+
 
 # Main function to handle training
 def main(epochs = 50, learningRate = 0.0001, modelSavePath = "modelImplicit.pth"):

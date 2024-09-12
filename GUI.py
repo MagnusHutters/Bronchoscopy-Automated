@@ -403,7 +403,7 @@ class GUI:
         
 
         doQuit, selectEvent, joystick, manual = self.doHandleEvents()
-        doQuit=False
+        #doQuit=False
               
         Timer.point("eventsHandled")
         

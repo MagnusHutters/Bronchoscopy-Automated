@@ -19,7 +19,8 @@ class Interface:
         if os.name == 'nt': #windows
             self.broncho=Bronchoscope(port='COM3', baudrate=115200)
             #self.bronchoCamera=Camera(1)
-            self.bronchoCamera=Camera(Camera.get_camera_id_by_name("PC Camera"))
+            #self.bronchoCamera=Camera(Camera.get_camera_id_by_name("PC Camera"))
+            self.bronchoCamera=Camera(3)
         elif os.name == 'posix': #linux
             self.broncho=Bronchoscope(port='/dev/broncho', baudrate=115200)
             self.bronchoCamera=Camera('/dev/broncho_camera')
@@ -29,8 +30,12 @@ class Interface:
         
         self.broncho.start()
 
-        self.Trakstar=Trakstar()
+        self.doTrackstar=False
+
+        if self.doTrackstar:
+            self.Trakstar=Trakstar()
         self.trackstarData={}
+        
 
         
         
@@ -58,7 +63,8 @@ class Interface:
         #Timer.point("gotBrocnhoImage")
         self.topImage = self.topCamera.get_frame()
         #Timer.point("gotTopImage")
-        self.trackstarData = self.Trakstar.getFrame()
+        if self.doTrackstar:
+            self.trackstarData = self.Trakstar.getFrame()
         
         
         return self.currentImage, self.topImage

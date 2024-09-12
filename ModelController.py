@@ -17,6 +17,7 @@ from Input import Input
 #from Training.ImageMod import preprocess_image
 #from PathTrackerInterfaceCV import PathTrackerInterface
 from branchModelTracker import BranchModelTracker
+from BronchoBehaviourModelImplicit import BronchoBehaviourModelImplicit
 
 
 class ModelController(Controller):
@@ -31,11 +32,9 @@ class ModelController(Controller):
         #self.input_shape = self.pathInterface.getInputShape()
         self.branchModelTracker = BranchModelTracker("C:/Users/magnu/OneDrive/Misc/Ny mappe/Bronchoscopy-Automated/BronchoYolo/yolov5/runs/train/branchTraining11-X/weights/best.pt")
         
-        #load tf-lite model
-
-
-        # Load the TFLite model and allocate tensors
-        self.model = None #TFLiteModel("BronchoModel.tflite")
+        #behavioir model
+        
+        self.model = BronchoBehaviourModelImplicit(model_path="runs/implicitTraining_14/modelImplicit.pth")
         
         self.override_active=False
         
@@ -58,9 +57,11 @@ class ModelController(Controller):
         #_, doExit, objects = self.pathInterface.predictAndTrack(image,image)
         
         branchPoints, branchPredictions = self.branchModelTracker.predict(image)
+
+        #print(f"BranchPoints: {branchPoints}")
         
         
-        objects=[]
+        #objects=[]
         
         state = self.interface.currentState
         
@@ -131,21 +132,14 @@ class ModelController(Controller):
                 
             else:
                 
-                paths = []
-                for key, item in objects.items():
-                    
-                    existance=1
-                    chosen=0
-                    x=item[0]
-                    y=item[1]
-                    if key is currentKey:
-                        chosen=1
-                        
-                    paths.append([x,y,existance,chosen])
-                    
-                #fill paths up till 4
-                for i in range(len(paths),4):
-                    paths.append([0,0,0,0])
+
+                if currentKey in branchPredictions.keys():
+                
+                    action = self.model.predict(state, image, branchPredictions, currentKey)
+                else:
+                    action = -1
+
+                input = Input.fromAction(action)
                 
                 
                 
@@ -155,23 +149,25 @@ class ModelController(Controller):
                 #image=preprocess_image(image, mode="basic")
                 
                 #convert to numpy array in float32 bit format
-                state = np.array([[state]], dtype=np.float32)
-                image = np.array([image], dtype=np.float32)
-                paths = np.array([paths], dtype=np.float32)
+                #state = np.array([[state]], dtype=np.float32)
+                #image = np.array([image], dtype=np.float32)
+                #paths = np.array([paths], dtype=np.float32)
                 
                 
                 #if new index is in obejcts keys
-                if currentKey in objects.keys() and joystick.forwards>0.5:
+                #if currentKey in objects.keys() and joystick.forwards>0.5:
                     
                     #print("Predicting")
                     #prediction with 3 inputs: image, paths, state
-                    prediction = self.model.predict(state,image, paths)
-                    prediction=prediction[0]
-                    print(f"Prediction: {prediction}                ")
-                    input=Input(*prediction)
+                #    prediction = self.model.predict(state,image, paths)
+                #    prediction=prediction[0]
+                #    print(f"Prediction: {prediction}                ")
+                #    input=Input(*prediction)
                     
                     #print prediction on same line
-            
+                if False:
+                    pass
+
                 elif joystick.forwards < -0.5:
                     
                     # 1 if state[1] is negative and -1 if state[1] is positive

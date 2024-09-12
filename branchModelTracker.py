@@ -102,7 +102,7 @@ def find_affine_transformation(img2, oldKeypoints, oldDescriptors, feature_type=
     #if img1 is None return a affine transformation matrix that does nothing
 
     doDownsample = True
-    downSampleFactor = 0.25
+    downSampleFactor = 0.5
 
     if doDownsample:
         img2 = cv2.resize(img2, (0, 0), fx=downSampleFactor, fy=downSampleFactor)

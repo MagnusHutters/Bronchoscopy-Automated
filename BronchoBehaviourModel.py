@@ -93,7 +93,7 @@ class BronchosopyDataset(Dataset):
 
 
         
-        return image, stateInput, goalInput, oneHotAction
+        return image, stateInput, goalInput, oneHotAction #image, state, goal, label(one-hot encoded action)
 
 
 class FilteredUpsampledDataset(Dataset):
@@ -217,7 +217,7 @@ class FilteredUpsampledDataset(Dataset):
 
 # Multi-input CNN model
 class MultiInputModel(nn.Module):
-    def __init__(self, numStates=3, numGoal=4, imageSize=50, channels=1, classes=6):
+    def __init__(self, numStates=3, numGoal=4, imageSize=50, channels=3, classes=6):
         super(MultiInputModel, self).__init__()
         
         # Convolutional layers for the image input
@@ -310,7 +310,7 @@ def main(epochs = 50, learningRate = 0.0001, modelSavePath = "model.pth"):
 
 
     # Instantiate the model
-    model = MultiInputModel(numStates=3, numGoal=4, imageSize=50, channels=3, classes=6)
+    model = MultiInputModel()
 
     # Loss and optimizer
     criterion = nn.CrossEntropyLoss()
