@@ -207,11 +207,11 @@ def create_detections_from_yolo(yolo_predictions):
     """
     detections = []
 
-    predictions = yolo_predictions.pred[0]
+    
 
 
 
-    for yoloDetection in predictions:
+    for yoloDetection in yolo_predictions:
 
 
         detection = Detection.from_yolo_detection(yoloDetection)
@@ -780,6 +780,53 @@ class BranchModelTracker:
 
     def predict(self, image, doDebug=False, doVideo=False, videoWriter=None):
 
+        def filter_corner_detections(detections, image_width, image_height, corner_margin=5, area_threshold=0.02):
+            """
+            Filters out small detections near the corresponding corners of an image.
+            
+            :param detections: List of detections, each detection is a dictionary with 'x1', 'y1', 'x2', 'y2' representing the bounding box.
+            :param image_width: Width of the image.
+            :param image_height: Height of the image.
+            :param corner_margin: Margin in pixels to consider as 'corner'. Default is 20 pixels.
+            :param area_threshold: Fraction of image area that a detection must exceed to be kept. Default is 0.02 (2%).
+            
+            :return: Filtered list of detections.
+            """
+            
+            filtered_detections = []
+            image_area = image_width * image_height
+            min_area = image_area * area_threshold  # Calculate the minimum area threshold
+
+            def is_bbox_near_image_corner(x1, y1, x2, y2):
+                """
+                Check if the top-left, top-right, bottom-left, or bottom-right corner of the bounding box is near 
+                the corresponding corner of the image.
+                """
+                # Top-left corner check
+                if x1 <= corner_margin and y1 <= corner_margin:
+                    return True
+                # Top-right corner check
+                if x2 >= image_width - corner_margin and y1 <= corner_margin:
+                    return True
+                # Bottom-left corner check
+                if x1 <= corner_margin and y2 >= image_height - corner_margin:
+                    return True
+                # Bottom-right corner check
+                if x2 >= image_width - corner_margin and y2 >= image_height - corner_margin:
+                    return True
+
+                return False
+
+            for detection in detections:
+                x1, y1, x2, y2 = bbox = detection[:4]
+                detection_area = (x2 - x1) * (y2 - y1)
+                
+                # If the detection is not in the corner or has an area larger than the threshold, keep it
+                if not is_bbox_near_image_corner(x1, y1, x2, y2) or detection_area >= min_area:
+                    filtered_detections.append(detection)
+            
+            return filtered_detections
+
         report=Timer.reset()
         #print(report)
         Timer.point("predict")
@@ -798,6 +845,10 @@ class BranchModelTracker:
 
         time1 = time.time()
         newPredictions = self.getPredictions(newImage)
+
+        newPredictions = newPredictions.pred[0]
+
+        newPredictions = filter_corner_detections(newPredictions, newImage.shape[1], newImage.shape[0], corner_margin=4, area_threshold=0.05)
         time2 = time.time()
         #print(f"YOLO inference time: {time2-time1} seconds")
         
@@ -957,7 +1008,7 @@ def main():
     episodeManager = EpisodeManager(mode = "Labelling", saveLocation="DatabaseLabelled/", loadLocation="DatabaseLabelled/")
 
     #episodeManager.currentIndex = 
-    episodeManager.nextEpisode(6)
+    episodeManager.nextEpisode(1)
     #episodeManager.nextEpisode()
 
     episode = episodeManager.getCurrentEpisode()
