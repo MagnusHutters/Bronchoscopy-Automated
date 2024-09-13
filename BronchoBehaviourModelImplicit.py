@@ -130,7 +130,7 @@ class BronchosopyDataset(Dataset):
 
 
 class FilteredUpsampledDataset(Dataset):
-    def __init__(self, originalDataset, maxOversamlingFactor=4):
+    def __init__(self, originalDataset, maxOversamlingFactor=12):
 
         print("Filtering and upsampling dataset")
         self.primaryDataset = originalDataset
@@ -599,11 +599,11 @@ class BronchoBehaviourModelImplicit:
 # Main function to handle training
 def main(epochs = 50, learningRate = 0.0001, modelSavePath = "modelImplicit.pth"):
     # Image transformation
-    transform = transforms.Compose([
+    transform = T.Compose([
         #transforms.Grayscale(),                     # Convert images to grayscale
-        transforms.Resize((50, 50)),                # Resize images to 50x50 pixels
-        transforms.ToTensor(),                      # Convert images to PyTorch tensors
-        transforms.Normalize((0.5,), (0.5,))         # Normalize images
+        T.Resize((50, 50)),                # Resize images to 50x50 pixels
+        T.ToTensor(),                      # Convert images to PyTorch tensors
+        T.Normalize((0.5,), (0.5,))         # Normalize images
     ])
 
     # Load your dataset
