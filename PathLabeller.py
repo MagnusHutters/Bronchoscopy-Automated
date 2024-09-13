@@ -138,6 +138,7 @@ def labelEpisode(episode, modelPath):
 
         input = Input.fromDict(frame.action)
         frame.action = input.toDict()
+        episode[i] = frame
 
     print("")
 
@@ -192,7 +193,7 @@ def main():
 
 
 
-        labelEpisode(episode, "C:/Users/magnu/OneDrive/Misc/BronchoYolo/yolov5/runs/train/branchTraining7-XL/weights/best.pt")
+        labelEpisode(episode, "C:/Users/magnu/OneDrive/Misc/BronchoYolo/yolov5/runs/train/branchTraining8-XL/weights/best.pt")
 
 
     episodeManager.endEpisode()
