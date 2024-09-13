@@ -784,6 +784,8 @@ def validate(model, val_loader, criterion):
         'f1': f1
     }
 
+
+
     return val_loss / len(val_loader), metrics
 
 
