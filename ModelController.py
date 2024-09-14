@@ -34,7 +34,7 @@ class ModelController(Controller):
         
         #behavioir model
         
-        self.model = BronchoBehaviourModelImplicit(model_path="C:/Users/magnu/OneDrive/Misc/Ny mappe/Bronchoscopy-Automated/runs/implictTraining_14/modelImplicit.pth")
+        self.model = BronchoBehaviourModelImplicit(model_path="C:/Users/magnu/OneDrive/Misc/Ny mappe/Bronchoscopy-Automated/runs/implictTraining_17/modelImplicit.pth")
         
         self.override_active=False
         
