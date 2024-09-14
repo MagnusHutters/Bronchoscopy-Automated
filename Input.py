@@ -8,11 +8,18 @@ class Input:
     
     
     
-    numStepsDefault = [
+    numStepsFast = [
         4, #Bend
         16, #Rotation
         12  #Extension
     ] 
+    numStepsSlow = [
+        4, #Bend
+        8, #Rotation
+        6  #Extension
+    ]
+    numStepsDefault = numStepsSlow
+
     
     letterToAxis = {
         'd': 0,

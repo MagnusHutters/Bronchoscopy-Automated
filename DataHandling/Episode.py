@@ -136,7 +136,7 @@ class Episode:
 
 
 
-    def get_frame(self, index):
+    def get_frame(self, index, getImage=True):
         #print(f"Getting frame at index {index}")
         if index < 0 or index >= len(self._images):
             raise IndexError(f"Index out of range: index {index} size is {len(self._images)}")
@@ -146,19 +146,20 @@ class Episode:
 
         #print(f"Getting frame image: {self._images[index]}, of type {type(self._images[index])}")
         image = self._images[index]
+        topImage = self._topImages[index]
 
         #check if either image is a string, in which case it is a path to the image, and load it
-        if isinstance(self._images[index], str):
-            image = cv2.imread(self._images[index])
+        if getImage:
+            if isinstance(self._images[index], str):
+                image = cv2.imread(self._images[index])
 
-        topImage = self._topImages[index]
-        if isinstance(self._topImages[index], str):
-            topImage = cv2.imread(self._topImages[index])
+            if isinstance(self._topImages[index], str):
+                topImage = cv2.imread(self._topImages[index])
 
 
-        if self.cacheImages:
-            self._images[index] = image
-            self._topImages[index] = topImage
+            if self.cacheImages:
+                self._images[index] = image
+                self._topImages[index] = topImage
 
 
 

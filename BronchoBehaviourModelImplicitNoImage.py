@@ -74,12 +74,12 @@ class BronchosopyDataset(Dataset):
 
             #print(f"Getting index {idx} episodeIndex {episodeIndex} subIndex {subIndex} using frameStart {self.episodeFrameIndexStart}")
 
-            frame = self.episodes[episodeIndex][subIndex]
+            frame = self.episodes[episodeIndex].get_frame(subIndex, getImage=False)
 
-            image = Image.fromarray(frame.image)
+            #image = Image.fromarray(frame.image)
 
-            if self.transform:
-                image = self.transform(image)
+            #if self.transform:
+            #    image = self.transform(image)
 
 
             data = frame.data
@@ -124,9 +124,9 @@ class BronchosopyDataset(Dataset):
                 
             
 
-            self.cache[idx] = (image, stateInput, goalInput, oneHotAction)
+            self.cache[idx] = (stateInput, goalInput, oneHotAction)
             
-            return image, stateInput, goalInput, oneHotAction
+            return stateInput, goalInput, oneHotAction
 
 
 class FilteredUpsampledDataset(Dataset):
@@ -151,7 +151,8 @@ class FilteredUpsampledDataset(Dataset):
         validIndices = []
 
         for i in range(len(self.primaryDataset)):
-            image, state, goal, label = self.primaryDataset[i]
+            #image, state, goal, label = self.primaryDataset[i]
+            state, goal, label = self.primaryDataset[i]
 
             #label is one-hot encoded, invalid if all zeros
             if torch.sum(label) > 0:
@@ -168,7 +169,8 @@ class FilteredUpsampledDataset(Dataset):
         classCounts = {}
 
         for i, idx in enumerate(validIndices):
-            image, state, goal, label = self.primaryDataset[idx]
+            #image, state, goal, label = self.primaryDataset[idx]
+            state, goal, label = self.primaryDataset[idx]
 
             classId = torch.argmax(label).item()
 
@@ -215,7 +217,8 @@ class FilteredUpsampledDataset(Dataset):
         counts = {classId: 0 for classId in oversamplingFactors}
 
         for idx in validIndices:
-            image, state, goal, label = self.primaryDataset[idx]
+            #image, state, goal, label = self.primaryDataset[idx]
+            state, goal, label = self.primaryDataset[idx]
 
             classId = torch.argmax(label).item()
 
@@ -242,10 +245,11 @@ class FilteredUpsampledDataset(Dataset):
         return len(self.oversampledIndices)
     
     def __getitem__(self, idx):
-        image, state, goal, label = self.primaryDataset[self.oversampledIndices[idx]]
+        #image, state, goal, label = self.primaryDataset[self.oversampledIndices[idx]]
+        state, goal, label = self.primaryDataset[self.oversampledIndices[idx]]
         #label to index
         #classId = torch.argmax(label).item()
-        return image, state, goal, label
+        return state, goal, label
 
 
 
@@ -275,31 +279,31 @@ class DataAugmentationDataset(Dataset):
         :param augmentation_factor: Integer, how many augmentations to apply per image
         """
         self.primaryDataset = originalDataset
-        self.grayscale = grayscale
+        #self.grayscale = grayscale
         self.augmentation_factor = augmentation_factor
         
         # Define possible transformations for grayscale images
-        if self.grayscale:
-            self.image_transform_options = [
-                T.ColorJitter(brightness=0.1, contrast=0.1),  # Brightness and contrast for grayscale
-                T.ColorJitter(brightness=0.2, contrast=0.2),  # Brightness and contrast for grayscale
-                T.GaussianBlur(kernel_size=(3, 3), sigma=(0.1, 2.0)),  # Gaussian Blur
-                T.RandomAffine(degrees=0, translate=(0.1, 0.1)),  # Small translation
-                #T.RandomResizedCrop(size=(128, 128), scale=(0.8, 1.0)),  # Random crop
-                T.Lambda(add_gaussian_noise_01),  # Add Gaussian noise 0.01
-                T.Lambda(add_gaussian_noise_03)  # Add Gaussian noise 0.03
-            ]
-        else:
-            # If working with RGB images, allow for more advanced augmentations
-            self.image_transform_options = [
-                T.ColorJitter(brightness=0.1, contrast=0.1, saturation=0.1, hue=0.1),  # Full ColorJitter
-                T.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.2),  # Full ColorJitter
-                T.GaussianBlur(kernel_size=(3, 3), sigma=(0.1, 2.0)),  # Gaussian Blur
-                T.RandomAffine(degrees=0, translate=(0.1, 0.1)),  # Small translation
-                #T.RandomResizedCrop(size=(128, 128), scale=(0.8, 1.0)),  # Random crop
-                T.Lambda(add_gaussian_noise_01),  # Add Gaussian noise 0.01
-                T.Lambda(add_gaussian_noise_03)  # Add Gaussian noise 0.03
-            ]
+        #if self.grayscale:
+        #    self.image_transform_options = [
+        #        T.ColorJitter(brightness=0.1, contrast=0.1),  # Brightness and contrast for grayscale
+        #        T.ColorJitter(brightness=0.2, contrast=0.2),  # Brightness and contrast for grayscale
+        #        T.GaussianBlur(kernel_size=(3, 3), sigma=(0.1, 2.0)),  # Gaussian Blur
+        #        T.RandomAffine(degrees=0, translate=(0.1, 0.1)),  # Small translation
+        #        #T.RandomResizedCrop(size=(128, 128), scale=(0.8, 1.0)),  # Random crop
+        #        T.Lambda(add_gaussian_noise_01),  # Add Gaussian noise 0.01
+        #        T.Lambda(add_gaussian_noise_03)  # Add Gaussian noise 0.03
+        #    ]
+        #else:
+        #    # If working with RGB images, allow for more advanced augmentations
+        #    self.image_transform_options = [
+        #        T.ColorJitter(brightness=0.1, contrast=0.1, saturation=0.1, hue=0.1),  # Full ColorJitter
+        #        T.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.2),  # Full ColorJitter
+        #        T.GaussianBlur(kernel_size=(3, 3), sigma=(0.1, 2.0)),  # Gaussian Blur
+        #        T.RandomAffine(degrees=0, translate=(0.1, 0.1)),  # Small translation
+        #        #T.RandomResizedCrop(size=(128, 128), scale=(0.8, 1.0)),  # Random crop
+        #        T.Lambda(add_gaussian_noise_01),  # Add Gaussian noise 0.01
+        #        T.Lambda(add_gaussian_noise_03)  # Add Gaussian noise 0.03
+        #    ]
 
     def __len__(self):
         # The length of the dataset is the number of samples in the original dataset multiplied by the augmentation factor
@@ -311,7 +315,8 @@ class DataAugmentationDataset(Dataset):
         transformIdx = idx % self.augmentation_factor
         
         # Fetch the image, state, goal, label from the original dataset
-        image, state, goal, label = self.primaryDataset[actualIdx]
+        #image, state, goal, label = self.primaryDataset[actualIdx]
+        state, goal, label = self.primaryDataset[actualIdx]
 
         
         # Apply random transformations if transformIdx is not 0
@@ -323,7 +328,7 @@ class DataAugmentationDataset(Dataset):
 
 
 
-            image = self.apply_random_transforms(image)
+            #image = self.apply_random_transforms(image)
 
             # Convert image back to tensor
             #image = T.ToTensor()(image)
@@ -332,37 +337,37 @@ class DataAugmentationDataset(Dataset):
             state = self.perturb_state(state, transformIdx)
             goal = self.perturb_goal(goal, transformIdx)
         
-        return image, state, goal, label
+        return state, goal, label
     
-    def apply_random_transforms(self, image):
-        """
-        Apply 1 to 3 random image transformations.
-        If the image is grayscale, only brightness and contrast are adjusted.
-        If the image is RGB, full color jitter (hue, saturation) is applied.
-        """
-        num_transforms = random.randint(1, 3)  # Choose between 1 and 3 transformations
-        selected_transforms = random.sample(self.image_transform_options, num_transforms)
-        
-        # Compose and apply the selected transforms
-        composed_transform = T.Compose(selected_transforms)
-
-        # If the image is grayscale but you're using ColorJitter, convert it to RGB first
-        if self.grayscale:
-            image = self.convert_grayscale_to_rgb(image)
-        
-        transformed_image = composed_transform(image)
-        
-        # Convert back to grayscale if needed
-        if self.grayscale:
-            transformed_image = T.Grayscale()(transformed_image)
-        
-        return transformed_image
+    #def apply_random_transforms(self, image):
+    #    """
+    #    Apply 1 to 3 random image transformations.
+    #    If the image is grayscale, only brightness and contrast are adjusted.
+    #    If the image is RGB, full color jitter (hue, saturation) is applied.
+    #    """
+    #    num_transforms = random.randint(1, 3)  # Choose between 1 and 3 transformations
+    #    selected_transforms = random.sample(self.image_transform_options, num_transforms)
+    #    
+    #    # Compose and apply the selected transforms
+    #    composed_transform = T.Compose(selected_transforms)
+#
+    #    # If the image is grayscale but you're using ColorJitter, convert it to RGB first
+    #    if self.grayscale:
+    #        image = self.convert_grayscale_to_rgb(image)
+    #    
+    #    transformed_image = composed_transform(image)
+    #    
+    #    # Convert back to grayscale if needed
+    #    if self.grayscale:
+    #        transformed_image = T.Grayscale()(transformed_image)
+    #    
+    #    return transformed_image
     
-    def convert_grayscale_to_rgb(self, image):
-        """
-        Convert a grayscale image to an RGB image so ColorJitter can be applied.
-        """
-        #return image.convert("RGB")
+    #def convert_grayscale_to_rgb(self, image):
+    #    """
+    #    Convert a grayscale image to an RGB image so ColorJitter can be applied.
+    #    """
+    #    #return image.convert("RGB")
     
     def perturb_state(self, state, transformIdx):
         """
@@ -393,32 +398,36 @@ class DataAugmentationDataset(Dataset):
 
 # Multi-input CNN model
 class MultiInputModel(nn.Module):
-    def __init__(self, numStates=3, numGoal=4, imageSize=50, channels=1, classes=6):
+    def __init__(self, numStates=3, numGoal=4, classes=6):
         super(MultiInputModel, self).__init__()
         
         # Convolutional layers for the image input
-        self.conv1 = nn.Conv2d(in_channels=channels, out_channels=16, kernel_size=3, stride=1, padding=1)
-        self.conv2 = nn.Conv2d(in_channels=16, out_channels=32, kernel_size=3, stride=1, padding=1)
-        self.conv3 = nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, stride=1, padding=1)
-        self.pool = nn.MaxPool2d(kernel_size=2, stride=2, padding=0)
+        #self.conv1 = nn.Conv2d(in_channels=channels, out_channels=16, kernel_size=3, stride=1, padding=1)
+        #self.conv2 = nn.Conv2d(in_channels=16, out_channels=32, kernel_size=3, stride=1, padding=1)
+        #self.conv3 = nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, stride=1, padding=1)
+        #self.pool = nn.MaxPool2d(kernel_size=2, stride=2, padding=0)
         
         # Fully connected layers for the additional input
-        def conv2d_output_size(size, kernel_size=3, stride=1, padding=1):
-            return (size - kernel_size + 2 * padding) // stride + 1
+        #def conv2d_output_size(size, kernel_size=3, stride=1, padding=1):
+        #    return (size - kernel_size + 2 * padding) // stride + 1
         
-        conv1_size = conv2d_output_size(imageSize)
-        pool1_size = conv1_size // 2
-        conv2_size = conv2d_output_size(pool1_size)
-        pool2_size = conv2_size // 2
-        conv3_size = conv2d_output_size(pool2_size)
-        pool3_size = conv3_size // 2
+        #conv1_size = conv2d_output_size(imageSize)
+        #pool1_size = conv1_size // 2
+        #conv2_size = conv2d_output_size(pool1_size)
+        #pool2_size = conv2_size // 2
+        #conv3_size = conv2d_output_size(pool2_size)
+        #pool3_size = conv3_size // 2
 
-        flattened_size = 64 * pool3_size * pool3_size
+        #flattened_size = 64 * pool3_size * pool3_size
 
-        self.fc1_state = nn.Linear(in_features=numStates, out_features=32)
-        self.fc1_goal = nn.Linear(in_features=numGoal, out_features=32)
+        self.fc1_state = nn.Linear(in_features=numStates, out_features=64)
+        self.fc1_goal = nn.Linear(in_features=numGoal, out_features=64)
 
-        concatenated_size = 32 + 32 + flattened_size
+        #an aditional layer
+        self.fc2_state = nn.Linear(in_features=64, out_features=128)
+        self.fc2_goal = nn.Linear(in_features=64, out_features=128)
+
+        concatenated_size = 128 + 128
         
         # Fully connected layers for the combined output
         self.fc1_combined = nn.Linear(in_features=concatenated_size, out_features=256)
@@ -429,17 +438,16 @@ class MultiInputModel(nn.Module):
 
         
 
-    def forward(self, image, state, goal):
-        # CNN pathway for image input
-        x1 = self.pool(F.relu(self.conv1(image)))
-        x1 = self.pool(F.relu(self.conv2(x1)))
-        x1 = self.pool(F.relu(self.conv3(x1)))
-        x1 = x1.view(-1, x1.size(1) * x1.size(2) * x1.size(3))
+    def forward(self, state, goal):
+        
 
         state = F.relu(self.fc1_state(state))
         goal = F.relu(self.fc1_goal(goal))
 
-        x = torch.cat((x1, goal, state), dim=1)
+        state = F.relu(self.fc2_state(state))
+        goal = F.relu(self.fc2_goal(goal))
+
+        x = torch.cat((goal, state), dim=1)
 
         x = F.relu(self.fc1_combined(x))
         x = F.relu(self.fc2_combined(x))
@@ -519,7 +527,7 @@ class BronchoBehaviourModelImplicit:
     def predict(self, image, state, paths, selected_path_key):
         #print(image)
         # 1. Transform the image
-        image_tensor = self._transform_image(image)
+        #image_tensor = self._transform_image(image)
 
         # 2. Extract the relevant state information (bend, rotation, extension)
 
@@ -530,11 +538,11 @@ class BronchoBehaviourModelImplicit:
         goal_tensor = self._extract_goal_from_path(paths, selected_path_key)
 
         # 4. Feed the inputs to the model to get action probabilities
-        image_tensor = image_tensor.unsqueeze(0).to(self.device)  # Add batch dimension
+        #image_tensor = image_tensor.unsqueeze(0).to(self.device)  # Add batch dimension
         goal_tensor = goal_tensor.to(self.device)
 
         with torch.no_grad():
-            logits = self.model(image_tensor, state_tensor.unsqueeze(0), goal_tensor.unsqueeze(0))
+            logits = self.model(state_tensor.unsqueeze(0), goal_tensor.unsqueeze(0))
 
         probabilities = F.softmax(logits, dim=1)
 
@@ -543,14 +551,14 @@ class BronchoBehaviourModelImplicit:
 
         return action_index
 
-    def _transform_image(self, image):
-        """Applies the necessary image transformations."""
-        if isinstance(image, Image.Image):
-            return self.transform(image)
-        else:
-            # Convert to PIL Image if it's a numpy array
-            image = Image.fromarray(image)
-            return self.transform(image)
+    #def _transform_image(self, image):
+    #    """Applies the necessary image transformations."""
+    #    if isinstance(image, Image.Image):
+    #        return self.transform(image)
+    #    else:
+    #        # Convert to PIL Image if it's a numpy array
+    #        image = Image.fromarray(image)
+    #        return self.transform(image)
 
     def _extract_goal_from_path(self, paths, selected_path_key):
         """Extracts the goal from the path dictionary using the selected path key."""
@@ -599,24 +607,24 @@ class BronchoBehaviourModelImplicit:
 # Main function to handle training
 def main(epochs = 50, learningRate = 0.0001, modelSavePath = "modelImplicit.pth"):
     # Image transformation
-    transform = T.Compose([
-        #transforms.Grayscale(),                     # Convert images to grayscale
-        T.Resize((50, 50)),                # Resize images to 50x50 pixels
-        T.ToTensor(),                      # Convert images to PyTorch tensors
-        T.Normalize((0.5,), (0.5,))         # Normalize images
-    ])
+    #transform = T.Compose([
+    #    #transforms.Grayscale(),                     # Convert images to grayscale
+    #    T.Resize((50, 50)),                # Resize images to 50x50 pixels
+    #    T.ToTensor(),                      # Convert images to PyTorch tensors
+    #    T.Normalize((0.5,), (0.5,))         # Normalize images
+    #])
 
     # Load your dataset
     # Assuming image_paths, extra_features, and labels are preloaded lists
     # Example: Replace these with your actual data loading logic
 
-    output_folder = create_output_folder("runs/implictTraining")
+    output_folder = create_output_folder("runs/implictTrainingNoImage")
 
     # File to save metrics
     metrics_file_path = os.path.join(output_folder, "metrics.csv")
 
     # Create the custom dataset and DataLoader
-    dataset = BronchosopyDataset("DatabaseLabelled", transform=transform)
+    dataset = BronchosopyDataset("DatabaseLabelled")
 
     dataset = FilteredUpsampledDataset(dataset)
 
@@ -631,14 +639,14 @@ def main(epochs = 50, learningRate = 0.0001, modelSavePath = "modelImplicit.pth"
 
     trainSubset, valSubsetRandom = torch.utils.data.random_split(trainSubset, [trainSize - valSize, valSize])
 
-    train_loader = DataLoader(trainSubset, batch_size=64, shuffle=True, num_workers=4)
-    val_loader_random = DataLoader(valSubsetRandom, batch_size=64, shuffle=False, num_workers=4)
-    val_loader_sequence = DataLoader(valSubsetSequence, batch_size=64, shuffle=False, num_workers=4)
+    train_loader = DataLoader(trainSubset, batch_size=64, shuffle=True, num_workers=4, persistent_workers=True)
+    val_loader_random = DataLoader(valSubsetRandom, batch_size=64, shuffle=False, num_workers=4, persistent_workers=True)
+    val_loader_sequence = DataLoader(valSubsetSequence, batch_size=64, shuffle=False, num_workers=4,persistent_workers=True)
 
 
 
     # Instantiate the model
-    model = MultiInputModel(numStates=3, numGoal=4, imageSize=50, channels=3, classes=6)
+    model = MultiInputModel(numStates=3, numGoal=4, classes=6)
 
     # Loss and optimizer
     criterion = nn.KLDivLoss(reduction='batchmean')
@@ -652,7 +660,10 @@ def main(epochs = 50, learningRate = 0.0001, modelSavePath = "modelImplicit.pth"
 
     best_val_loss = float('inf')
 
+    print("Starting training")
     for epoch in range(epochs):
+        print(f"Epoch [{epoch + 1}/{epochs}]")
+        
         model.train()
         running_loss = 0.0
         index = 0
@@ -660,11 +671,11 @@ def main(epochs = 50, learningRate = 0.0001, modelSavePath = "modelImplicit.pth"
         all_true_labels = []
         all_predicted_labels = []
 
-        for images, states,goals, labels in train_loader:
+        for states,goals, labels in train_loader:
             optimizer.zero_grad()
 
             with autocast(device_type):
-                outputs = model(images, states, goals)
+                outputs = model(states, goals)
 
                 logOutputs = F.log_softmax(outputs, dim=1)
 
@@ -717,10 +728,12 @@ def main(epochs = 50, learningRate = 0.0001, modelSavePath = "modelImplicit.pth"
             'recall': train_recall,
             'f1': train_f1
         }
+        print("Validating random")
 
         random_val_loss, random_val_metrics = validate(model, val_loader_random, criterion)
 
         # Validation for sequence samples
+        print("Validating sequence")
         seq_val_loss, seq_val_metrics = validate(model, val_loader_sequence, criterion)
 
         random_val_loss_values.append(random_val_loss)
@@ -753,9 +766,11 @@ def validate(model, val_loader, criterion):
     all_true_labels = []
     all_predicted_labels = []
 
+    print("Validating...")
+
     with torch.no_grad():
-        for images, states, goals, labels in val_loader:
-            outputs = model(images, states, goals)
+        for states, goals, labels in val_loader:
+            outputs = model(states, goals)
 
             logOutputs = F.log_softmax(outputs, dim=1)
             loss = criterion(logOutputs, labels)
@@ -770,6 +785,9 @@ def validate(model, val_loader, criterion):
 
             total += labels.size(0)
             correct += (predicted == true_labels).sum().item()
+
+            print(f"\rValidation Loss: {val_loss / len(val_loader):.4f}, Accuracy: {100 * correct / total:.4f}          ", end="")
+    print("")
 
     accuracy = 100 * correct / total
     precision = precision_score(all_true_labels, all_predicted_labels, average='weighted', zero_division=0)

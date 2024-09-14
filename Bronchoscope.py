@@ -16,7 +16,7 @@ class Bronchoscope(threading.Thread):
     
     
     joint_limits = [170,170,250]# mm, degree, degree
-    vellimits = [25,25,100]# deg/s, deg/s, mm
+    vellimits = [25,25,100*60]# deg/s, deg/s, mm
     
     
     
@@ -148,7 +148,7 @@ class Bronchoscope(threading.Thread):
             new_position = max(self.jointStepLimits[axis][0], min(self.jointStepLimits[axis][1], new_position))
             
             
-            #print(f"Axis: {axis}, Change: {change}, Current: {current_position}, New: {new_position}")
+            print(f"Axis: {axis}, Change: {change}, Current: {current_position}, New: {new_position}")
             
             command = self.axisToJoint[axis] + str(new_position)
             
@@ -170,8 +170,19 @@ class Bronchoscope(threading.Thread):
                     return
                 # Update current_position for the corresponding joint
                 
-                #print(f"Axis: {axis}, New position: {position}")
-                self.current_position[axis] = position
+                print(f"Axis: {axis}, New position: {position}")
+
+                if(abs(position - new_position) > self.jointStepMaxChange[axis]):
+                    print(f"Position {position} is different from new position {new_position}. Retrying...")
+                    #flush serial buffer
+                    self.serial.flushInput()
+
+                    #get new position
+                    self.query_joint_positions(doForce=False)
+                else:
+                    self.current_position[axis] = new_position
+
+                #self.current_position[axis] = position
             except serial.SerialException as e:
                 print(f"Serial error while reading response: {e}")    
             
@@ -200,11 +211,12 @@ class Bronchoscope(threading.Thread):
         success = False
         while not success:
             #flush input buffer
-            time.sleep(0.1)
-            self.serial.flushInput()
-            time.sleep(0.1)
-            self.serial.flushInput()
-            time.sleep(0.1)
+            if doForce:
+                time.sleep(0.1)
+                self.serial.flushInput()
+                time.sleep(0.1)
+                self.serial.flushInput()
+                time.sleep(0.1)
             
             self.send_serial_command('j')  # Send 'j' command to query positions
             try:
