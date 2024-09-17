@@ -30,13 +30,34 @@ import matplotlib.pyplot as plt
 from DataHandling.Episode import Episode, EpisodeManager
 
 
+#Other
+import torch.nn.functional as F
+import os
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score
+#from torch.cuda.amp import autocast
+import json
+
+# Action to name mapping
+actionToName = {
+    -1: "No Input",
+    0: "Down",
+    1: "Up",
+    2: "Right",
+    3: "Left",
+    4: "Forward",
+    5: "Backward",
+}
+
 # Custom Dataset class
 class BronchosopyDataset(Dataset):
     def __init__(self, databasePath, transform=None, blurSigma=5):
         self.episodeManager = EpisodeManager(mode = "read", loadLocation = databasePath)
 
 
-        self.episodes, self.lenght, self.episodeFrameIndexStart = self.episodeManager.loadAllEpisodes(cacheImages=False, maxEpisodes=100, shuffle=False)
+        self.episodes, self.lenght, self.episodeFrameIndexStart = self.episodeManager.loadAllEpisodes(cacheImages=False, maxEpisodes=100, shuffle=True)
 
         if blurSigma > 0:
             for i, episode in enumerate(self.episodes):
@@ -99,7 +120,7 @@ class BronchosopyDataset(Dataset):
             goalBbox = goalPath["bbox"]
 
 
-            featureString = frame.data["EfficientNetFeatures"]
+            featureString = frame.data["MobileNetFeatures"]
             features = torch.tensor(list(map(float, featureString.split(","))), dtype=torch.float)
 
             "bbox to center and size"
@@ -649,9 +670,9 @@ def main(epochs = 50, learningRate = 0.0001, modelSavePath = "modelImplicit.pth"
     # Create the custom dataset and DataLoader
     dataset = BronchosopyDataset("DatabaseLabelledWithFeatures", transform=transform, blurSigma=0)
 
-    dataset = FilteredUpsampledDataset(dataset, doUpsample=False, maxOversamlingFactor=12)
+    dataset = FilteredUpsampledDataset(dataset, doUpsample=True, maxOversamlingFactor=12)
 
-    #dataset = DataAugmentationDataset(dataset, grayscale=False, augmentation_factor=16)
+    dataset = DataAugmentationDataset(dataset, grayscale=False, augmentation_factor=8)
 
 
     
@@ -685,8 +706,8 @@ def main(epochs = 50, learningRate = 0.0001, modelSavePath = "modelImplicit.pth"
     model = MultiInputModel(numStates=numStates, numGoal=numGoal, numFeatures=numFeatures, classes=numClasses)
 
     # Loss and optimizer
-    #criterion = nn.KLDivLoss(reduction='batchmean')
-    criterion = nn.CrossEntropyLoss()
+    criterion = nn.KLDivLoss(reduction='batchmean')
+    #criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=0.0001)
     scaler = GradScaler()
     device_type = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -772,10 +793,11 @@ def main(epochs = 50, learningRate = 0.0001, modelSavePath = "modelImplicit.pth"
             'f1': train_f1
         }
 
-        random_val_loss, random_val_metrics = validate(model, val_loader_random, criterion, device)
+        random_val_loss, random_val_metrics = validate(model, val_loader_random, criterion, device, outputFolder=output_folder, epoch = epoch,prefix="random")
 
         # Validation for sequence samples
-        seq_val_loss, seq_val_metrics = validate(model, val_loader_sequence, criterion, device)
+        seq_val_loss, seq_val_metrics = validate(model, val_loader_sequence, criterion, device, outputFolder=output_folder, epoch = epoch, prefix="sequence")
+
 
         random_val_loss_values.append(random_val_loss)
         seq_val_loss_values.append(seq_val_loss)
@@ -798,18 +820,22 @@ def main(epochs = 50, learningRate = 0.0001, modelSavePath = "modelImplicit.pth"
 
     # Save final loss plot
     plot_and_save_loss_curve(train_loss_values, random_val_loss_values, seq_val_loss_values, output_folder)
-
-def validate(model, val_loader, criterion, device, device_type='cuda'):
+def validate(model, val_loader, criterion, device, device_type='cuda', outputFolder="runs/implicitValidation", epoch=0, prefix=""):
     model.eval()
     val_loss = 0.0
     correct = 0
     total = 0
     all_true_labels = []
     all_predicted_labels = []
+    all_confidences = []
+    class_losses = {i: [] for i in range(6)}  # assuming 6 actions (excluding -1: No Input)
+
+    # Create the output directory for the epoch
+    epoch_output_folder = os.path.join(outputFolder, f'epoch/{epoch}')
+    os.makedirs(epoch_output_folder, exist_ok=True)
 
     with torch.no_grad():
         for images, states, goals, labels in val_loader:
-
             images = images.to(device)
             states = states.to(device)
             goals = goals.to(device)
@@ -817,7 +843,6 @@ def validate(model, val_loader, criterion, device, device_type='cuda'):
 
             with autocast(device_type):
                 outputs = model(images, states, goals)
-
                 logOutputs = F.log_softmax(outputs, dim=1)
                 loss = criterion(logOutputs, labels)
 
@@ -830,23 +855,90 @@ def validate(model, val_loader, criterion, device, device_type='cuda'):
             all_true_labels.extend(true_labels.cpu().numpy())
             all_predicted_labels.extend(predicted.cpu().numpy())
 
+            # Confidence tracking
+            confidences = torch.max(F.softmax(outputs, dim=1), dim=1).values
+            all_confidences.extend(confidences.cpu().numpy())
+
             total += labels.size(0)
             correct += (predicted == true_labels).sum().item()
+
+            # Per-class loss tracking
+            for i in range(6):  # Assuming you have 6 actions (from 0 to 5)
+                class_mask = (true_labels == i)
+                if class_mask.any():
+                    class_loss = criterion(logOutputs[class_mask], labels[class_mask])
+                    class_losses[i].append(class_loss.item())
 
     accuracy = 100 * correct / total
     precision = precision_score(all_true_labels, all_predicted_labels, average='weighted', zero_division=0)
     recall = recall_score(all_true_labels, all_predicted_labels, average='weighted', zero_division=0)
     f1 = f1_score(all_true_labels, all_predicted_labels, average='weighted', zero_division=0)
 
+    # Convert NumPy arrays or values to native Python types for JSON compatibility
+    class_loss_avg = {i: float(np.mean(class_losses[i])) if class_losses[i] else 0.0 for i in range(6)}
+    mean_confidence = float(np.mean(all_confidences)) if all_confidences else 0.0
+
+    # Compute confusion matrix
+    cm = confusion_matrix(all_true_labels, all_predicted_labels)
+
+    # --- Visualization 1: Confusion Matrix ---
+    plt.figure(figsize=(10, 8))
+    sns.heatmap(cm, annot=True, fmt='d', cmap="Blues", xticklabels=[actionToName[i] for i in range(6)], yticklabels=[actionToName[i] for i in range(6)])
+    plt.xlabel('Predicted Actions')
+    plt.ylabel('True Actions')
+    plt.title(f'Confusion Matrix - {prefix} - Epoch {epoch}')
+    plt.savefig(os.path.join(epoch_output_folder, f'{prefix}_confusion_matrix_epoch_{epoch}.png'))
+
+    # --- Visualization 2: Class-specific Loss ---
+    plt.figure(figsize=(10, 6))
+    plt.bar([actionToName[i] for i in range(6)], [class_loss_avg[i] for i in range(6)], color='skyblue')
+    plt.xlabel('Action Class')
+    plt.ylabel('Average Loss')
+    plt.title(f'Class-Specific Loss - {prefix} - Epoch {epoch}')
+    plt.savefig(os.path.join(epoch_output_folder, f'{prefix}_class_specific_loss_epoch_{epoch}.png'))
+
+    # --- Visualization 3: Confidence Distribution ---
+    plt.figure(figsize=(10, 6))
+    plt.hist(all_confidences, bins=20, color='orange', edgecolor='black')
+    plt.xlabel('Confidence Score')
+    plt.ylabel('Frequency')
+    plt.title(f'Confidence Score Distribution - {prefix} - Epoch {epoch}')
+    plt.savefig(os.path.join(epoch_output_folder, f'{prefix}_confidence_distribution_epoch_{epoch}.png'))
+
+    # --- Visualization 4: Loss and Accuracy ---
+    plt.figure(figsize=(8, 6))
+    metrics_values = [val_loss / len(val_loader), accuracy]
+    metrics_labels = ['Validation Loss', 'Accuracy (%)']
+    plt.bar(metrics_labels, metrics_values, color=['red', 'green'])
+    plt.title(f'Overall Validation Loss and Accuracy - {prefix} - Epoch {epoch}')
+    plt.savefig(os.path.join(epoch_output_folder, f'{prefix}_loss_accuracy_epoch_{epoch}.png'))
+
+    # Save metrics and class-specific loss information
     metrics = {
-        'loss': val_loss / len(val_loader),
-        'accuracy': accuracy,
-        'precision': precision,
-        'recall': recall,
-        'f1': f1
+        'loss': float(val_loss / len(val_loader)),  # Ensure float type
+        'accuracy': float(accuracy),
+        'precision': float(precision),
+        'recall': float(recall),
+        'f1': float(f1),
+        'class_loss': {actionToName[i]: class_loss_avg[i] for i in range(6)},  # Use action names
+        'low_confidence': mean_confidence  # Already converted to float
     }
 
+    # Save the metrics to a JSON file with prefix and epoch
+    with open(os.path.join(epoch_output_folder, f'{prefix}_metrics_epoch_{epoch}.json'), 'w') as f:
+        json.dump(metrics, f, indent=4)
 
+    # Print metrics
+    print(f"Epoch {epoch} - {prefix.capitalize()} Validation:")
+    print(f"  Validation Loss: {metrics['loss']:.4f}")
+    print(f"  Accuracy: {metrics['accuracy']:.2f}%")
+    print(f"  Precision: {metrics['precision']:.4f}")
+    print(f"  Recall: {metrics['recall']:.4f}")
+    print(f"  F1 Score: {metrics['f1']:.4f}")
+    print(f"  Class-wise Loss:")
+    for action, loss in metrics['class_loss'].items():
+        print(f"    {action}: {loss:.4f}")
+    print(f"  Average Prediction Confidence: {metrics['low_confidence']:.4f}")
 
     return val_loss / len(val_loader), metrics
 

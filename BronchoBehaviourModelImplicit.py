@@ -57,7 +57,7 @@ class BronchosopyDataset(Dataset):
         self.episodeManager = EpisodeManager(mode = "read", loadLocation = databasePath)
 
 
-        self.episodes, self.lenght, self.episodeFrameIndexStart = self.episodeManager.loadAllEpisodes(cacheImages=False, maxEpisodes=100, shuffle=False)
+        self.episodes, self.lenght, self.episodeFrameIndexStart = self.episodeManager.loadAllEpisodes(cacheImages=False, maxEpisodes=100, shuffle=False, shuffleSeed=1)
 
         if blurSigma > 0:
             for i, episode in enumerate(self.episodes):
@@ -684,9 +684,9 @@ def main(epochs = 50, learningRate = 0.0001, modelSavePath = "modelImplicit.pth"
     # Create the custom dataset and DataLoader
     dataset = BronchosopyDataset("DatabaseLabelled", transform=transform, blurSigma=0)
 
-    dataset = FilteredUpsampledDataset(dataset, doUpsample=False, maxOversamlingFactor=12)
+    dataset = FilteredUpsampledDataset(dataset, doUpsample=True, maxOversamlingFactor=12)
 
-    dataset = DataAugmentationDataset(dataset, grayscale=False, augmentation_factor=16)
+    dataset = DataAugmentationDataset(dataset, grayscale=False, augmentation_factor=8)
 
     
 

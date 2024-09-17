@@ -803,11 +803,12 @@ class EpisodeManager:
         self.currentEpisode = Episode.load(path, self.pool, cacheImages=cacheImages)
         return self.currentEpisode
     
-    def doShuffleEpisodes(self):
+    def doShuffleEpisodes(self, seed=0):
         #shuffle the list of strings that represent the episodes
         
         #get new index order
         print("Shuffling episodes")
+        np.random.seed(seed)
         newOrder = np.random.permutation(len(self.allEpisodes))
 
         #reorder the list of episodes
@@ -815,12 +816,12 @@ class EpisodeManager:
 
 
 
-    def loadAllEpisodes(self, maxEpisodes=None, cacheImages=True, shuffle=False):
+    def loadAllEpisodes(self, maxEpisodes=None, cacheImages=True, shuffle=False, shuffleSeed=0):
         episodes = []
         episodeFrameIndexStart = []
 
         if shuffle:
-            self.doShuffleEpisodes()
+            self.doShuffleEpisodes(shuffle)
 
         totalFrames = 0
         for i in range(len(self.allEpisodes)):
