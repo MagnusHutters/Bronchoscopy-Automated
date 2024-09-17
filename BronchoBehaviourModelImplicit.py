@@ -57,7 +57,7 @@ class BronchosopyDataset(Dataset):
         self.episodeManager = EpisodeManager(mode = "read", loadLocation = databasePath)
 
 
-        self.episodes, self.lenght, self.episodeFrameIndexStart = self.episodeManager.loadAllEpisodes(cacheImages=False, maxEpisodes=100, shuffle=False, shuffleSeed=1)
+        self.episodes, self.lenght, self.episodeFrameIndexStart = self.episodeManager.loadAllEpisodes(cacheImages=False, maxEpisodes=100, shuffle=True, shuffleSeed=1)
 
         if blurSigma > 0:
             for i, episode in enumerate(self.episodes):
@@ -667,7 +667,7 @@ def main(epochs = 50, learningRate = 0.0001, modelSavePath = "modelImplicit.pth"
     # Image transformation
     transform = T.Compose([
         #transforms.Grayscale(),                     # Convert images to grayscale
-        T.Resize((50, 50)),                # Resize images to 50x50 pixels
+        T.Resize((40, 40)),                # Resize images to 50x50 pixels
         T.ToTensor(),                      # Convert images to PyTorch tensors
         T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])         # Normalize images
     ])
