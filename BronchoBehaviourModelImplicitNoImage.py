@@ -107,6 +107,8 @@ class BronchosopyDataset(Dataset):
 
             stateInput = torch.tensor(state, dtype=torch.float)
             goalInput = torch.tensor(goalCenter + goalSize, dtype=torch.float)
+            #without size
+            #goalInput = torch.tensor(goalCenter, dtype=torch.float)
 
             action = frame.action["char_value"] # char value u, d, l, r, f, b or none
             #print("")
@@ -639,10 +641,13 @@ def main(epochs = 50, learningRate = 0.0001, modelSavePath = "modelImplicit.pth"
 
     trainSubset, valSubsetRandom = torch.utils.data.random_split(trainSubset, [trainSize - valSize, valSize])
 
-    train_loader = DataLoader(trainSubset, batch_size=64, shuffle=True, num_workers=4, persistent_workers=True)
-    val_loader_random = DataLoader(valSubsetRandom, batch_size=64, shuffle=False, num_workers=4, persistent_workers=True)
-    val_loader_sequence = DataLoader(valSubsetSequence, batch_size=64, shuffle=False, num_workers=4,persistent_workers=True)
-
+    #train_loader = DataLoader(trainSubset, batch_size=64, shuffle=True, num_workers=4, persistent_workers=True)
+    #val_loader_random = DataLoader(valSubsetRandom, batch_size=64, shuffle=False, num_workers=4, persistent_workers=True)
+    #val_loader_sequence = DataLoader(valSubsetSequence, batch_size=64, shuffle=False, num_workers=4,persistent_workers=True)
+    #no extra workers
+    train_loader = DataLoader(trainSubset, batch_size=64, shuffle=True)
+    val_loader_random = DataLoader(valSubsetRandom, batch_size=64, shuffle=False)
+    val_loader_sequence = DataLoader(valSubsetSequence, batch_size=64, shuffle=False)
 
 
     # Instantiate the model

@@ -180,26 +180,35 @@ class Episode:
     def __getitem__(self, index):
         return self.get_frame(index)
 
-    #overload the [] operator to set the frame at the given index
-    def __setitem__(self, index, frame):
 
-        imageHasChanged = not np.array_equal(self._images[index], frame.image)
+
+    def set_frame(self, index, frame, setImage=True):
+        if index < 0 or index >= len(self._images):
+            raise IndexError(f"Index out of range: index {index} size is {len(self._images)}")
+            return None
+        
+        
 
         self._images[index] = frame.image
         self._states[index] = frame.state
         self._actions[index] = frame.action
         self._data[index] = frame.data
         self._topImages[index] = frame.topImage
-        
-        if frame.topImage is not None:
-            self._topImages[index] = frame.topImage
-            self.saveImage(frame.topImage, index, prefix="top")
 
-        if imageHasChanged:
-            self.saveImage(frame.image, index, prefix="broncho")   
-            
-            
-            
+        if setImage:
+            imageHasChanged = not np.array_equal(self._images[index], frame.image)
+            if frame.topImage is not None:
+                self._topImages[index] = frame.topImage
+                self.saveImage(frame.topImage, index, prefix="top")
+
+            if imageHasChanged:
+                self.saveImage(frame.image, index, prefix="broncho")  
+
+
+        #overload the [] operator to set the frame at the given index
+    def __setitem__(self, index, frame):
+
+        self.set_frame(index, frame)
 
 
 
@@ -229,17 +238,19 @@ class Episode:
         """
         model_values = []
 
-        for frame in self:
-            action = frame[0].action  # frame[0] because __next__ returns (frame, index)
+        for index in range(len(self._images)):
+            print(f"\rExtracting model values: {index+1}/{len(self._images)}", end="")
+            frame = self.get_frame(index, getImage=False)
+            action = frame.action  # frame[0] because __next__ returns (frame, index)
             if "model_value" in action:
                 model_values.append(action["model_value"])
             else:
                 model_values.append([0.0] * 6)  # Default to a zero list if not found
+        print("")
+        return np.array(model_values, dtype=np.float32)
 
-        return np.array(model_values)
 
-
-    def normalize_model_values(model_values):
+    def normalize_model_values(self,model_values):
         """
         Normalizes the 'model_value' entries for each frame to ensure they sum to 1.
         
@@ -249,16 +260,18 @@ class Episode:
         normalized_values = np.zeros_like(model_values)
         
         for i, values in enumerate(model_values):
+            print(f"\rNormalizing model values: {i+1}/{len(model_values)}", end="")
             sum_values = np.sum(values)
             if sum_values > 0:
                 normalized_values[i] = values / sum_values  # Normalize by dividing by sum
             else:
                 normalized_values[i] = values  # If sum is zero, leave it unchanged
+        print("")
         
         return normalized_values
 
 
-    def gaussian_blur_model_values(model_values, sigma=1):
+    def gaussian_blur_model_values(self,model_values, sigma=1):
         """
         Applies a Gaussian blur to the 'model_value' lists across frames.
 
@@ -267,7 +280,10 @@ class Episode:
         :return: A blurred version of the model_values.
         """
         # Apply Gaussian blur along the time axis (frames) for each of the 6 model_value entries
+        print(f"Applying Gaussian blur with sigma={sigma} to model values")
         blurred_values = gaussian_filter1d(model_values, sigma=sigma, axis=0)
+        
+        #blurred_values = model_values
         
         return blurred_values
 
@@ -290,10 +306,19 @@ class Episode:
         # Step 4: Normalize the blurred values again to maintain valid probabilities
         re_normalized_values = self.normalize_model_values(blurred_values)
 
+        #for i in range(len(model_values)):
+            #print(f"{i}: {re_normalized_values[i]}")
+            
+
         # Step 5: Update the episode with the re-normalized blurred model values
-        for i, (frame, index) in enumerate(self):
+
+        for i in range(len(self._images)):
+            frame = self.get_frame(i, getImage=False)
+
+            print(f"\rSetting blurred model values: {i+1}/{len(self._images)}", end="")
             frame.action["model_value"] = re_normalized_values[i].tolist()
-            self[index] = frame  # Update the frame in the episode
+            self.set_frame(i, frame, setImage=False)
+        print("")
 
 
     def saveImage(self, image, index, prefix=""):
@@ -712,7 +737,7 @@ class Episode:
             #delete the temporary folder, if it exists  
             if os.path.exists(self.path):
                 shutil.rmtree(self.path)
-                print(f"Temporary folder at {self.path} deleted.")
+                #print(f"Temporary folder at {self.path} deleted.")
             else: 
                 print(f"Temporary folder at {self.path} already deleted")
         except Exception as e:
@@ -778,9 +803,25 @@ class EpisodeManager:
         self.currentEpisode = Episode.load(path, self.pool, cacheImages=cacheImages)
         return self.currentEpisode
     
-    def loadAllEpisodes(self, maxEpisodes=None, cacheImages=True):
+    def doShuffleEpisodes(self):
+        #shuffle the list of strings that represent the episodes
+        
+        #get new index order
+        print("Shuffling episodes")
+        newOrder = np.random.permutation(len(self.allEpisodes))
+
+        #reorder the list of episodes
+        self.allEpisodes = [self.allEpisodes[i] for i in newOrder]
+
+
+
+    def loadAllEpisodes(self, maxEpisodes=None, cacheImages=True, shuffle=False):
         episodes = []
         episodeFrameIndexStart = []
+
+        if shuffle:
+            self.doShuffleEpisodes()
+
         totalFrames = 0
         for i in range(len(self.allEpisodes)):
             if maxEpisodes is not None and i >= maxEpisodes:

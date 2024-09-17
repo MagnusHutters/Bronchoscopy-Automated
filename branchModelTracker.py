@@ -102,7 +102,7 @@ def find_affine_transformation(img2, oldKeypoints, oldDescriptors, feature_type=
     #if img1 is None return a affine transformation matrix that does nothing
 
     doDownsample = True
-    downSampleFactor = 0.5
+    downSampleFactor = 1
 
     if doDownsample:
         img2 = cv2.resize(img2, (0, 0), fx=downSampleFactor, fy=downSampleFactor)
@@ -278,7 +278,17 @@ def match_detections(list1, list2, min_similarity=0.2):
     for i, det1 in enumerate(list1):
         for j, det2 in enumerate(list2):
             similarity = det1.get_similarity(det2)
-            cost_matrix[i, j] = -similarity if similarity >= min_similarity else 999999
+
+
+            lastMatched = float(det1.iterationsSinceLastMatch)
+            lastMathcedThreshold = 15
+
+            if lastMatched<=lastMathcedThreshold:  # Only apply the minimum similarity threshold if the detection has been matched recently
+
+                cost_matrix[i, j] = -similarity if similarity >= min_similarity else 999999
+            else:                       
+                cost_matrix[i, j] = -similarity if similarity >= min_similarity* (lastMathcedThreshold/lastMatched) else 999999
+
 
 
     #print(cost_matrix)
@@ -330,6 +340,36 @@ def buildHierachy(detections):
 
 
 
+
+class WrappedList:
+        def __init__(self, list):
+            self.list = list
+            self.length = len(list)
+
+        def __getitem__(self, index):
+            if index >=0:
+                return self.list[index % self.length]
+            else:
+                return self.list[index]
+            
+        def __setitem__(self, index, value):
+            if index >=0:
+                self.list[index % self.length] = value
+            else:
+                self.list[index] = value
+
+        def __len__(self):
+            return self.length
+        
+        def __str__(self):
+            return str(self.list)
+        
+        def __repr__(self):
+            return str(self.list)
+        
+        
+
+
 class Detection:
 
     
@@ -359,8 +399,11 @@ class Detection:
 
         self.children=[]
         self.parent=None
+        self.isMatched = False
+        self.iterationsSinceLastMatch = 0
         
         self.id=id
+        self.isNew = True
         self.class_id = int(class_id)
         self.confidence = float(confidence)
         self.polygon = polygon
@@ -387,6 +430,29 @@ class Detection:
             "parent": self.parent.id if self.parent is not None else -1,
             "children": [child.id for child in self.children]
         }
+    
+    @classmethod
+    def fromDict(cls, detection_dict):
+        #initialize a detection object from a dictionary
+        class_id = detection_dict["class_id"]
+        confidence = detection_dict["confidence"]
+        polygon = Polygon(detection_dict["polygon"])
+        bbox = detection_dict["bbox"]
+        id = detection_dict["id"]
+        childrenIds = detection_dict["children"]
+        parentId = detection_dict["parent"]
+        inView = detection_dict["inView"]
+
+
+        detection = cls(class_id, confidence, polygon, id, bbox)
+
+        detection.inView = inView
+
+
+
+
+
+        return detection, childrenIds, parentId
 
     @classmethod
     def from_yolo_detection(cls, yolo_detection):
@@ -403,6 +469,9 @@ class Detection:
         bbox = yolo_detection[:4]
         confidence = yolo_detection[4]
         class_id = yolo_detection[5]
+
+
+
 
 
         polygon = cls.create_polygon_from_bbox(bbox)
@@ -434,8 +503,40 @@ class Detection:
         # Shapely affine_transform expects a 6-tuple (a, b, d, e, xoff, yoff)
         a, b, d, e = affine_matrix[0, 0], affine_matrix[0, 1], affine_matrix[1, 0], affine_matrix[1, 1]
         xoff, yoff = affine_matrix[0, 2], affine_matrix[1, 2]
+
+
         affine_params = (a, b, d, e, xoff, yoff)
         self.polygon = affine_transform(self.polygon, affine_params)
+        
+
+
+
+        
+        
+
+    
+
+
+
+
+        #to bounds and back
+        #self.polygon = box(*self.polygon.bounds)
+
+
+
+        
+
+        #create a list of the 4 corners of the polygon
+        
+
+
+
+                
+
+        #self.polygon = self.calculatePartOfPolygonOutsideView()
+
+
+
         #self.polygonOutsideView = affine_transform(self.polygonOutsideView, affine_params)
 
 
@@ -450,6 +551,127 @@ class Detection:
         self.intersectionWithView = self.polygon.intersection(self.viewPolygonWithMargin)
 
         self.inView = self.intersectionWithView.area > 1
+
+
+
+    def squareify(self):
+        '''
+        Squareify the polygon if along the edge of the view
+
+
+
+
+
+
+        '''
+
+
+
+        #Squareify the polygon if along the edge of the view
+
+        corners = list(self.polygon.exterior.coords[0:4])
+        #print(f"corners: {corners}")
+
+        #map corners to a list of points
+        corners = WrappedList([Point(corner) for corner in corners])
+
+        numpyCorners = WrappedList([np.array(corner.coords[0]) for corner in corners.list])
+
+
+        def sideIsInsideOppositeIsOutside(corners, sideIndex):
+        #check if the side is inside the view and the opposite side is outside
+        
+        #if the side is inside the view, return false
+            return \
+                self.viewPolygonWithMargin.contains((corners[sideIndex])) and \
+                self.viewPolygonWithMargin.contains((corners[sideIndex+1])) and \
+                not self.viewPolygonWithMargin.contains((corners[sideIndex+2])) and \
+                not self.viewPolygonWithMargin.contains((corners[sideIndex-1]))
+        
+        def cornerIsInsideRestIsOutside(corners, cornerIndex):
+            #check if the corner is inside the view and the rest is outside
+            return \
+                self.viewPolygonWithMargin.contains((corners[cornerIndex])) and \
+                not self.viewPolygonWithMargin.contains((corners[cornerIndex-1])) and \
+                not self.viewPolygonWithMargin.contains((corners[cornerIndex+1])) and \
+                not self.viewPolygonWithMargin.contains((corners[cornerIndex+2]))
+
+
+        foundSide = False
+        for i in range(4):
+            if sideIsInsideOppositeIsOutside(corners, i):
+                
+                insideLength = corners[i].distance(corners[i+1])
+
+                outsideLength = corners[i+2].distance(corners[i+1])
+
+
+                diff = insideLength - outsideLength
+                maxDiff = insideLength * 0.1
+
+                #clamp diff
+                diff = max(0, min(maxDiff, diff))
+                
+
+
+
+
+                toOutsideVector = numpyCorners[i+2] - numpyCorners[i+1]
+                normalizedToOutsideVector = toOutsideVector / outsideLength
+
+                newOutsidePoint1 = numpyCorners[i-1] + normalizedToOutsideVector * diff
+                newOutsidePoint2 = numpyCorners[i+2] + normalizedToOutsideVector * diff
+
+                corners[i-1] = Point(newOutsidePoint1)
+                corners[i+2] = Point(newOutsidePoint2)
+                foundSide = True
+                break
+
+        if not foundSide:
+            for i in range(4):
+                if cornerIsInsideRestIsOutside(corners, i):
+
+                    insideLength1 = corners[i].distance(corners[i-1])
+                    insideLength2 = corners[i].distance(corners[i+1])
+
+                    
+                    dif1 = insideLength1 - insideLength2
+                    dif2 = insideLength2 - insideLength1
+
+                    maxDif = max(insideLength1, insideLength2) * 0.3
+                    
+                    dif1 = max(0, min(maxDif, dif1))
+                    dif2 = max(0, min(maxDif, dif2))
+
+
+                    toOutsideVector1 = numpyCorners[i-1] - numpyCorners[i]
+                    toOutsideVector2 = numpyCorners[i+1] - numpyCorners[i]
+
+                    normalizedToOutsideVector1 = toOutsideVector1 / insideLength1
+                    normalizedToOutsideVector2 = toOutsideVector2 / insideLength2
+
+                    newOutsidePoint1 = numpyCorners[i-1] + normalizedToOutsideVector1 * dif2
+                    newOutsidePoint2 = numpyCorners[i+1] + normalizedToOutsideVector2 * dif1
+
+                    newOutsidePoint3 = numpyCorners[i+2] + normalizedToOutsideVector1 * dif2 + normalizedToOutsideVector2 * dif1
+
+                    corners[i-1] = Point(newOutsidePoint1)
+                    corners[i+1] = Point(newOutsidePoint2)
+                    corners[i+2] = Point(newOutsidePoint3)
+
+                    break
+
+        self.polygon = Polygon([corner.coords[0] for corner in corners.list])
+
+        self.bbox = self.polygon.bounds
+
+        self.calculateViewIntersection()   
+
+                
+
+        #extra decay depending on size compared to view
+        
+
 
     def apply_match(self, matched_detection, interpolation_factor=0.8):
         """
@@ -466,7 +688,7 @@ class Detection:
             maxy = box1[3] * (1 - t) + box2[3] * t
             return (minx, miny, maxx, maxy)
 
-        def apply_interpolation(orignial_box, target_box, mask_poly):
+        def apply_interpolation(orignial_box, target_box, alt_box, detection_box, mask_poly):
             
             """Directly adjust vertices to new positions from the interpolated box if inside the mask polygon."""
             new_coords = []
@@ -477,26 +699,55 @@ class Detection:
 
             origMinX, origMinY, origMaxX, origMaxY = orignial_box
             targetMinX, targetMinY, targetMaxX, targetMaxY = target_box
+            altMinX, altMinY, altMaxX, altMaxY = alt_box
+            detMinX, detMinY, detMaxX, detMaxY = detection_box
 
             if maskMinX < origMinX < maskMaxX:
                 newMinX = targetMinX
             else:
-                newMinX = origMinX
+
+                #if both detection x values are inside the mask, use the target value
+                if maskMinX < detMinX < maskMaxX and maskMinX < detMaxX < maskMaxX:
+                    #print("MinX - Both inside")
+                    newMinX = altMinX
+                else:
+                    newMinX = origMinX
+
+                
 
             if maskMinY < origMinY < maskMaxY:
                 newMinY = targetMinY
             else:
-                newMinY = origMinY
+                
+                #if both detection y values are inside the mask, use the target value
+                if maskMinY < detMinY < maskMaxY and maskMinY < detMaxY < maskMaxY:
+
+                    #print("MinY - Both inside")
+                    newMinY = altMinY
+                else:
+                    newMinY = origMinY
 
             if maskMinX < origMaxX < maskMaxX:
                 newMaxX = targetMaxX
             else:
-                newMaxX = origMaxX
+                
+                #if both detection x values are inside the mask, use the target value
+                if maskMinX < detMinX < maskMaxX and maskMinX < detMaxX < maskMaxX:
+                    #print("MaxX - Both inside")
+                    newMaxX = altMaxX
+                else:
+                    newMaxX = origMaxX
 
             if maskMinY < origMaxY < maskMaxY:
                 newMaxY = targetMaxY
             else:
-                newMaxY = origMaxY
+                
+                #if both detection y values are inside the mask, use the target value
+                if maskMinY < detMinY < maskMaxY and maskMinY < detMaxY < maskMaxY:
+                    #print("MaxY - Both inside")
+                    newMaxY = altMaxY
+                else:
+                    newMaxY = origMaxY
 
             #create polygon from bounds
             new_coords = [(newMinX, newMinY), (newMinX, newMaxY), (newMaxX, newMaxY), (newMaxX, newMinY)]
@@ -509,17 +760,24 @@ class Detection:
         self.calculateViewIntersection()
 
         if matched_detection is not None:
+            self.isNew = False
+            if self.iterationsSinceLastMatch <= 2:
+                self.iterationsSinceLastMatch = 0
+            self.iterationsSinceLastMatch = self.iterationsSinceLastMatch //2
             # Update polygon (for simplicity, we'll just keep the current polygon, but this could be extended)
             # Update confidence by adding the matched detection's confidence
             self.confidence += matched_detection.confidence
 
 
             unionPolygon = self.polygon.union(matched_detection.polygon)
+
+            detectionBox = matched_detection.polygon.bounds
             unionBbox = unionPolygon.bounds
 
             interpolatedBbox = interpolate_box(unionPolygon.bounds, matched_detection.bbox, interpolation_factor)
+            interpolatedBbox1 = interpolate_box(unionPolygon.bounds, matched_detection.bbox, interpolation_factor*0.3)
 
-            self.polygon = apply_interpolation(unionBbox, interpolatedBbox, self.viewPolygon)
+            self.polygon = apply_interpolation(unionBbox, interpolatedBbox, interpolatedBbox1, detectionBox, self.viewPolygon)
 
             self.bbox = self.polygon.bounds
 
@@ -529,22 +787,51 @@ class Detection:
             #    self.polygon = self.polygon.simplify(1)
 
             self.bbox = self.polygon.bounds
-            self.confidence *= 0.98
+            self.confidence *= 0.99
 
 
 
 
 
 
-        else:
+        else: # No match - handle this case
+
+
+            self.iterationsSinceLastMatch += 1
             # Decrease confidence by a fixed amount or percentage if no match
+
+            #if not matched squareify the polygon
+
+
+
+            children = self.children
+            anyChildrenHasMatch= False
+
+            for child in children:
+                if child.isMatched:
+                    anyChildrenHasMatch = True
+                    #print("Child has match")
+                    
+                    #found alive child - decrease confidence greatly
+                    self.confidence *= 0.8
+
+            
+                
+            #if new and no match, decrease confidence
+            if self.isNew:
+                self.confidence *= 0.75
+
+
+            
+            
+
             
 
             
 
             if self.inView:
             
-                self.confidence *= 0.9
+                self.confidence *= 0.98
 
                 if self.confidence < 0.1:
                     #remove the detection
@@ -567,31 +854,32 @@ class Detection:
                 if rectangleRatio < 1:
                     rectangleRatio = 1/rectangleRatio
 
-                rectangleRatioLimit = 2 #if more than twice as high as wide, or opposite, decrease confidence
-                if rectangleRatio > rectangleRatioLimit:
-                    decay = 0.5 * (rectangleRatio-rectangleRatioLimit)
-                    self.confidence *= 1-decay
+                #rectangleRatioLimit = 2 #if more than twice as high as wide, or opposite, decrease confidence
+                #if rectangleRatio > rectangleRatioLimit:
+                #    decay = 0.02 * (rectangleRatio-rectangleRatioLimit)
+                #    self.confidence *= 1-decay
 
                 if detectionToViewRatio > 0.25:
-                    decay = 0.5 * detectionToViewRatio
+                    decay = 0.01 * detectionToViewRatio
                     self.confidence *= 1-decay
 
                 if maxDetectionSideRation > 0.5:
-                    decay = 0.5 * maxDetectionSideRation
+                    decay = 0.005 * maxDetectionSideRation
                     self.confidence *= 1-decay
 
 
             else:
-                self.confidence *= 0.94
+                self.confidence *= 0.98
 
                 if self.confidence < 0.1:
                     #remove the detection
 
                     self.confidence = 0
 
-                
 
-        #extra decay depending on size compared to view
+
+
+        
         
 
 
@@ -600,15 +888,20 @@ class Detection:
 
                                                              
 
-    def isInsided(self, detection): #check if the other detection is inside this detection, counts as inside if the intersection is more than 80% of this detection and not the opposite
+    def isInsided(self, detection, insideCriteria=0.7): #check if the other detection is inside this detection, counts as inside if the intersection is more than 80% of this detection and not the opposite
         intersection = self.polygon.intersection(detection.polygon)
 
-        insideCriteria=0.7
-        return intersection.area > insideCriteria * self.polygon.area  and intersection.area < insideCriteria * detection.polygon.area
+        #intersection is more than % of this detection         - at least % of this detection is inside other detection
+        isInsideOther = intersection.area > insideCriteria * self.polygon.area              
+        #intersection is less than % of the other detection    - no more than % of the other detection is inside this detection
+        otherNotInsideThis = intersection.area < insideCriteria * detection.polygon.area    
 
-    def contains(self, detection): #check if this detection contains the other detection, counts as inside if the intersection is more than 80% of the other detection
 
-        return detection.isInsided(self)      
+        return isInsideOther and otherNotInsideThis
+
+    def contains(self, detection, insideCriteria=0.7): #check if this detection contains the other detection, counts as inside if the intersection is more than 80% of the other detection
+
+        return detection.isInsided(self, insideCriteria)      
 
     def get_intersection(self, other_detection):
         """
@@ -647,6 +940,7 @@ class Detection:
         float: The similarity score (IoU).
         """
 
+
         
         
 
@@ -659,6 +953,22 @@ class Detection:
 
         intersection_area = intersection.area
         union_area = union.area
+
+
+        #if self has children, check that all children are inside the other detection
+        if len(self.children) > 0:
+            for child in self.children:
+                #check if child is in view
+                if child.inView:
+                    
+                    #if intersection is more than 0
+                    intersection = child.polygon.intersection(other_detection.polygon).area
+                    if intersection == 0:    
+                    
+                        #("Child not inside")
+                        return 0
+
+
 
 
         return intersection_area / union_area if union_area != 0 else 0
@@ -684,7 +994,7 @@ class BranchModelTracker:
     def detectionsToPoints(self, detections):
         #takes the center of the bounding box of the detections and returns them as a list of points
 
-        buildHierachy(detections)
+        #buildHierachy(detections)
 
 
 
@@ -763,13 +1073,28 @@ class BranchModelTracker:
         matches (list): A list of tuples, where each tuple contains a detection from list1 and its matched detection
                         from list2 or None if no match was found.
         """
+        #print(f"matches: {matches}")
+
+        for det1, det2 in matches:
+
+            if det1 is not None:
+                if det2 is not None:
+                    det1.isMatched = True
+                else:
+                    det1.isMatched = False
+
+
         for det1, det2 in matches:
             if det1 is not None:
                 det1.apply_match(det2)
+
+                det1.squareify()
             else:
                 #add the unmatched new detection to the list of tracked detections
                 det2.id = self.newId
                 self.newId += 1
+                det2.squareify()
+
                 trackedDetections.append(det2)
 
                 
@@ -848,7 +1173,8 @@ class BranchModelTracker:
 
         newPredictions = newPredictions.pred[0]
 
-        newPredictions = filter_corner_detections(newPredictions, newImage.shape[1], newImage.shape[0], corner_margin=4, area_threshold=0.05)
+        newPredictions = filter_corner_detections(newPredictions, newImage.shape[1], newImage.shape[0], corner_margin=2, area_threshold=0.05)
+
         time2 = time.time()
         #print(f"YOLO inference time: {time2-time1} seconds")
         
@@ -859,6 +1185,11 @@ class BranchModelTracker:
 
         Timer.point("createDetections")
         newDetections = create_detections_from_yolo(newPredictions)
+
+        
+        #squareify the detections
+        #for detection in newDetections:
+        #    detection.squareify()
 
         #draw raw predictions
         newDetectionsImage = newImage.copy()
@@ -880,6 +1211,7 @@ class BranchModelTracker:
                 detection.id = self.newId
                 self.newId += 1
 
+            buildHierachy(self.trackedDetections)
             return self.detectionsToPoints(self.trackedDetections)
 
 
@@ -971,7 +1303,7 @@ class BranchModelTracker:
 
 
 
-        
+        buildHierachy(self.trackedDetections)
 
 
         return self.detectionsToPoints(self.trackedDetections)
@@ -1005,91 +1337,97 @@ def closest_point_on_circle(Cx, Cy, R, Px, Py):
 
 
 def main():
-    episodeManager = EpisodeManager(mode = "Labelling", saveLocation="DatabaseLabelled/", loadLocation="DatabaseLabelled/")
+    episodeManager = EpisodeManager(mode = "Read", loadLocation="DatabaseLabelled/")
 
     #episodeManager.currentIndex = 
-    episodeManager.nextEpisode(1)
-    #episodeManager.nextEpisode()
+    #shuffle the episodes
+    #episodeManager.doShuffleEpisodes()
+    doExit = False
 
-    episode = episodeManager.getCurrentEpisode()
+    while not doExit:
+        episodeManager.nextEpisode()
+        #episodeManager.nextEpisode()
 
-    doVideo = True
-    name = episode.name
-    videoOutputPath = f"runs/{name}.mp4"
-    fps = 10
-    video_writer = None
-    if doVideo:
-        frame = episode[0].image
-        height, width, layers = frame.shape
-        #delete the video if it already exists
+        episode = episodeManager.getCurrentEpisode()
+
+        doVideo = False
+        name = episode.name
+        videoOutputPath = f"runs/{name}.mp4"
+        fps = 10
+        video_writer = None
+        if doVideo:
+            frame = episode[0].image
+            height, width, layers = frame.shape
+            #delete the video if it already exists
+            
+            if os.path.exists(videoOutputPath):
+                os.remove(videoOutputPath)
+            video_writer = cv2.VideoWriter(videoOutputPath, cv2.VideoWriter_fourcc(*'mp4v'), fps, (width, height))
+
+
+
+
+
+        branchModelTracker = BranchModelTracker("C:/Users/magnu/OneDrive/Misc/BronchoYolo/yolov5/runs/train/branchTraining8-XL/weights/best.pt")
         
-        if os.path.exists(videoOutputPath):
-            os.remove(videoOutputPath)
-        video_writer = cv2.VideoWriter(videoOutputPath, cv2.VideoWriter_fourcc(*'mp4v'), fps, (width, height))
+        for index in range(len(episode)):
+            
+
+            if index < 50:
+                continue
+
+            frame = episode[index]
+
+            #print(f"Processing frame {index}")
+            #print(frame.image.shape)
+            #findBranches(frame.image, doDraw=True)
+
+            #watershed(frame.image)
+            #watershed(frame.image)
 
 
 
+            timeStamp1 = time.time()
+            #contours = thresholdTree(frame.image, 1)
+            timeStamp2 = time.time()
+
+            #time taken in seconds
+            #print(f"Time taken: {timeStamp2 - timeStamp1}")
+
+            drawImage = frame.image.copy()
+
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", category=FutureWarning)
+                points, detections =branchModelTracker.predict(frame.image, doDebug=True, doVideo=doVideo, videoWriter=video_writer)
 
 
-    branchModelTracker = BranchModelTracker("C:/Users/magnu/OneDrive/Misc/BronchoYolo/yolov5/runs/train/branchTraining8-XL/weights/best.pt")
+                for key, detection in detections.items():
+                    cv2.polylines(drawImage, [np.array(detection.polygon.exterior.coords, np.int32)], True, (0, 255, 0), 1)
+
+                    #draw the confidence
+                    cv2.putText(drawImage, f"{detection.confidence:.2f}", (int(detection.bbox[0]), int(detection.bbox[1])), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+
+                    #print bbox
+                    #(f"bbox {key}: {detection.bbox}")
+            cv2.imshow("Threshold Contours", drawImage)
+
+            #create_and_display_contour_tree(frame.image)
+            
+            key = cv2.waitKey(1)
+            # If the user presses 'q', exit the loop
+            if key == ord('q'):
+                doExit = True
+                break
+            # if esc is pressed, exit the loop
+            elif key == 27:
+                doExit = True
+                break
+
+        
     
-    for index in range(len(episode)):
-        
-
-        if index < 150:
-            continue
-
-        frame = episode[index]
-
-        #print(f"Processing frame {index}")
-        #print(frame.image.shape)
-        #findBranches(frame.image, doDraw=True)
-
-        #watershed(frame.image)
-        #watershed(frame.image)
-
-
-
-        timeStamp1 = time.time()
-        #contours = thresholdTree(frame.image, 1)
-        timeStamp2 = time.time()
-
-        #time taken in seconds
-        #print(f"Time taken: {timeStamp2 - timeStamp1}")
-
-        drawImage = frame.image.copy()
-
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", category=FutureWarning)
-            points, detections =branchModelTracker.predict(frame.image, doDebug=False, doVideo=doVideo, videoWriter=video_writer)
-
-
-            for key, detection in detections.items():
-                cv2.polylines(drawImage, [np.array(detection.polygon.exterior.coords, np.int32)], True, (0, 255, 0), 1)
-
-                #draw the confidence
-                cv2.putText(drawImage, f"{detection.confidence:.2f}", (int(detection.bbox[0]), int(detection.bbox[1])), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-
-                #print bbox
-                print(f"bbox {key}: {detection.bbox}")
-        cv2.imshow("Threshold Contours", drawImage)
-
-        #create_and_display_contour_tree(frame.image)
-        
-        key = cv2.waitKey(1)
-        # If the user presses 'q', exit the loop
-        if key == ord('q'):
-            break
-        # if esc is pressed, exit the loop
-        elif key == 27:
-            break
-
-
-        
-    
-    if doVideo:
-        video_writer.release()
-        print(f"Video saved to {videoOutputPath}")
+        if doVideo:
+            video_writer.release()
+            print(f"Video saved to {videoOutputPath}")
     cv2.destroyAllWindows()
 
 

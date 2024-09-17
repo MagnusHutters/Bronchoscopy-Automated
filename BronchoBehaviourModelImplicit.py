@@ -30,13 +30,39 @@ import matplotlib.pyplot as plt
 from DataHandling.Episode import Episode, EpisodeManager
 
 
+#Other
+import torch.nn.functional as F
+import os
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score
+#from torch.cuda.amp import autocast
+import json
+
+# Action to name mapping
+actionToName = {
+    -1: "No Input",
+    0: "Down",
+    1: "Up",
+    2: "Right",
+    3: "Left",
+    4: "Forward",
+    5: "Backward",
+}
+
 # Custom Dataset class
 class BronchosopyDataset(Dataset):
-    def __init__(self, databasePath, transform=None):
+    def __init__(self, databasePath, transform=None, blurSigma=0):
         self.episodeManager = EpisodeManager(mode = "read", loadLocation = databasePath)
 
 
-        self.episodes, self.lenght, self.episodeFrameIndexStart = self.episodeManager.loadAllEpisodes(cacheImages=False, maxEpisodes=100)
+        self.episodes, self.lenght, self.episodeFrameIndexStart = self.episodeManager.loadAllEpisodes(cacheImages=False, maxEpisodes=100, shuffle=False)
+
+        if blurSigma > 0:
+            for i, episode in enumerate(self.episodes):
+                pass
+                episode.apply_gaussian_blur_with_normalization(blurSigma)
 
         self.transform = transform
 
@@ -106,31 +132,37 @@ class BronchosopyDataset(Dataset):
             goalSize[1] = goalSize[1] / 200
 
             stateInput = torch.tensor(state, dtype=torch.float)
-            goalInput = torch.tensor(goalCenter + goalSize, dtype=torch.float)
+            #goalInput = torch.tensor(goalCenter + goalSize, dtype=torch.float)
+            goalInput = torch.tensor(goalCenter, dtype=torch.float)
 
             action = frame.action["char_value"] # char value u, d, l, r, f, b or none
             #print("")
             #print(frame.action)
 
-            oneHotAction = torch.zeros(6, dtype=torch.float)
+            action = frame.action["model_value"] # char value u, d, l, r, f, b or none
+            #print("")
+            #print(frame.action)
 
-            if action in self.actionToIndex:
-                oneHotAction[self.actionToIndex[action]] = 1.0
+            #convert list of float directly to tensor
+            action = torch.tensor(action, dtype=torch.float)
+
+
             
 
-            #ensure normalization
-            
-            oneHotAction = oneHotAction / torch.sum(oneHotAction)
+            if torch.sum(action) == 0:
+                action = torch.zeros(6)
+            else:
+                action = action / torch.sum(action)
                 
             
 
-            self.cache[idx] = (image, stateInput, goalInput, oneHotAction)
+            self.cache[idx] = (image, stateInput, goalInput, action)
             
-            return image, stateInput, goalInput, oneHotAction
+            return image, stateInput, goalInput, action
 
 
 class FilteredUpsampledDataset(Dataset):
-    def __init__(self, originalDataset, maxOversamlingFactor=12):
+    def __init__(self, originalDataset, doUpsample=True, maxOversamlingFactor=12):
 
         print("Filtering and upsampling dataset")
         self.primaryDataset = originalDataset
@@ -139,25 +171,29 @@ class FilteredUpsampledDataset(Dataset):
 
         validIndices = self.filterInvalidIndices()
 
-        classCounts = self.countClasses(validIndices)
 
-        oversamplingFactors = self.calculateOversamplingFactors(classCounts)
+        if(doUpsample):
+            classCounts = self.countClasses(validIndices)
 
-        oversampledIndices = self.oversampleIndices(validIndices, oversamplingFactors)
+            oversamplingFactors = self.calculateOversamplingFactors(classCounts)
 
-        self.oversampledIndices = oversampledIndices
+            oversampledIndices = self.oversampleIndices(validIndices, oversamplingFactors)
+
+            self.oversampledIndices = oversampledIndices
+        else:
+            self.oversampledIndices = validIndices
 
     def filterInvalidIndices(self):
         validIndices = []
 
         for i in range(len(self.primaryDataset)):
-            image, state, goal, label = self.primaryDataset[i]
+            features, state, goal, label = self.primaryDataset[i]
 
             #label is one-hot encoded, invalid if all zeros
             if torch.sum(label) > 0:
                 validIndices.append(i)
 
-            print(f"\rFiltering invalid indices {i}/{len(self.primaryDataset)} - valid: {len(validIndices)}, invalid: {i - len(validIndices)}, label: {label}", end="")
+            print(f"\rFiltering invalid indices {i}/{len(self.primaryDataset)} - valid: {len(validIndices)}, invalid: {i - len(validIndices)}, label: {label}                      ", end="")
             #time.sleep(0.01)
         print("")
 
@@ -165,22 +201,17 @@ class FilteredUpsampledDataset(Dataset):
         return validIndices
     
     def countClasses(self, validIndices):
-        classCounts = {}
+        classCounts = torch.zeros(6)
 
         for i, idx in enumerate(validIndices):
-            image, state, goal, label = self.primaryDataset[idx]
+            features, state, goal, label = self.primaryDataset[idx]
 
-            classId = torch.argmax(label).item()
-
-            if classId not in classCounts:
-                classCounts[classId] = 0
-            classCounts[classId] += 1
+            classCounts += label
 
             print(f"\rCounting classes {i}/{len(validIndices)}", end="")
 
         print("")
-        for classId in classCounts:
-            print(f"Class {classId} count: {classCounts[classId]}")
+        print(f"Class Counts: {classCounts}")
         return classCounts
     
     def calculateOversamplingFactors(self, classCounts):
@@ -191,50 +222,85 @@ class FilteredUpsampledDataset(Dataset):
         #maxCount = max(classCounts.values())
 
         #second largest count
-        maxCount = sorted(classCounts.values())[-2]
 
-        for classId in classCounts:
-            count = classCounts[classId]
-            factor = maxCount / count
+        sortedCounts = torch.sort(classCounts, descending=True).values
 
-            if factor > self.maxOversamlingFactor:
-                factor = self.maxOversamlingFactor
-
-            oversamplingFactors[classId] = factor
+        baseCount = sortedCounts[0]
         
-        print("Sampling factors")
-        for classId in oversamplingFactors:
-            print(f"Class {classId} factor: {oversamplingFactors[classId]}")
+        factor=baseCount/classCounts
 
+        oversamplingFactors = torch.clamp(factor, min = 0.1, max=self.maxOversamlingFactor)
+
+        print(f"Sampling factors {oversamplingFactors}")
+
+
+        #for classId in classCounts:
+        #    count = classCounts[classId]
+        #    factor = baseCount / count
+#
+        #    if factor > self.maxOversamlingFactor:
+        #        factor = self.maxOversamlingFactor
+#
+        #    oversamplingFactors[classId] = factor
+        #
+        #print("Sampling factors")
+        #for classId in oversamplingFactors:
+        #    print(f"Class {classId} factor: {oversamplingFactors[classId]}")
+#
         return oversamplingFactors
     
     def oversampleIndices(self, validIndices, oversamplingFactors):
         oversampledIndices = []
 
-        accumulator = {classId: 0 for classId in oversamplingFactors}
-        counts = {classId: 0 for classId in oversamplingFactors}
+        accumulator = torch.zeros(6)
+        counts = torch.zeros(6)
 
         for idx in validIndices:
-            image, state, goal, label = self.primaryDataset[idx]
+            features, state, goal, label = self.primaryDataset[idx]
 
-            classId = torch.argmax(label).item()
+            probablities = label
 
-            factor = oversamplingFactors[classId]
+            factors = probablities * oversamplingFactors
 
-            toAdd = factor+accumulator[classId]
+            toAdd = factors + accumulator
 
-            toAddActual = int(toAdd)
-            remainder = toAdd - toAddActual
-            accumulator[classId] = remainder
 
-            oversampledIndices.extend([idx] * toAddActual)
-            counts[classId] += toAddActual
+            #while any of the values of toAdd is greater than probability
+            while torch.all(toAdd >= probablities):
 
+                #print(f"\rAdding sample with probabilties: {probablities}, leftToAdd: {toAdd}        ", end="")
+
+                toAdd -= probablities
+
+                counts += probablities
+
+                oversampledIndices.append(idx)
+
+
+            accumulator = toAdd #remainder
+
+
+
+
+
+            #classId = torch.argmax(label).item()
+#
+            #factor = oversamplingFactors[classId]
+#
+            #toAdd = factor+accumulator[classId]
+#
+            #toAddActual = int(toAdd)
+            #remainder = toAdd - toAddActual
+            #accumulator[classId] = remainder
+#
+            #oversampledIndices.extend([idx] * toAddActual)
+            #counts[classId] += toAddActual
+#
             print(f"\rOversampling indices {idx}/{len(validIndices)}, Oversampled {len(oversampledIndices)}          ", end="")
         print("")
         print("Counts After Resampling")
-        for classId in counts:
-            print(f"Class {classId} count: {counts[classId]}")
+        
+        print(counts)
 
         return oversampledIndices
     
@@ -242,10 +308,10 @@ class FilteredUpsampledDataset(Dataset):
         return len(self.oversampledIndices)
     
     def __getitem__(self, idx):
-        image, state, goal, label = self.primaryDataset[self.oversampledIndices[idx]]
+        features, state, goal, label = self.primaryDataset[self.oversampledIndices[idx]]
         #label to index
         #classId = torch.argmax(label).item()
-        return image, state, goal, label
+        return features, state, goal, label
 
 
 
@@ -373,7 +439,7 @@ class DataAugmentationDataset(Dataset):
 
         # Apply noise proportional to the state values
         noise_factor = 0.05  # You can adjust the noise factor
-        perturbed_state = state + noise_factor * torch.randn_like(state) * torch.abs(state)
+        perturbed_state = state + noise_factor * (torch.randn_like(state)-0.5) * torch.abs(state)
 
         return perturbed_state
     
@@ -386,7 +452,7 @@ class DataAugmentationDataset(Dataset):
 
         # Apply noise proportional to the goal values
         goal_perturbation_factor = 0.03  # Smaller perturbation compared to state
-        perturbed_goal = goal + goal_perturbation_factor * torch.randn_like(goal) * torch.abs(goal)
+        perturbed_goal = goal + goal_perturbation_factor * (torch.randn_like(goal)-0.5) * torch.abs(goal)
 
         return perturbed_goal
 
@@ -397,9 +463,9 @@ class MultiInputModel(nn.Module):
         super(MultiInputModel, self).__init__()
         
         # Convolutional layers for the image input
-        self.conv1 = nn.Conv2d(in_channels=channels, out_channels=16, kernel_size=3, stride=1, padding=1)
-        self.conv2 = nn.Conv2d(in_channels=16, out_channels=32, kernel_size=3, stride=1, padding=1)
-        self.conv3 = nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, stride=1, padding=1)
+        self.conv1 = nn.Conv2d(in_channels=channels, out_channels=8, kernel_size=3, stride=1, padding=1)
+        self.conv2 = nn.Conv2d(in_channels=8, out_channels=16, kernel_size=3, stride=1, padding=1)
+        self.conv3 = nn.Conv2d(in_channels=16, out_channels=32, kernel_size=3, stride=1, padding=1)
         self.pool = nn.MaxPool2d(kernel_size=2, stride=2, padding=0)
         
         # Fully connected layers for the additional input
@@ -413,7 +479,7 @@ class MultiInputModel(nn.Module):
         conv3_size = conv2d_output_size(pool2_size)
         pool3_size = conv3_size // 2
 
-        flattened_size = 64 * pool3_size * pool3_size
+        flattened_size = 32 * pool3_size * pool3_size
 
         self.fc1_state = nn.Linear(in_features=numStates, out_features=32)
         self.fc1_goal = nn.Linear(in_features=numGoal, out_features=32)
@@ -421,8 +487,8 @@ class MultiInputModel(nn.Module):
         concatenated_size = 32 + 32 + flattened_size
         
         # Fully connected layers for the combined output
-        self.fc1_combined = nn.Linear(in_features=concatenated_size, out_features=256)
-        self.fc2_combined = nn.Linear(in_features=256, out_features=128)
+        #self.fc1_combined = nn.Linear(in_features=concatenated_size, out_features=256)
+        self.fc2_combined = nn.Linear(in_features=concatenated_size, out_features=128)
         self.fc3_combined = nn.Linear(in_features=128, out_features=classes)
 
 
@@ -441,7 +507,7 @@ class MultiInputModel(nn.Module):
 
         x = torch.cat((x1, goal, state), dim=1)
 
-        x = F.relu(self.fc1_combined(x))
+        #x = F.relu(self.fc1_combined(x))
         x = F.relu(self.fc2_combined(x))
         x = self.fc3_combined(x)
         
@@ -603,7 +669,7 @@ def main(epochs = 50, learningRate = 0.0001, modelSavePath = "modelImplicit.pth"
         #transforms.Grayscale(),                     # Convert images to grayscale
         T.Resize((50, 50)),                # Resize images to 50x50 pixels
         T.ToTensor(),                      # Convert images to PyTorch tensors
-        T.Normalize((0.5,), (0.5,))         # Normalize images
+        T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])         # Normalize images
     ])
 
     # Load your dataset
@@ -616,14 +682,16 @@ def main(epochs = 50, learningRate = 0.0001, modelSavePath = "modelImplicit.pth"
     metrics_file_path = os.path.join(output_folder, "metrics.csv")
 
     # Create the custom dataset and DataLoader
-    dataset = BronchosopyDataset("DatabaseLabelled", transform=transform)
+    dataset = BronchosopyDataset("DatabaseLabelled", transform=transform, blurSigma=0)
 
-    dataset = FilteredUpsampledDataset(dataset)
+    dataset = FilteredUpsampledDataset(dataset, doUpsample=False, maxOversamlingFactor=12)
 
-    dataset = DataAugmentationDataset(dataset, grayscale=False, augmentation_factor=8)
+    dataset = DataAugmentationDataset(dataset, grayscale=False, augmentation_factor=16)
+
+    
 
     datasetSize = len(dataset)
-    valSize = int(0.05 * datasetSize)
+    valSize = int(0.1 * datasetSize)
     trainSize = datasetSize - valSize
 
     trainSubset = torch.utils.data.Subset(dataset, range(trainSize))
@@ -631,20 +699,34 @@ def main(epochs = 50, learningRate = 0.0001, modelSavePath = "modelImplicit.pth"
 
     trainSubset, valSubsetRandom = torch.utils.data.random_split(trainSubset, [trainSize - valSize, valSize])
 
-    train_loader = DataLoader(trainSubset, batch_size=64, shuffle=True, num_workers=4)
-    val_loader_random = DataLoader(valSubsetRandom, batch_size=64, shuffle=False, num_workers=4)
-    val_loader_sequence = DataLoader(valSubsetSequence, batch_size=64, shuffle=False, num_workers=4)
+    batchSize = 256
 
+    train_loader = DataLoader(trainSubset, batch_size=batchSize, shuffle=True)
+    val_loader_random = DataLoader(valSubsetRandom, batch_size=batchSize, shuffle=False)
+    val_loader_sequence = DataLoader(valSubsetSequence, batch_size=batchSize, shuffle=False)
+
+
+    sampleImage, sampleState, sampleGoal, sampleLabel = dataset[0]
+
+    numStates = len(sampleState)
+    numGoal = len(sampleGoal)
+    imageSize = sampleImage.shape[1]
+    channels = sampleImage.shape[0]
+    classes = len(sampleLabel)
 
 
     # Instantiate the model
-    model = MultiInputModel(numStates=3, numGoal=4, imageSize=50, channels=3, classes=6)
+    model = MultiInputModel(numStates=numStates, numGoal=numGoal, imageSize=imageSize, channels=channels, classes=classes)
 
     # Loss and optimizer
     criterion = nn.KLDivLoss(reduction='batchmean')
+    #criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=0.0001)
     scaler = GradScaler()
     device_type = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    model = model.to(device)
 
     train_loss_values = []
     random_val_loss_values = []
@@ -661,6 +743,12 @@ def main(epochs = 50, learningRate = 0.0001, modelSavePath = "modelImplicit.pth"
         all_predicted_labels = []
 
         for images, states,goals, labels in train_loader:
+            images = images.to(device)
+            states = states.to(device)
+            goals = goals.to(device)
+            labels = labels.to(device)
+
+
             optimizer.zero_grad()
 
             with autocast(device_type):
@@ -718,10 +806,10 @@ def main(epochs = 50, learningRate = 0.0001, modelSavePath = "modelImplicit.pth"
             'f1': train_f1
         }
 
-        random_val_loss, random_val_metrics = validate(model, val_loader_random, criterion)
+        random_val_loss, random_val_metrics = validate(model, val_loader_random, criterion, device, outputFolder=output_folder, epoch = epoch,prefix="random")
 
         # Validation for sequence samples
-        seq_val_loss, seq_val_metrics = validate(model, val_loader_sequence, criterion)
+        seq_val_loss, seq_val_metrics = validate(model, val_loader_sequence, criterion, device, outputFolder=output_folder, epoch = epoch, prefix="sequence")
 
         random_val_loss_values.append(random_val_loss)
         seq_val_loss_values.append(seq_val_loss)
@@ -745,20 +833,32 @@ def main(epochs = 50, learningRate = 0.0001, modelSavePath = "modelImplicit.pth"
     # Save final loss plot
     plot_and_save_loss_curve(train_loss_values, random_val_loss_values, seq_val_loss_values, output_folder)
 
-def validate(model, val_loader, criterion):
+def validate(model, val_loader, criterion, device, device_type='cuda', outputFolder="runs/implicitValidation", epoch=0, prefix=""):
     model.eval()
     val_loss = 0.0
     correct = 0
     total = 0
     all_true_labels = []
     all_predicted_labels = []
+    all_confidences = []
+    class_losses = {i: [] for i in range(6)}  # assuming 6 actions (excluding -1: No Input)
+
+    # Create the output directory for the epoch
+    epoch_output_folder = os.path.join(outputFolder, f'epoch/{epoch}')
+    os.makedirs(epoch_output_folder, exist_ok=True)
 
     with torch.no_grad():
         for images, states, goals, labels in val_loader:
-            outputs = model(images, states, goals)
+            images = images.to(device)
+            states = states.to(device)
+            goals = goals.to(device)
+            labels = labels.to(device)
 
-            logOutputs = F.log_softmax(outputs, dim=1)
-            loss = criterion(logOutputs, labels)
+            with autocast(device_type):
+                outputs = model(images, states, goals)
+                logOutputs = F.log_softmax(outputs, dim=1)
+                loss = criterion(logOutputs, labels)
+
             val_loss += loss.item()
 
             # Accuracy calculation
@@ -768,23 +868,90 @@ def validate(model, val_loader, criterion):
             all_true_labels.extend(true_labels.cpu().numpy())
             all_predicted_labels.extend(predicted.cpu().numpy())
 
+            # Confidence tracking
+            confidences = torch.max(F.softmax(outputs, dim=1), dim=1).values
+            all_confidences.extend(confidences.cpu().numpy())
+
             total += labels.size(0)
             correct += (predicted == true_labels).sum().item()
+
+            # Per-class loss tracking
+            for i in range(6):  # Assuming you have 6 actions (from 0 to 5)
+                class_mask = (true_labels == i)
+                if class_mask.any():
+                    class_loss = criterion(logOutputs[class_mask], labels[class_mask])
+                    class_losses[i].append(class_loss.item())
 
     accuracy = 100 * correct / total
     precision = precision_score(all_true_labels, all_predicted_labels, average='weighted', zero_division=0)
     recall = recall_score(all_true_labels, all_predicted_labels, average='weighted', zero_division=0)
     f1 = f1_score(all_true_labels, all_predicted_labels, average='weighted', zero_division=0)
 
+    # Convert NumPy arrays or values to native Python types for JSON compatibility
+    class_loss_avg = {i: float(np.mean(class_losses[i])) if class_losses[i] else 0.0 for i in range(6)}
+    mean_confidence = float(np.mean(all_confidences)) if all_confidences else 0.0
+
+    # Compute confusion matrix
+    cm = confusion_matrix(all_true_labels, all_predicted_labels)
+
+    # --- Visualization 1: Confusion Matrix ---
+    plt.figure(figsize=(10, 8))
+    sns.heatmap(cm, annot=True, fmt='d', cmap="Blues", xticklabels=[actionToName[i] for i in range(6)], yticklabels=[actionToName[i] for i in range(6)])
+    plt.xlabel('Predicted Actions')
+    plt.ylabel('True Actions')
+    plt.title(f'Confusion Matrix - {prefix} - Epoch {epoch}')
+    plt.savefig(os.path.join(epoch_output_folder, f'{prefix}_confusion_matrix_epoch_{epoch}.png'))
+
+    # --- Visualization 2: Class-specific Loss ---
+    plt.figure(figsize=(10, 6))
+    plt.bar([actionToName[i] for i in range(6)], [class_loss_avg[i] for i in range(6)], color='skyblue')
+    plt.xlabel('Action Class')
+    plt.ylabel('Average Loss')
+    plt.title(f'Class-Specific Loss - {prefix} - Epoch {epoch}')
+    plt.savefig(os.path.join(epoch_output_folder, f'{prefix}_class_specific_loss_epoch_{epoch}.png'))
+
+    # --- Visualization 3: Confidence Distribution ---
+    plt.figure(figsize=(10, 6))
+    plt.hist(all_confidences, bins=20, color='orange', edgecolor='black')
+    plt.xlabel('Confidence Score')
+    plt.ylabel('Frequency')
+    plt.title(f'Confidence Score Distribution - {prefix} - Epoch {epoch}')
+    plt.savefig(os.path.join(epoch_output_folder, f'{prefix}_confidence_distribution_epoch_{epoch}.png'))
+
+    # --- Visualization 4: Loss and Accuracy ---
+    plt.figure(figsize=(8, 6))
+    metrics_values = [val_loss / len(val_loader), accuracy]
+    metrics_labels = ['Validation Loss', 'Accuracy (%)']
+    plt.bar(metrics_labels, metrics_values, color=['red', 'green'])
+    plt.title(f'Overall Validation Loss and Accuracy - {prefix} - Epoch {epoch}')
+    plt.savefig(os.path.join(epoch_output_folder, f'{prefix}_loss_accuracy_epoch_{epoch}.png'))
+
+    # Save metrics and class-specific loss information
     metrics = {
-        'loss': val_loss / len(val_loader),
-        'accuracy': accuracy,
-        'precision': precision,
-        'recall': recall,
-        'f1': f1
+        'loss': float(val_loss / len(val_loader)),  # Ensure float type
+        'accuracy': float(accuracy),
+        'precision': float(precision),
+        'recall': float(recall),
+        'f1': float(f1),
+        'class_loss': {actionToName[i]: class_loss_avg[i] for i in range(6)},  # Use action names
+        'low_confidence': mean_confidence  # Already converted to float
     }
 
+    # Save the metrics to a JSON file with prefix and epoch
+    with open(os.path.join(epoch_output_folder, f'{prefix}_metrics_epoch_{epoch}.json'), 'w') as f:
+        json.dump(metrics, f, indent=4)
 
+    # Print metrics
+    print(f"Epoch {epoch} - {prefix.capitalize()} Validation:")
+    print(f"  Validation Loss: {metrics['loss']:.4f}")
+    print(f"  Accuracy: {metrics['accuracy']:.2f}%")
+    print(f"  Precision: {metrics['precision']:.4f}")
+    print(f"  Recall: {metrics['recall']:.4f}")
+    print(f"  F1 Score: {metrics['f1']:.4f}")
+    print(f"  Class-wise Loss:")
+    for action, loss in metrics['class_loss'].items():
+        print(f"    {action}: {loss:.4f}")
+    print(f"  Average Prediction Confidence: {metrics['low_confidence']:.4f}")
 
     return val_loss / len(val_loader), metrics
 

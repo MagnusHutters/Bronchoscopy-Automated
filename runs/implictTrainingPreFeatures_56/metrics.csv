@@ -1,0 +1,2 @@
+Epoch,Training Loss,Training Accuracy,Training Precision,Training Recall,Training F1,Random Val Loss,Random Val Accuracy,Random Val Precision,Random Val Recall,Random Val F1,Sequence Val Loss,Sequence Val Accuracy,Sequence Val Precision,Sequence Val Recall,Sequence Val F1
+1,1.5028691597886987,55.58488175675676,0.5531109323826169,0.5558488175675675,0.5265328934139565,0.7832927584648133,77.36486486486487,0.7924928065706799,0.7736486486486487,0.7546664763963391,3.541138005256653,0.0,0.0,0.0,0.0
