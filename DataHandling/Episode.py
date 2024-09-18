@@ -189,13 +189,13 @@ class Episode:
         
         
 
-        self._images[index] = frame.image
         self._states[index] = frame.state
         self._actions[index] = frame.action
         self._data[index] = frame.data
-        self._topImages[index] = frame.topImage
 
         if setImage:
+            self._images[index] = frame.image
+            self._topImages[index] = frame.topImage
             imageHasChanged = not np.array_equal(self._images[index], frame.image)
             if frame.topImage is not None:
                 self._topImages[index] = frame.topImage

@@ -30,13 +30,14 @@ class ModelController(Controller):
         self.gui = GUI()
         #self.pathInterface= PathTrackerInterface("Training/model.keras")
         #self.input_shape = self.pathInterface.getInputShape()
-        self.branchModelTracker = BranchModelTracker("C:/Users/magnu/OneDrive/Misc/Ny mappe/Bronchoscopy-Automated/BronchoYolo/yolov5/runs/train/branchTraining11-X/weights/best.pt")
+        self.branchModelTracker = BranchModelTracker("C:/Users/magnu/OneDrive/Misc/Ny mappe/Bronchoscopy-Automated/BronchoYolo/yolov5/runs/train/branchTraining11-X/weights/best.pt", featureScale=0.25)
         
         #behavioir model
         
-        self.model = BronchoBehaviourModelImplicit(model_path="C:/Users/magnu/OneDrive/Misc/Ny mappe/Bronchoscopy-Automated/runs/implictTraining_17/modelImplicit.pth")
+        self.model = BronchoBehaviourModelImplicit(model_path="C:/Users/magnu/OneDrive/Misc/Ny mappe/Bronchoscopy-Automated/runs/implictTraining_42/modelImplicit.pth")
         
         self.override_active=False
+        self.manual=True
         
         
         
@@ -56,7 +57,7 @@ class ModelController(Controller):
         
         #_, doExit, objects = self.pathInterface.predictAndTrack(image,image)
         
-        branchPoints, branchPredictions = self.branchModelTracker.predict(image)
+        branchPoints, branchPredictions = self.branchModelTracker.predict(image, active = not self.manual)
 
         #print(f"BranchPoints: {branchPoints}")
         
@@ -80,6 +81,7 @@ class ModelController(Controller):
         
         Timer.point("beforeGUIUpdate")
         currentKey, doExit, joystick, manual=self.gui.update(image,(branchPoints, branchPredictions),state, recording, currentFrame, topImage)
+        self.manual = manual
         Timer.point("afterGUIUpdate")
         #print(f"Current Key: {currentKey}, keys: {objects.keys()}")
         

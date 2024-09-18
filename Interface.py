@@ -30,7 +30,7 @@ class Interface:
         
         self.broncho.start()
 
-        self.doTrackstar=False
+        self.doTrackstar=True
 
         if self.doTrackstar:
             self.Trakstar=Trakstar()
@@ -45,7 +45,7 @@ class Interface:
         self.currentState= self.broncho.getDict()
         self.currentInput=None
         
-        self.episodeManager=EpisodeManager()
+        self.episodeManager=EpisodeManager(multiProcessing=True)
         
         self.oldDoStart=False
         self.oldDoStop=False
