@@ -18,7 +18,7 @@ class Input:
         8, #Rotation
         6  #Extension
     ]
-    numStepsDefault = numStepsSlow
+    numStepsDefault = numStepsFast
 
     
     letterToAxis = {
@@ -167,7 +167,7 @@ class Input:
         if axis is None:
             return ''
         if axis == 0:
-            return 'u' if sign > 0 else 'd'
+            return 'd' if sign > 0 else 'u'
         if axis == 1:
             return 'r' if sign > 0 else 'l'
         if axis == 2:

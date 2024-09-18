@@ -86,7 +86,7 @@ def detect_features(image, feature_type = "AKAZE"):
     return keypoints, descriptors
 
 
-def find_affine_transformation(img2, oldKeypoints, oldDescriptors, feature_type='AKAZE'):
+def find_affine_transformation(img2, oldKeypoints, oldDescriptors, feature_type='AKAZE', featureScale=1.0):
     """
     Finds the affine transformation between two images by detecting and matching features.
     
@@ -102,10 +102,10 @@ def find_affine_transformation(img2, oldKeypoints, oldDescriptors, feature_type=
     #if img1 is None return a affine transformation matrix that does nothing
 
     doDownsample = True
-    downSampleFactor = 1
+    downsampleFactor = featureScale
 
     if doDownsample:
-        img2 = cv2.resize(img2, (0, 0), fx=downSampleFactor, fy=downSampleFactor)
+        img2 = cv2.resize(img2, (0, 0), fx=downsampleFactor, fy=downsampleFactor)
 
         
     
@@ -119,7 +119,7 @@ def find_affine_transformation(img2, oldKeypoints, oldDescriptors, feature_type=
         #upsample the keypoints to the original size
 
         for keypoint in newKeypoints:
-            keypoint.pt = (keypoint.pt[0]/downSampleFactor, keypoint.pt[1]/downSampleFactor)
+            keypoint.pt = (keypoint.pt[0]/downsampleFactor, keypoint.pt[1]/downsampleFactor)
 
     if oldKeypoints is None or oldDescriptors is None:
         return np.array([[1, 0, 0], [0, 1, 0]], dtype=np.float32), newKeypoints, newDescriptors
@@ -974,8 +974,11 @@ class Detection:
         return intersection_area / union_area if union_area != 0 else 0
 
 class BranchModelTracker:
-    def __init__(self, modelPath):
+    def __init__(self, modelPath, featureScale=1.0):
         pass
+
+        #load the model
+        self.featureScale = featureScale
 
         self.model = torch.hub.load('BronchoYolo/yolov5', 'custom', path=modelPath, source='local', force_reload=True)
         self.model.eval()
@@ -1103,7 +1106,8 @@ class BranchModelTracker:
 
         return trackedDetections
 
-    def predict(self, image, doDebug=False, doVideo=False, videoWriter=None):
+    def predict(self, image, doDebug=False, doVideo=False, videoWriter=None, active = True):
+
 
         def filter_corner_detections(detections, image_width, image_height, corner_margin=5, area_threshold=0.02):
             """
@@ -1151,6 +1155,10 @@ class BranchModelTracker:
                     filtered_detections.append(detection)
             
             return filtered_detections
+
+
+        if not active:
+            return {}, {}
 
         report=Timer.reset()
         #print(report)
@@ -1221,7 +1229,7 @@ class BranchModelTracker:
 
         
         #affineTransformation = find_affine_transformation(oldImage, newImage, feature_type='AKAZE')
-        affineTransformation, self.oldKeypoints, self.oldSescriptors = find_affine_transformation(newImage, self.oldKeypoints, self.oldSescriptors, feature_type='AKAZE')
+        affineTransformation, self.oldKeypoints, self.oldSescriptors = find_affine_transformation(newImage, self.oldKeypoints, self.oldSescriptors, feature_type='AKAZE', featureScale = self.featureScale)
 
 
         

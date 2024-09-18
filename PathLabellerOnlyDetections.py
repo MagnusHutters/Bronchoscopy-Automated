@@ -133,45 +133,21 @@ def labelEpisode(episode, modelPath):
         detections.append(frameDetections)
 
 
+        frame.data["paths"] = detectionsToDict(frameDetections)
+
+
 
         #fix action(input)
 
         input = Input.fromDict(frame.action)
         frame.action = input.toDict()
-        episode[i] = frame
+        episode.set_frame(i, frame, setImage=False)
 
     print("")
 
 
     
 
-    currentFrame = len(episode) - 1
-
-    print("Processing paths")
-
-    while currentFrame >= 0:
-        startFrame, pathId  = processEndFrame(currentFrame)
-        if pathId == -1:
-            print(f"No path found for frame {startFrame} to {currentFrame}")
-            for i in range(currentFrame, startFrame-1, -1):
-                print(f"Setting frame {i} to path from frame {i+1}")
-                episode[i].data["pathId"] = episode[i+1].data["pathId"]
-                episode[i].data["paths"] = episode[i+1].data["paths"]
-            
-        else:
-
-            print(f"Path {pathId} from frame {startFrame} to {currentFrame}")
-
-
-            setPath(pathId, startFrame, currentFrame)
-
-        currentFrame = startFrame-1
-
-
-    #ensure whole episode is labelled
-    for i in range(len(episode)):
-        if "pathId" not in episode[i].data.keys() or "paths" not in episode[i].data.keys():
-            raise Exception(f"Frame {i} not labelled")
 
 
 

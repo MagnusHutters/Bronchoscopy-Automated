@@ -126,6 +126,9 @@ class Bronchoscope(threading.Thread):
         #command must be of type Input
         if not isinstance(command, Input):
             raise ValueError("Command must be of type Input")
+        
+
+        print(f"Handling command: {command}")
         if command.hasInput:
             axis = command.axis
             change = command.change
@@ -148,7 +151,7 @@ class Bronchoscope(threading.Thread):
             new_position = max(self.jointStepLimits[axis][0], min(self.jointStepLimits[axis][1], new_position))
             
             
-            print(f"Axis: {axis}, Change: {change}, Current: {current_position}, New: {new_position}")
+            #print(f"Axis: {axis}, Change: {change}, Current: {current_position}, New: {new_position}")
             
             command = self.axisToJoint[axis] + str(new_position)
             
@@ -170,10 +173,10 @@ class Bronchoscope(threading.Thread):
                     return
                 # Update current_position for the corresponding joint
                 
-                print(f"Axis: {axis}, New position: {position}")
+                #print(f"Axis: {axis}, New position: {position}")
 
                 if(abs(position - new_position) > self.jointStepMaxChange[axis]):
-                    print(f"Position {position} is different from new position {new_position}. Retrying...")
+                    #print(f"Position {position} is different from new position {new_position}. Retrying...")
                     #flush serial buffer
                     self.serial.flushInput()
 

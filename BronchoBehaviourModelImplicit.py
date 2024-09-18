@@ -567,14 +567,14 @@ class BronchoBehaviourModelImplicit:
     def __init__(self, model_path, device='cuda'):
         # Initialize the model and load the weights
         self.device = torch.device(device if torch.cuda.is_available() else 'cpu')
-        self.model = MultiInputModel(numStates=3, numGoal=4, imageSize=50, channels=3, classes=6)
+        self.model = MultiInputModel(numStates=3, numGoal=2, imageSize=40, channels=3, classes=6)
         self.model.load_state_dict(torch.load(model_path, map_location=self.device))
         self.model.to(self.device)
         self.model.eval()
 
         # Define the image transform used during inference
         self.transform = T.Compose([
-            T.Resize((50, 50)),
+            T.Resize((40, 40)),
             T.ToTensor(),
             T.Normalize((0.5,), (0.5,))
         ])
