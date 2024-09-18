@@ -39,6 +39,7 @@ import seaborn as sns
 from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score
 #from torch.cuda.amp import autocast
 import json
+from collections import defaultdict
 
 # Action to name mapping
 actionToName = {
@@ -57,7 +58,7 @@ class BronchosopyDataset(Dataset):
         self.episodeManager = EpisodeManager(mode = "read", loadLocation = databasePath)
 
 
-        self.episodes, self.lenght, self.episodeFrameIndexStart = self.episodeManager.loadAllEpisodes(cacheImages=False, maxEpisodes=100, shuffle=True, shuffleSeed=1)
+        self.episodes, self.lenght, self.episodeFrameIndexStart = self.episodeManager.loadAllEpisodes(cacheImages=False, maxEpisodes=100, shuffle=False, shuffleSeed=1)
 
         if blurSigma > 0:
             for i, episode in enumerate(self.episodes):
@@ -99,6 +100,10 @@ class BronchosopyDataset(Dataset):
             episodeIndex, subIndex = self.getEpisodeAndSubIndex(idx)
 
             #print(f"Getting index {idx} episodeIndex {episodeIndex} subIndex {subIndex} using frameStart {self.episodeFrameIndexStart}")
+
+
+            episodeAndIndex = (episodeIndex, subIndex)
+
 
             frame = self.episodes[episodeIndex][subIndex]
 
@@ -156,9 +161,9 @@ class BronchosopyDataset(Dataset):
                 
             
 
-            self.cache[idx] = (image, stateInput, goalInput, action)
+            self.cache[idx] = (image, stateInput, goalInput, action, episodeAndIndex)
             
-            return image, stateInput, goalInput, action
+            return image, stateInput, goalInput, action, episodeAndIndex
 
 
 class FilteredUpsampledDataset(Dataset):
@@ -187,7 +192,7 @@ class FilteredUpsampledDataset(Dataset):
         validIndices = []
 
         for i in range(len(self.primaryDataset)):
-            features, state, goal, label = self.primaryDataset[i]
+            features, state, goal, label, _ = self.primaryDataset[i]
 
             #label is one-hot encoded, invalid if all zeros
             if torch.sum(label) > 0:
@@ -204,7 +209,7 @@ class FilteredUpsampledDataset(Dataset):
         classCounts = torch.zeros(6)
 
         for i, idx in enumerate(validIndices):
-            features, state, goal, label = self.primaryDataset[idx]
+            features, state, goal, label, _ = self.primaryDataset[idx]
 
             classCounts += label
 
@@ -256,7 +261,7 @@ class FilteredUpsampledDataset(Dataset):
         counts = torch.zeros(6)
 
         for idx in validIndices:
-            features, state, goal, label = self.primaryDataset[idx]
+            features, state, goal, label, _ = self.primaryDataset[idx]
 
             probablities = label
 
@@ -308,10 +313,10 @@ class FilteredUpsampledDataset(Dataset):
         return len(self.oversampledIndices)
     
     def __getitem__(self, idx):
-        features, state, goal, label = self.primaryDataset[self.oversampledIndices[idx]]
+        features, state, goal, label, episodeAndIndex = self.primaryDataset[self.oversampledIndices[idx]]
         #label to index
         #classId = torch.argmax(label).item()
-        return features, state, goal, label
+        return features, state, goal, label, episodeAndIndex
 
 
 
@@ -377,7 +382,7 @@ class DataAugmentationDataset(Dataset):
         transformIdx = idx % self.augmentation_factor
         
         # Fetch the image, state, goal, label from the original dataset
-        image, state, goal, label = self.primaryDataset[actualIdx]
+        image, state, goal, label, episodeAndIndex = self.primaryDataset[actualIdx]
 
         
         # Apply random transformations if transformIdx is not 0
@@ -398,7 +403,7 @@ class DataAugmentationDataset(Dataset):
             state = self.perturb_state(state, transformIdx)
             goal = self.perturb_goal(goal, transformIdx)
         
-        return image, state, goal, label
+        return image, state, goal, label, episodeAndIndex
     
     def apply_random_transforms(self, image):
         """
@@ -732,6 +737,9 @@ def main(epochs = 50, learningRate = 0.0001, modelSavePath = "modelImplicit.pth"
     random_val_loss_values = []
     seq_val_loss_values = []
 
+
+    worstIndexes = defaultdict(set)
+
     best_val_loss = float('inf')
 
     for epoch in range(epochs):
@@ -742,7 +750,9 @@ def main(epochs = 50, learningRate = 0.0001, modelSavePath = "modelImplicit.pth"
         all_true_labels = []
         all_predicted_labels = []
 
-        for images, states,goals, labels in train_loader:
+        
+
+        for images, states,goals, labels, episodeAndIndex in train_loader:
             images = images.to(device)
             states = states.to(device)
             goals = goals.to(device)
