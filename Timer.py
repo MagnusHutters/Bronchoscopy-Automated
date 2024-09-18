@@ -33,7 +33,7 @@ class Timer:
             name1, time1 = sorted_checkpoints[i - 1]
             name2, time2 = sorted_checkpoints[i]
             time_diff = time2 - time1
-            percentage = (time_diff / total_time) * 100
+            percentage = (time_diff / total_time) * 100 if total_time != 0 else 100/numOfPoints
             report.append(f"Time from {name1} to {name2}: {time_diff:.2f} milliseconds ({percentage:.2f}%)")
 
         # Clear the checkpoints for the next run

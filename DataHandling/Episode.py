@@ -859,11 +859,16 @@ class EpisodeManager:
     def endEpisode(self, discard=False, saveLocation=None):
         if self.currentEpisode is None:
             return
+        if len(self.currentEpisode) == 0:
+            print("Episode is empty")
+            self.currentEpisode.clear()
+            self.currentEpisode = None
+            return
         
         if saveLocation is None:
             saveLocation = self.defaultSaveLocation
         
-        #save the episode to the database
+        #dont save the episode and discard it
         if discard is True:
             self.currentEpisode.clear()
             self.currentEpisode = None
@@ -871,6 +876,7 @@ class EpisodeManager:
         
         
 
+        #save the episode to the database
         if self.currentEpisode.isSaved is False:
             
             self.currentEpisode.save(saveLocation)
@@ -936,6 +942,9 @@ class EpisodeManager:
             self.currentEpisode.append(*args, **kwargs)
         else:
             print("No current episode")
+
+    def __len__(self):
+        return len(self.allEpisodes)
 
     
         

@@ -167,9 +167,10 @@ class BronchosopyDataset(Dataset):
 
 
 class FilteredUpsampledDataset(Dataset):
-    def __init__(self, originalDataset, doUpsample=True, maxOversamlingFactor=12):
+    def __init__(self, originalDataset, doUpsample=True, maxOversamlingFactor=12, upsampleIndex=0):
 
         print("Filtering and upsampling dataset")
+        self.upsampleIndex = upsampleIndex
         self.primaryDataset = originalDataset
 
         self.maxOversamlingFactor = maxOversamlingFactor
@@ -230,7 +231,7 @@ class FilteredUpsampledDataset(Dataset):
 
         sortedCounts = torch.sort(classCounts, descending=True).values
 
-        baseCount = sortedCounts[0]
+        baseCount = sortedCounts[self.upsampleIndex]
         
         factor=baseCount/classCounts
 
@@ -339,12 +340,14 @@ class DataAugmentationDataset(Dataset):
 
     
 
-    def __init__(self, originalDataset, grayscale=True, augmentation_factor=8):
+    def __init__(self, originalDataset, grayscale=True, augmentation_factor=8, doStatePerturbation=True, doGoalPerturbation=True):
         """
         :param originalDataset: The original dataset to augment
         :param grayscale: Boolean, True if the dataset images are grayscale
         :param augmentation_factor: Integer, how many augmentations to apply per image
         """
+        self.doStatePerturbation = doStatePerturbation
+        self.doGoalPerturbation = doGoalPerturbation
         self.primaryDataset = originalDataset
         self.grayscale = grayscale
         self.augmentation_factor = augmentation_factor
@@ -400,8 +403,10 @@ class DataAugmentationDataset(Dataset):
             #image = T.ToTensor()(image)
 
             # Apply state and goal perturbations
-            state = self.perturb_state(state, transformIdx)
-            goal = self.perturb_goal(goal, transformIdx)
+            if self.doStatePerturbation:
+                state = self.perturb_state(state, transformIdx)
+            if self.doGoalPerturbation:
+                goal = self.perturb_goal(goal, transformIdx)
         
         return image, state, goal, label, episodeAndIndex
     
@@ -693,7 +698,14 @@ def main(epochs = 50, learningRate = 0.0001, modelSavePath = "modelImplicit.pth"
 
     dataset = DataAugmentationDataset(dataset, grayscale=False, augmentation_factor=8)
 
-    
+    doManual = True
+    if doManual:
+        print(f"Loading Manual Dataset")
+
+        manualDataset = BronchosopyDataset("DatabaseManual", transform=transform, blurSigma=0)
+        manualDataset = FilteredUpsampledDataset(manualDataset, doUpsample=True, maxOversamlingFactor=12, upsampleIndex=1)
+        manualDataset = DataAugmentationDataset(manualDataset, grayscale=False, augmentation_factor=8, doStatePerturbation=False, doGoalPerturbation=False)
+
 
     datasetSize = len(dataset)
     valSize = int(0.1 * datasetSize)
@@ -702,16 +714,19 @@ def main(epochs = 50, learningRate = 0.0001, modelSavePath = "modelImplicit.pth"
     trainSubset = torch.utils.data.Subset(dataset, range(trainSize))
     valSubsetSequence = torch.utils.data.Subset(dataset, range(trainSize, datasetSize))
 
-    trainSubset, valSubsetRandom = torch.utils.data.random_split(trainSubset, [trainSize - valSize, valSize])
+    trainSet, valSubsetRandom = torch.utils.data.random_split(trainSubset, [trainSize - valSize, valSize])
 
     batchSize = 256
 
-    train_loader = DataLoader(trainSubset, batch_size=batchSize, shuffle=True)
+    if doManual:
+        trainSet = torch.utils.data.ConcatDataset([trainSet, manualDataset])
+
+    train_loader = DataLoader(trainSet, batch_size=batchSize, shuffle=True)
     val_loader_random = DataLoader(valSubsetRandom, batch_size=batchSize, shuffle=False)
     val_loader_sequence = DataLoader(valSubsetSequence, batch_size=batchSize, shuffle=False)
 
 
-    sampleImage, sampleState, sampleGoal, sampleLabel = dataset[0]
+    sampleImage, sampleState, sampleGoal, sampleLabel, _ = dataset[0]
 
     numStates = len(sampleState)
     numGoal = len(sampleGoal)
@@ -750,7 +765,7 @@ def main(epochs = 50, learningRate = 0.0001, modelSavePath = "modelImplicit.pth"
         all_true_labels = []
         all_predicted_labels = []
 
-        
+
 
         for images, states,goals, labels, episodeAndIndex in train_loader:
             images = images.to(device)
@@ -858,7 +873,7 @@ def validate(model, val_loader, criterion, device, device_type='cuda', outputFol
     os.makedirs(epoch_output_folder, exist_ok=True)
 
     with torch.no_grad():
-        for images, states, goals, labels in val_loader:
+        for images, states, goals, labels, _ in val_loader:
             images = images.to(device)
             states = states.to(device)
             goals = goals.to(device)
