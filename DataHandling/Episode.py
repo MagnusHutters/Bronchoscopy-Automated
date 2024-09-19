@@ -937,6 +937,9 @@ class EpisodeManager:
         else:
             print("No current episode")
 
+    def __len__(self):
+        return len(self.allEpisodes)
+
     
         
 

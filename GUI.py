@@ -98,6 +98,7 @@ class GUI:
 
 
         self.manual=True
+        self.mode=0 #0=manual, 1=visual servoing, 2=behavioural cloning
         
         pygame.font.init()
         self.font = pygame.font.Font(None, 18)

@@ -30,7 +30,7 @@ class Interface:
         
         self.broncho.start()
 
-        self.doTrackstar=True
+        self.doTrackstar=False
 
         if self.doTrackstar:
             self.Trakstar=Trakstar()

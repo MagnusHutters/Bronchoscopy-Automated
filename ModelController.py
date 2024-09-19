@@ -20,6 +20,9 @@ from branchModelTracker import BranchModelTracker
 from BronchoBehaviourModelImplicit import BronchoBehaviourModelImplicit
 
 
+from pathLabelNewActions import guessBranch
+
+
 class ModelController(Controller):
     
     def __init__(self):
@@ -30,7 +33,9 @@ class ModelController(Controller):
         self.gui = GUI()
         #self.pathInterface= PathTrackerInterface("Training/model.keras")
         #self.input_shape = self.pathInterface.getInputShape()
-        self.branchModelTracker = BranchModelTracker("C:/Users/magnu/OneDrive/Misc/Ny mappe/Bronchoscopy-Automated/BronchoYolo/yolov5/runs/train/branchTraining11-X/weights/best.pt", featureScale=0.25)
+        self.branchModelTracker = BranchModelTracker(\
+            "C:/Users/magnu/OneDrive/Misc/Ny mappe/Bronchoscopy-Automated/BronchoYolo/yolov5/runs/train/branchTraining11-X/weights/best.pt",\
+            featureScale=0.5)
         
         #behavioir model
         
@@ -59,7 +64,8 @@ class ModelController(Controller):
         
         #_, doExit, objects = self.pathInterface.predictAndTrack(image,image)
         
-        branchPoints, branchPredictions = self.branchModelTracker.predict(image, active = not self.manual)
+        activeTracking = False if self.mode==0 else True
+        branchPoints, branchPredictions = self.branchModelTracker.predict(image, activeTracking)
 
         #print(f"BranchPoints: {branchPoints}")
         
@@ -75,6 +81,8 @@ class ModelController(Controller):
         if self.interface.episodeManager.hasEpisode():
             recording = True
             currentFrame = len(self.interface.episodeManager.currentEpisode)
+            
+            
             
         
         
@@ -125,9 +133,51 @@ class ModelController(Controller):
             
         elif mode==1: #visual servoing
 
+            state = self.interface.currentState
 
 
-            pass
+            goalAbs = branchPoints.get(currentKey, (0,0)) 
+
+            imageSize = (image.shape[1], image.shape[0])
+            center = (imageSize[0]//2, imageSize[1]//2)
+
+            goal = (goalAbs[0] - center[0], goalAbs[1] - center[1])
+
+            currentJoints = None #not used - also redundant with state
+
+            doVisualize = True
+            maxDist = 99999
+            limitCount = 0
+
+            #print(f"State: {state}")
+            #print(f"Goal: {goal}")
+            #print(f"imageSize: {imageSize}")
+            #print(f"GoalAbs: {goalAbs}")
+
+            action = guessBranch(state, goalAbs, imageSize, currentJoints, doVisualize, maxDist, limitCount)
+
+
+
+            if joystick.forwards > 0.5:
+                
+                input = Input.fromChar(action)
+
+            elif joystick.forwards < -0.5:
+                
+                # 1 if state[1] is negative and -1 if state[1] is positive
+                #toNeutral = 1 if state[0][0][1] < 0 else -1
+                
+                input=Input.fromChar("b")
+
+            else:
+                input = Input()
+
+
+
+            #uses this function
+            #action = guessBranch(state, goal, imageSize, currentJoints, doVisualize = False, maxDist = 5000, limitCount = 0):
+
+            
 
 
 

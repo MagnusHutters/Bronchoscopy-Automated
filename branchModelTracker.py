@@ -1042,11 +1042,11 @@ class BranchModelTracker:
                         radius = min(viewSize)//2
                         radius -= Detection.margin
 
-                        detectionPoint = detection.polygon.centroid
+                        closestPoint = detection.polygon.centroid
 
-                        closestPoint = closest_point_on_circle(centerX, centerY, radius, detectionPoint.x, detectionPoint.y)
+                        #closestPoint = closest_point_on_circle(centerX, centerY, radius, closestPoint.x, closestPoint.y)
 
-                        points[detection.id] = (int(closestPoint[0]), int(closestPoint[1]))
+                        points[detection.id] = (int(closestPoint.x), int(closestPoint.y))
 
                     finalDetections[detection.id] = copy.deepcopy(detection)
                 

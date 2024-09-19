@@ -80,7 +80,7 @@ class Controller:
                 Timer.point("End")
                 report=Timer.reset()
                 Timer.point("Start")
-                print(report)
+                #print(report)
                 #print(num)
 
 
