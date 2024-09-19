@@ -37,7 +37,9 @@ class ModelController(Controller):
         self.model = BronchoBehaviourModelImplicit(model_path="C:/Users/magnu/OneDrive/Misc/Ny mappe/Bronchoscopy-Automated/runs/implictTraining_42/modelImplicit.pth")
         
         self.override_active=False
-        self.manual=True
+        #self.manual=True
+
+        self.mode = 1 #0: Manual #1: visual servoing, 2: behaviour model
         
         
         
@@ -80,8 +82,8 @@ class ModelController(Controller):
         
         
         Timer.point("beforeGUIUpdate")
-        currentKey, doExit, joystick, manual=self.gui.update(image,(branchPoints, branchPredictions),state, recording, currentFrame, topImage)
-        self.manual = manual
+        currentKey, doExit, joystick, mode=self.gui.update(image,(branchPoints, branchPredictions),state, recording, currentFrame, topImage)
+        self.mode = mode
         Timer.point("afterGUIUpdate")
         #print(f"Current Key: {currentKey}, keys: {objects.keys()}")
         
@@ -112,78 +114,75 @@ class ModelController(Controller):
         #    self.override_type = 'rotation'
         
 
-        if False: #self.override_active:
-            if self.override_type == 'extension':
-                #input = Input(0, 0, 1)
-                pass
-            elif self.override_type == 'rotation':
-                rotation_direction = 1 if self.last_nonzero_rotation > 0 else -1
-                #input = Input(rotation_direction, 0, 0)
+        
+
+        if mode==0:
+            input=Input.fromJoystick(joystick)
+
+            if joystick.l2:
+                self.interface.broncho.home() # Reset the broncho to the home position
+            #print(f"Manual: {input}")
             
-            if time.time() >= self.override_end_time:
-                self.override_active = False
-                self.override_type = None
-        else:
+        elif mode==1: #visual servoing
 
-            if manual:
-                input=Input.fromJoystick(joystick)
 
-                if joystick.l2:
-                    self.interface.broncho.home() # Reset the broncho to the home position
-                #print(f"Manual: {input}")
-                
-            else:
-                
 
-                
-                
-                
-                
-                
-                
-                
-                #image=preprocess_image(image, mode="basic")
-                
-                #convert to numpy array in float32 bit format
-                #state = np.array([[state]], dtype=np.float32)
-                #image = np.array([image], dtype=np.float32)
-                #paths = np.array([paths], dtype=np.float32)
-                
-                
-                #if new index is in obejcts keys
-                #if currentKey in objects.keys() and joystick.forwards>0.5:
-                    
-                    #print("Predicting")
-                    #prediction with 3 inputs: image, paths, state
-                #    prediction = self.model.predict(state,image, paths)
-                #    prediction=prediction[0]
-                #    print(f"Prediction: {prediction}                ")
-                #    input=Input(*prediction)
-                    
-                    #print prediction on same line
-                if joystick.forwards > 0.5:
-                    if currentKey in branchPredictions.keys():
-                
-                        action = self.model.predict(image, state, branchPredictions, currentKey)
-                    else:
-                        action = -1
+            pass
 
-                    input = Input.fromActionValue(action)
 
-                elif joystick.forwards < -0.5:
-                    
-                    # 1 if state[1] is negative and -1 if state[1] is positive
-                    #toNeutral = 1 if state[0][0][1] < 0 else -1
-                    
-                    input=Input.fromChar("b")
 
+        elif mode==2: #behaviour model
+            
+
+            
+            
+            
+            
+            
+            
+            
+            #image=preprocess_image(image, mode="basic")
+            
+            #convert to numpy array in float32 bit format
+            #state = np.array([[state]], dtype=np.float32)
+            #image = np.array([image], dtype=np.float32)
+            #paths = np.array([paths], dtype=np.float32)
+            
+            
+            #if new index is in obejcts keys
+            #if currentKey in objects.keys() and joystick.forwards>0.5:
+                
+                #print("Predicting")
+                #prediction with 3 inputs: image, paths, state
+            #    prediction = self.model.predict(state,image, paths)
+            #    prediction=prediction[0]
+            #    print(f"Prediction: {prediction}                ")
+            #    input=Input(*prediction)
+                
+                #print prediction on same line
+            if joystick.forwards > 0.5:
+                if currentKey in branchPredictions.keys():
+            
+                    action = self.model.predict(image, state, branchPredictions, currentKey)
                 else:
-                    input = Input()
-            
+                    action = -1
+
+                input = Input.fromActionValue(action)
+
+            elif joystick.forwards < -0.5:
+                
+                # 1 if state[1] is negative and -1 if state[1] is positive
+                #toNeutral = 1 if state[0][0][1] < 0 else -1
+                
+                input=Input.fromChar("b")
+
+            else:
+                input = Input()
         
+    
+    
         
-            
-        
+    
             
             
             

@@ -365,18 +365,16 @@ class GUI:
         joystick = JoystickData.fromJoystick(self.js)
         
         
-        manualSwitch=joystick.r1-joystick.l1
-        if manualSwitch < -0.5:
-            self.manual = True
-            print("Manual")
-        elif manualSwitch >0.5:
-            self.manual = False
-            print("Auto")
-    
+        if joystick.l1:
+            self.mode = 0 #manual
+        elif joystick.r1:
+            self.mode = 1 #visual servoing
+        elif joystick.r2:
+            self.mode = 2 #behavioural cloning
     
         
         
-        return doQuit, selectEvent, joystick, self.manual
+        return doQuit, selectEvent, joystick, self.mode
 
 
     def drawRecording(self, recording, currentFrame):
@@ -402,12 +400,12 @@ class GUI:
         #create window if it does not exist using the size of the image
         
 
-        doQuit, selectEvent, joystick, manual = self.doHandleEvents()
+        doQuit, selectEvent, joystick, mode = self.doHandleEvents()
         #doQuit=False
               
         Timer.point("eventsHandled")
         
-        if(manual):
+        if(mode==0):
             pass
             
         else:
@@ -473,7 +471,7 @@ class GUI:
         if doQuit:
             pygame.quit()
         
-        return self.current_index, doQuit, joystick, self.manual
+        return self.current_index, doQuit, joystick, self.mode
     
             
         #time.sleep(0.1)
