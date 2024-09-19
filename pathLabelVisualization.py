@@ -23,7 +23,7 @@ def visualize_paths(frame):
     return image
 
 def main():
-    episodeManager = EpisodeManager(mode="read", loadLocation="DatabaseLabelled")
+    episodeManager = EpisodeManager(mode="read", loadLocation="DatabaseManual")
 
     episodeManager.currentIndex=0
     doQuit = False
@@ -78,7 +78,7 @@ def main():
         if cv2.waitKey(0) & 0xFF == ord('q'):
             break
     
-    episode = episodeManager.nextEpisode()
+    episode = episodeManager.endEpisode(discard=True)
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
