@@ -1,0 +1,68 @@
+Overview
+The System is a semi-autonomous autopilot system for a bronchoscope were the system takes images from the tip of the bronchoscope using a micro camera place at the tip, and with actuators capable of rotating the bronchoscope, extending/retracting it and bending the tip in 2 directions.
+The system were trained and testing using a sophisticated lung phantom
+-          2 parts of the developed system
+o   Branch identification – data collection –
+§  Gathers the incoming visual data and identifies all the possible paths to take
+·         Uses yolov5 instead of a custom cnn or custom CV system
+§  Chose a path from possible paths through gui
+o   The control system
+§  A behavior cloning method
+§  Visual Sevoing system
+§  control class Is made to interface with the robot –
+·         also used during data collection for the yolo model and behaviour cloning model
+-          before that ill explain the overall robot and the phantom used for training and how data were collected for training
+ 
+The robot & interface
+The first part done were the interface for collecting sensor data from the robot as well as controlling the robots motion
+The robot
+-          Explain degrees of freedom
+-          Controlled by a teensy microcontroller,
+-          Controls the 3 different axis
+-          Gives feedback on absolute position of each axis
+-          Commands using serial interface
+-          Internal camera is connected to the pc via usb through a interface board, not trough microcontroller
+-          The internal camera were added at the tip, causing the length of the probe to be extended approximately 1 cm [see fig]
+o   The bending happened 1 cm further from the end
+o   This caused issues with dexterity,
+o   Had trouble reaching all points of the phantom, especially when needing to bend in 2 different directions in succesion
+o    
+-          Those are the primary sensors and controls
+-          In addition an extra camera and 3 3d sensors were added for collecting a more copmprehensive dataset. Though those were not directly used by the system in the end. The extra camera being a top-down camera, showing the phantom, and giving a rough indicator of the bronchoscopes position due to the camera light and the sligt translucence of the phantom
+Changes:
+The physical robot has been majorly overhauled
+The overall motions possible is the same, but actuators are different
+Only uses one actuator for each degree of freedom, all can tell absolute position, uses a telecoping tupe to tranfer the motion to the entrance of the phantom rather than having additional actuators
+This also eliminates all isues with syncing the different actuators and slipage
+All can tell absolute psotion
+Rotation is limited to -170, +170 degrees rotation, not a full rotation, but the fact that it can bend both up and down makes it not really a big issue
+ 
+ 
+The phantom
+All the testing were done in a sophisticated compliant silicone lung phantom [see figure]
+The phantom were modeled closely after real lungs in geometri, using a compliant silicone material that also behaves and looks similar to real lungs [ref] see figure [] for comparison between the model and a riamge from a real bronchoscopy
+ 
+-          Decription of the structure
+o   Right and left sections
+o   Slightly different branching geometry
+o   Each branch and section is labelled as seen in figure [ref] which uses real world designations
+Changes:
+Use just a single phantom – but much more complex and sophisticated
+Has 20 rechable major branches, each with 2-4 subbranches too small to traverse
+About half in each lung
+Use a flexible silicone material tha mimixs real lungs in appearance and compliance somewhat
+Data collection
+-          The data collected were used for training the the systems
+-	as part of the project a dataset was created consisting of episodes of a human navigator traversing the lung phantom
+-          Collected whole episodes of starting at the entrance and moving to one of the endpoints in the phantom
+o   Not actually the smalles branches, but the next level up
+-          Each reachable endpoint were visited 5 times for a total of 85 episodes
+-          Some endpoints could not be reached – fig [] shows which endpoints were reachable and which weren’t
+-          Collects 10 frame per second
+-          Each frame it collects the following information:
+o   State: rotation, bending and extansion – both the servo steps and converted to degrees and mm
+o   Action: the discrete action taken, and the speed in action (the change in servo steps ordered)
+o   Internal image: the internal image taken
+o   Top image: a top down image taken from outside the phantom
+o   3d positions: the 3d positions were recorded using a trakstar system – records the position of the probe, phantom and top-down camera
+o   Metadata: some additional information is recorded such as timestamp, frame index and such

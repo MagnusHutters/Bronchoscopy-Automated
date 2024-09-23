@@ -54,11 +54,11 @@ actionToName = {
 
 # Custom Dataset class
 class BronchosopyDataset(Dataset):
-    def __init__(self, databasePath, transform=None, blurSigma=0):
+    def __init__(self, databasePath, transform=None, blurSigma=0, maxEpisodes=100):
         self.episodeManager = EpisodeManager(mode = "read", loadLocation = databasePath)
 
 
-        self.episodes, self.lenght, self.episodeFrameIndexStart = self.episodeManager.loadAllEpisodes(cacheImages=False, maxEpisodes=100, shuffle=False, shuffleSeed=1)
+        self.episodes, self.lenght, self.episodeFrameIndexStart = self.episodeManager.loadAllEpisodes(cacheImages=False, maxEpisodes=maxEpisodes, shuffle=False, shuffleSeed=1)
 
         if blurSigma > 0:
             for i, episode in enumerate(self.episodes):
@@ -692,7 +692,7 @@ def main(epochs = 50, learningRate = 0.0001, modelSavePath = "modelImplicit.pth"
     metrics_file_path = os.path.join(output_folder, "metrics.csv")
 
     # Create the custom dataset and DataLoader
-    dataset = BronchosopyDataset("DatabaseLabelled", transform=transform, blurSigma=0)
+    dataset = BronchosopyDataset("DatabaseLabelled", transform=transform, blurSigma=0, maxEpisodes=100)
 
     dataset = FilteredUpsampledDataset(dataset, doUpsample=True, maxOversamlingFactor=12)
 
@@ -702,7 +702,7 @@ def main(epochs = 50, learningRate = 0.0001, modelSavePath = "modelImplicit.pth"
     if doManual:
         print(f"Loading Manual Dataset")
 
-        manualDataset = BronchosopyDataset("DatabaseManual", transform=transform, blurSigma=0)
+        manualDataset = BronchosopyDataset("DatabaseManual", transform=transform, blurSigma=0, maxEpisodes=40)
         manualDataset = FilteredUpsampledDataset(manualDataset, doUpsample=True, maxOversamlingFactor=12, upsampleIndex=1)
         manualDataset = DataAugmentationDataset(manualDataset, grayscale=False, augmentation_factor=8, doStatePerturbation=False, doGoalPerturbation=False)
 
@@ -739,8 +739,8 @@ def main(epochs = 50, learningRate = 0.0001, modelSavePath = "modelImplicit.pth"
     model = MultiInputModel(numStates=numStates, numGoal=numGoal, imageSize=imageSize, channels=channels, classes=classes)
 
     # Loss and optimizer
-    criterion = nn.KLDivLoss(reduction='batchmean')
-    #criterion = nn.CrossEntropyLoss()
+    #criterion = nn.KLDivLoss(reduction='batchmean')
+    criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=0.0001)
     scaler = GradScaler()
     device_type = 'cuda' if torch.cuda.is_available() else 'cpu'

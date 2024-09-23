@@ -1,8 +1,5 @@
 
 
-
-
-
 import numpy as np
 from branchModelTracker import BranchModelTracker, Detection
 from DataHandling.Episode import EpisodeManager, Episode
@@ -20,12 +17,16 @@ from Timer import Timer
 
 
 
-def drawRotationAccess(image, rotationDegrees, bendDegrees = 0):
+def drawRotationAccess(image, rotationDegrees, bendDegrees, bendMultiplier = 1):
 
     rotationDegrees += 90
     rotationLimits = (-170, 170)
 
-    imageCenter = (image.shape[1]//2, image.shape[0]//2)
+    actualImageCenter = (image.shape[1]//2, image.shape[0]//2)
+
+
+    bendOffset = int(bendDegrees*bendMultiplier)
+    imageCenter = (image.shape[1]//2, (image.shape[0]//2)-bendOffset)
 
     dist = 100
     axes = (dist, dist)
@@ -40,8 +41,32 @@ def drawRotationAccess(image, rotationDegrees, bendDegrees = 0):
 
     color = (0, 255, 0)
 
-    cv2.ellipse(image, imageCenter, axes, 0, startAngle, endAngle, color, 2)
+    
+    #==================Draw bending limits==================
 
+    bendLimits = 170
+
+    #bendLimitDown   = ((actualImageCenter[1]+bendLimits) + (imageCenter[1]+bendLimits))//2
+    #bendLimitUp     = ((actualImageCenter[1]-bendLimits) + (imageCenter[1]-bendLimits))//2
+
+    bendLimitDown = imageCenter[1]+int(bendLimits*bendMultiplier)
+    bendLimitUp = imageCenter[1]-int(bendLimits*bendMultiplier)
+    
+    print(f"bendLimitDown: {bendLimitDown}, bendLimitUp: {bendLimitUp}")
+
+    bendLimitDownPoint = (imageCenter[0], bendLimitDown)
+    bendLimitUpPoint = (imageCenter[0], bendLimitUp)
+
+    cv2.line(image, bendLimitDownPoint, (imageCenter[0], imageCenter[1]+125), (255, 0, 0), 2)
+    cv2.line(image, (imageCenter[0], imageCenter[1]-125), (imageCenter[0], imageCenter[1]+125), (255, 0, 0), 1)
+    cv2.line(image, bendLimitUpPoint, (imageCenter[0], imageCenter[1]-125), (255, 0, 0), 2)
+
+    #draw caps
+    cv2.line(image, (imageCenter[0]-5, bendLimitDown), (imageCenter[0]+5, bendLimitDown), (255, 0, 0), 2)
+    cv2.line(image, (imageCenter[0]-5, bendLimitUp), (imageCenter[0]+5, bendLimitUp), (255, 0, 0), 2)
+
+
+    #==================Draw rotation limits==================
 
     #5 pixels further in than the ellipse
     startAnglePoint1 = (int(imageCenter[0] + (dist-5)*np.cos(startAngleRad)), int(imageCenter[1] + (dist-5)*np.sin(startAngleRad)))
@@ -51,30 +76,38 @@ def drawRotationAccess(image, rotationDegrees, bendDegrees = 0):
     startAnglePoint2 = (int(imageCenter[0] + (dist+5)*np.cos(startAngleRad)), int(imageCenter[1] + (dist+5)*np.sin(startAngleRad)))
     endAnglePoint2 = (int(imageCenter[0] + (dist+5)*np.cos(endAngleRad)), int(imageCenter[1] + (dist+5)*np.sin(endAngleRad)))
 
-    cv2.line(image, startAnglePoint1, startAnglePoint2, color, 2)
-    cv2.line(image, endAnglePoint1, endAnglePoint2, color, 2)
-
 
     #draw line from center of image and straight up
+    cv2.ellipse(image, imageCenter, axes, 0, startAngle, endAngle, color, 2)
+
+    cv2.line(image, startAnglePoint1, startAnglePoint2, color, 2)
+    cv2.line(image, endAnglePoint1, endAnglePoint2, color, 2)
 
     cv2.line(image, (imageCenter[0]+5, imageCenter[1]-100), (imageCenter[0], imageCenter[1]-120), color, 2)
     cv2.line(image, (imageCenter[0]-5, imageCenter[1]-100), (imageCenter[0], imageCenter[1]-120), color, 2)
 
-    cv2.line(image, imageCenter, (imageCenter[0], imageCenter[1]+int(bendDegrees)), (0,0,255), 2)
+    #cv2.line(image, imageCenter, (imageCenter[0], imageCenter[1]+int(bendDegrees)), (0,0,255), 2)
+
+
+    #draw bending limit
+
+    
     
 
 
 
 
 
-def showBranch(image, pathData):
+def showBranch(image, pathData, currentBend = 0, bendMultiplier = 1):
 
+    bendOffset = int(currentBend*bendMultiplier)
 
     
     #path = pathData["path"]
     bbox = pathData["bbox"]
 
-    imageCenter = (image.shape[1]//2, image.shape[0]//2)
+    imageCenter = (image.shape[1]//2, image.shape[0]//2-bendOffset)
+    actualImageCenter = (image.shape[1]//2, image.shape[0]//2)
 
     x1, y1, x2, y2 = bbox
 
@@ -104,7 +137,7 @@ def showBranch(image, pathData):
     return image
 
 
-def guessBranch(state, goal, imageSize, currentJoints, doVisualize = False, maxDist = 5000, limitCount = 0):
+def guessBranch(state, goal, imageSize, currentJoints, doVisualize = False, maxDist = 5000, limitCount = 0, bendMultiplier = 1):
 
     rotationDegrees = state["rotationReal_deg"]
     bendDegrees = state["bendReal_deg"]
@@ -112,7 +145,10 @@ def guessBranch(state, goal, imageSize, currentJoints, doVisualize = False, maxD
 
     imageSize = np.array(imageSize)
 
-    imageCenter = imageSize//2
+    bendOffset = int(bendDegrees*bendMultiplier)
+
+    rotationCenter = (imageSize[0]//2, imageSize[1]//2-bendOffset)
+    actualImageCenter = (imageSize[0]//2, imageSize[1]//2)
 
 
     goal = np.array(goal)
@@ -124,8 +160,12 @@ def guessBranch(state, goal, imageSize, currentJoints, doVisualize = False, maxD
     lowDist = 75
     highDist = 300
 
-    goalVector = goal - imageCenter
+    goalVector = goal - rotationCenter #vector from approximate point of rotation to goal
     goalDist = np.linalg.norm(goalVector)
+
+    centerGoalVector = goal - actualImageCenter #vector from center of image to goal
+    centerGoalDist = np.linalg.norm(centerGoalVector)
+
 
     if goalDist > maxDist and limitCount < 10:
         return ""
@@ -146,14 +186,24 @@ def guessBranch(state, goal, imageSize, currentJoints, doVisualize = False, maxD
     goalAnglesAbs = [(angle+np.pi) % (2*np.pi) - np.pi for angle in goalAnglesAbs]
 
 
+    bendLimits = 170
+
+    goalBendAngleAbs = [bendDegrees - (goalDist*bendMultiplier), bendDegrees + (goalDist*bendMultiplier)]
+
+    #print bend stats
+    if doVisualize:
+        print(f"Goal: {goalDist}, bend: {bendDegrees}, goalBend: {goalBendAngleAbs}")
+
     #remove those that are outside of the rotation limits
     newGoalAnglesAbs = []
     newGoalAnglesRel = []
-    for index in range(len(goalAnglesAbs)):
+    for index in range(len(goalAnglesAbs)): #check both bend angles
         angle = goalAnglesAbs[index]
-        if rotationLimits[0] <= angle <= rotationLimits[1] or rotationLimits[0] <= angle+2*np.pi <= rotationLimits[1] or rotationLimits[0] <= angle-2*np.pi <= rotationLimits[1]:
-            newGoalAnglesAbs.append(angle)
-            newGoalAnglesRel.append(goalAnglesRelative[index])
+        if rotationLimits[0] <= angle <= rotationLimits[1] or rotationLimits[0] <= angle+2*np.pi <= rotationLimits[1] or rotationLimits[0] <= angle-2*np.pi <= rotationLimits[1]: #check if bend angle is within rotation limits
+            if abs(goalBendAngleAbs[index]) < bendLimits+lowDist: #check if bend angle is within bending limits plus the radius of the center region
+
+                newGoalAnglesAbs.append(angle)
+                newGoalAnglesRel.append(goalAnglesRelative[index])
     goalAnglesAbs = newGoalAnglesAbs
     goalAnglesRel = newGoalAnglesRel
 
@@ -162,6 +212,10 @@ def guessBranch(state, goal, imageSize, currentJoints, doVisualize = False, maxD
     bestScore = -999999
     rotationDirection = 0
     rotationDistance = 0
+
+
+
+    
 
     if doVisualize:
         print("")
@@ -190,20 +244,43 @@ def guessBranch(state, goal, imageSize, currentJoints, doVisualize = False, maxD
 
     action=""
 
-    if goalDist < lowDist:
+    #check if goal is within center region
+    #it is so i f its within:
+        #a circle with radius lowDist from the center of the image
+        #a circle with radius lowDist from the rotation center
+        #a rectangle with the center of the image and the rotation center as the top and bottom. The width is twice lowDist centered around the center of the image
+
+
+    #isWithinCenterRegion = (\
+    #    goalDist < lowDist or \
+    #    centerGoalDist < lowDist or \
+    #    (actualImageCenter[0]-lowDist < goal[0] < actualImageCenter[0]+lowDist\
+    #    and actualImageCenter[1] < goal[1] < rotationCenter[1]))
+    
+
+
+
+    smallestGoalDist = min(goalDist, centerGoalDist)
+
+    if centerGoalDist < lowDist:
         action = "f"
-    elif goalDist > highDist:
+    elif centerGoalDist > highDist:
         action = "b"
     elif np.degrees(rotationDistance) < 35 or np.degrees(rotationDistance) > (180-35):
-        if bendDirection < 0:
+        if bendDirection < 0 and abs(goalBendAngleAbs[0]) < bendLimits + lowDist: #if goal is within bending limits plus the radius of the center region
             action = "u"
-        else:
+        elif bendDirection > 0 and abs(goalBendAngleAbs[1]) < bendLimits + lowDist: #if goal is within bending limits plus the radius of the center region
             action = "d"
+        else: #Bending is outside limits - go backwards
+            action = "b"
     else:
         if rotationDirection < 0:
             action = "l"
-        else:
+        elif rotationDirection > 0:
             action = "r"
+        else:
+            action = "b" #if no rotation, go backwards - this will only happen if both goals are outside bending limits
+
 
     if doVisualize:
         
@@ -245,6 +322,14 @@ def labelFrame(episode, index, useGuess = False, doVisualize = True, maxDist = 5
         bendDegrees = state["bendReal_deg"]
         extensionMM = state["extensionReal_mm"]
 
+        if doVisualize:
+            print(f"Rotation: {rotationDegrees}, bend: {bendDegrees}, extension: {extensionMM}")
+
+        #bendDegreesToPixelsConstant = -2.2
+        bendDegreesToPixelsConstant = 1.5
+
+        bendOffset = int(bendDegreesToPixelsConstant*bendDegrees)
+
         currentJoints = [bendDegrees, rotationDegrees, extensionMM]
 
 
@@ -257,12 +342,11 @@ def labelFrame(episode, index, useGuess = False, doVisualize = True, maxDist = 5
 
 
         if doVisualize:
-            drawRotationAccess(displayImage, rotationDegrees, bendDegrees)
+            drawRotationAccess(displayImage, rotationDegrees, bendDegrees, bendMultiplier=bendDegreesToPixelsConstant)
 
         #draw line from center of image at angle of rotation
 
         
-
 
         #visualize paths on the frame using cv2
 
@@ -306,7 +390,7 @@ def labelFrame(episode, index, useGuess = False, doVisualize = True, maxDist = 5
 
 
         if doVisualize:
-            showBranch(displayImage, pathData)
+            showBranch(displayImage, pathData, currentBend = bendDegrees, bendMultiplier = bendDegreesToPixelsConstant)
 
             
 
@@ -378,7 +462,7 @@ def main():
 
     episodeReader = EpisodeManager(mode = "Read", loadLocation = "DatabaseLabelled")
 
-    episodeCreator = EpisodeManager(mode = "Recording", saveLocation = "DatabaseManualOnlyClose", multiProcessing=True)
+    episodeCreator = EpisodeManager(mode = "Recording", saveLocation = "DatabaseManualBendOffset", multiProcessing=True)
     episodeCreator.nextEpisode()
 
     doContinue = True
@@ -418,7 +502,7 @@ def main():
                 Timer.point("Start")
                 curentEpisodeName = episode.name
 
-                doContinue, frame = labelFrame(episode, index, useGuess = False, doVisualize = True, maxDist = 200)
+                doContinue, frame = labelFrame(episode, index, useGuess = True, doVisualize = False, maxDist = 400)
                 Timer.point("Labelled")
                 if not doContinue:
 
