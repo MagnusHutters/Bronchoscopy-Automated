@@ -128,7 +128,7 @@ class Bronchoscope(threading.Thread):
             raise ValueError("Command must be of type Input")
         
 
-        print(f"Handling command: {command}")
+        #print(f"Handling command: {command}")
         if command.hasInput:
             axis = command.axis
             change = command.change

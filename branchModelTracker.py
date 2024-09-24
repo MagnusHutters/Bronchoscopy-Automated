@@ -71,7 +71,7 @@ def detect_features(image, feature_type = "AKAZE"):
     #blur
     #image = cv2.GaussianBlur(image, (3, 3), 0)
 
-    cv2.imshow("processedImage", image)
+    #cv2.imshow("processedImage", image)
 
     keypoints, descriptors = detector.detectAndCompute(image, None)
 
@@ -85,6 +85,8 @@ def detect_features(image, feature_type = "AKAZE"):
 
     return keypoints, descriptors
 
+
+oldImage = None
 
 def find_affine_transformation(img2, oldKeypoints, oldDescriptors, feature_type='AKAZE', featureScale=1.0):
     """
@@ -103,6 +105,8 @@ def find_affine_transformation(img2, oldKeypoints, oldDescriptors, feature_type=
 
     doDownsample = True
     downsampleFactor = featureScale
+    originalImage = img2
+    global oldImage
 
     if doDownsample:
         img2 = cv2.resize(img2, (0, 0), fx=downsampleFactor, fy=downsampleFactor)
@@ -145,8 +149,10 @@ def find_affine_transformation(img2, oldKeypoints, oldDescriptors, feature_type=
 
 
     #display the matches
-    #img_matches = cv2.drawMatches(img1, oldKeypoints, img2, keypoints2, matches[:20], None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
-    #cv2.imshow("Matches", img_matches)
+    if oldImage is not None:
+        img_matches = cv2.drawMatches(oldImage, oldKeypoints, originalImage, newKeypoints, matches[:20], None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
+        #cv2.imshow("Matches", img_matches)
+        #print(f"Number of matches: {len(matches)}")
 
 
     # Compute the affine transformation matrix
@@ -188,6 +194,8 @@ def find_affine_transformation(img2, oldKeypoints, oldDescriptors, feature_type=
         return np.array([[1, 0, 0], [0, 1, 0]], dtype=np.float32), newKeypoints, newDescriptors
 
 
+
+    oldImage = originalImage
 
     
     return affine_matrix, newKeypoints, newDescriptors
@@ -981,7 +989,15 @@ class BranchModelTracker:
         self.featureScale = featureScale
 
         self.model = torch.hub.load('BronchoYolo/yolov5', 'custom', path=modelPath, source='local', force_reload=True)
+
+
+        self.model = self.model.to('cuda')
         self.model.eval()
+
+        torch.cuda.empty_cache()
+
+        print(f"Parameters: {next(self.model.parameters()).device}")
+
 
 
         self.oldImage = None
