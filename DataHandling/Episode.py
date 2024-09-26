@@ -51,7 +51,7 @@ def saveToDiskThreadSafe(image, path):
 
 
 class Frame:
-    def __init__(self, image, state, action, data, topImage=None):
+    def __init__(self, image, state, action, data, topImage=None, prefix=""):
         # Ensure all attributes are numpy arrays
         if not isinstance(image, np.ndarray) and not isinstance(image, str) and image is not None:
             raise ValueError(f"Image must be a numpy array or a string, its type is {type(image)}")
@@ -321,9 +321,13 @@ class Episode:
         print("")
 
 
-    def saveImage(self, image, index, prefix=""):
+    def saveImage(self, image, index, prefix="", overwrite=False):
         
         imagePath = self.getImagePath(index, prefix=prefix)
+
+        #check if image already exists
+        if os.path.exists(imagePath) and not overwrite:
+            return
         
         #print(f"Saving image of shape {image.size} to {imagePath}")
         
@@ -405,7 +409,7 @@ class Episode:
         if self._index > index:
             self._index -= 1
 
-    def _addFrame(self, frame):
+    def _addFrame(self, frame, overwrite=False):
 
 
         #frame.clean()
@@ -436,8 +440,8 @@ class Episode:
         
 
         Index = len(self._images) - 1
-        self.saveImage(frame.image,Index, prefix="broncho")
-        self.saveImage(frame.topImage,Index, prefix="top")
+        self.saveImage(frame.image,Index, prefix="broncho", overwrite=overwrite)
+        self.saveImage(frame.topImage,Index, prefix="top", overwrite=overwrite)
 
 
     def append(self, frameOrImage, state=None, action=None, data=None):
@@ -622,7 +626,17 @@ class Episode:
         
         #print the objects in the directory
         
-        
+        #if multiple processes are used, wait for them to finish
+        for i in range(2000):
+            
+            incomplete = sum(1 for task in self.pool._cache.values() if not task.ready())
+            if incomplete > 0:
+                print(f"\rWaiting for {incomplete} tasks to finish    ", end="")
+                time.sleep(0.2)
+            else:
+                print("")
+                break
+                
         
         print("Compresing episode to zip file")
         name = os.path.join(directory, name)

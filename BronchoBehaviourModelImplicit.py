@@ -54,11 +54,11 @@ actionToName = {
 
 # Custom Dataset class
 class BronchosopyDataset(Dataset):
-    def __init__(self, databasePath, transform=None, blurSigma=0, maxEpisodes=100):
+    def __init__(self, databasePath, transform=None, blurSigma=0, maxEpisodes=100, shuffle = False):
         self.episodeManager = EpisodeManager(mode = "read", loadLocation = databasePath)
 
 
-        self.episodes, self.lenght, self.episodeFrameIndexStart = self.episodeManager.loadAllEpisodes(cacheImages=False, maxEpisodes=maxEpisodes, shuffle=False, shuffleSeed=1)
+        self.episodes, self.lenght, self.episodeFrameIndexStart = self.episodeManager.loadAllEpisodes(cacheImages=False, maxEpisodes=maxEpisodes, shuffle=shuffle, shuffleSeed=1)
 
         if blurSigma > 0:
             for i, episode in enumerate(self.episodes):
@@ -692,7 +692,7 @@ def main(epochs = 50, learningRate = 0.0001, modelSavePath = "modelImplicit.pth"
     metrics_file_path = os.path.join(output_folder, "metrics.csv")
 
     # Create the custom dataset and DataLoader
-    dataset = BronchosopyDataset("DatabaseLabelled", transform=transform, blurSigma=0, maxEpisodes=100)
+    dataset = BronchosopyDataset("DatabaseLabelled", transform=transform, blurSigma=0, maxEpisodes=100, shuffle=False)
 
     dataset = FilteredUpsampledDataset(dataset, doUpsample=True, maxOversamlingFactor=12)
 
@@ -702,8 +702,8 @@ def main(epochs = 50, learningRate = 0.0001, modelSavePath = "modelImplicit.pth"
     if doManual:
         print(f"Loading Manual Dataset")
 
-        manualDataset = BronchosopyDataset("DatabaseManual", transform=transform, blurSigma=0, maxEpisodes=40)
-        manualDataset = FilteredUpsampledDataset(manualDataset, doUpsample=True, maxOversamlingFactor=12, upsampleIndex=1)
+        manualDataset = BronchosopyDataset("DatabaseManualBendOffset", transform=transform, blurSigma=0, maxEpisodes=100, shuffle=False)
+        manualDataset = FilteredUpsampledDataset(manualDataset, doUpsample=True, maxOversamlingFactor=12, upsampleIndex=2)
         manualDataset = DataAugmentationDataset(manualDataset, grayscale=False, augmentation_factor=8, doStatePerturbation=False, doGoalPerturbation=False)
 
 
@@ -716,7 +716,7 @@ def main(epochs = 50, learningRate = 0.0001, modelSavePath = "modelImplicit.pth"
 
     trainSet, valSubsetRandom = torch.utils.data.random_split(trainSubset, [trainSize - valSize, valSize])
 
-    batchSize = 256
+    batchSize = 64
 
     if doManual:
         trainSet = torch.utils.data.ConcatDataset([trainSet, manualDataset])
@@ -804,6 +804,9 @@ def main(epochs = 50, learningRate = 0.0001, modelSavePath = "modelImplicit.pth"
             all_true_labels.extend(true_labels.cpu().numpy())
             all_predicted_labels.extend(predicted.cpu().numpy())
 
+            del images, states, goals, labels, outputs, logOutputs
+            torch.cuda.empty_cache()  # Clear unused cached memory
+
 
 
             print(f"\rEpoch [{epoch + 1}/{epochs}], Batch [{index}/{len(train_loader)}], Loss: {running_loss / index:.4f}          ", end="")
@@ -831,10 +834,13 @@ def main(epochs = 50, learningRate = 0.0001, modelSavePath = "modelImplicit.pth"
             'f1': train_f1
         }
 
-        random_val_loss, random_val_metrics = validate(model, val_loader_random, criterion, device, outputFolder=output_folder, epoch = epoch,prefix="random")
+        epoch_output_folder = os.path.join(output_folder, f'epoch/{epoch}')
+        os.makedirs(epoch_output_folder, exist_ok=True)
+
+        random_val_loss, random_val_metrics = validate(model, val_loader_random, criterion, device, epochOutputFolder=epoch_output_folder, epoch = epoch,prefix="random")
 
         # Validation for sequence samples
-        seq_val_loss, seq_val_metrics = validate(model, val_loader_sequence, criterion, device, outputFolder=output_folder, epoch = epoch, prefix="sequence")
+        seq_val_loss, seq_val_metrics = validate(model, val_loader_sequence, criterion, device, epochOutputFolder=epoch_output_folder, epoch = epoch, prefix="sequence")
 
         random_val_loss_values.append(random_val_loss)
         seq_val_loss_values.append(seq_val_loss)
@@ -855,10 +861,19 @@ def main(epochs = 50, learningRate = 0.0001, modelSavePath = "modelImplicit.pth"
             torch.save(model.state_dict(), os.path.join(output_folder, modelSavePath))
             print(f"Model saved to {os.path.join(output_folder, modelSavePath)}")
 
+
+        #save weights to epoch folder
+        torch.save(model.state_dict(), os.path.join(epoch_output_folder, "epochModel.pth"))
+
+        #print("")
+        # Print memory summary
+        #print(f"Memory Summary at the end of epoch {epoch + 1}:")
+        #print(torch.cuda.memory_summary())
+
     # Save final loss plot
     plot_and_save_loss_curve(train_loss_values, random_val_loss_values, seq_val_loss_values, output_folder)
 
-def validate(model, val_loader, criterion, device, device_type='cuda', outputFolder="runs/implicitValidation", epoch=0, prefix=""):
+def validate(model, val_loader, criterion, device, device_type='cuda', epochOutputFolder="runs/implicitValidation/implicitTraining",epoch=0, prefix=""):
     model.eval()
     val_loss = 0.0
     correct = 0
@@ -869,8 +884,7 @@ def validate(model, val_loader, criterion, device, device_type='cuda', outputFol
     class_losses = {i: [] for i in range(6)}  # assuming 6 actions (excluding -1: No Input)
 
     # Create the output directory for the epoch
-    epoch_output_folder = os.path.join(outputFolder, f'epoch/{epoch}')
-    os.makedirs(epoch_output_folder, exist_ok=True)
+    
 
     with torch.no_grad():
         for images, states, goals, labels, _ in val_loader:
@@ -907,6 +921,9 @@ def validate(model, val_loader, criterion, device, device_type='cuda', outputFol
                     class_loss = criterion(logOutputs[class_mask], labels[class_mask])
                     class_losses[i].append(class_loss.item())
 
+            del images, states, goals, labels, outputs, logOutputs
+            torch.cuda.empty_cache()  # Clear unused cached memory
+
     accuracy = 100 * correct / total
     precision = precision_score(all_true_labels, all_predicted_labels, average='weighted', zero_division=0)
     recall = recall_score(all_true_labels, all_predicted_labels, average='weighted', zero_division=0)
@@ -925,7 +942,7 @@ def validate(model, val_loader, criterion, device, device_type='cuda', outputFol
     plt.xlabel('Predicted Actions')
     plt.ylabel('True Actions')
     plt.title(f'Confusion Matrix - {prefix} - Epoch {epoch}')
-    plt.savefig(os.path.join(epoch_output_folder, f'{prefix}_confusion_matrix_epoch_{epoch}.png'))
+    plt.savefig(os.path.join(epochOutputFolder, f'{prefix}_confusion_matrix_epoch_{epoch}.png'))
 
     # --- Visualization 2: Class-specific Loss ---
     plt.figure(figsize=(10, 6))
@@ -933,7 +950,7 @@ def validate(model, val_loader, criterion, device, device_type='cuda', outputFol
     plt.xlabel('Action Class')
     plt.ylabel('Average Loss')
     plt.title(f'Class-Specific Loss - {prefix} - Epoch {epoch}')
-    plt.savefig(os.path.join(epoch_output_folder, f'{prefix}_class_specific_loss_epoch_{epoch}.png'))
+    plt.savefig(os.path.join(epochOutputFolder, f'{prefix}_class_specific_loss_epoch_{epoch}.png'))
 
     # --- Visualization 3: Confidence Distribution ---
     plt.figure(figsize=(10, 6))
@@ -941,7 +958,7 @@ def validate(model, val_loader, criterion, device, device_type='cuda', outputFol
     plt.xlabel('Confidence Score')
     plt.ylabel('Frequency')
     plt.title(f'Confidence Score Distribution - {prefix} - Epoch {epoch}')
-    plt.savefig(os.path.join(epoch_output_folder, f'{prefix}_confidence_distribution_epoch_{epoch}.png'))
+    plt.savefig(os.path.join(epochOutputFolder, f'{prefix}_confidence_distribution_epoch_{epoch}.png'))
 
     # --- Visualization 4: Loss and Accuracy ---
     plt.figure(figsize=(8, 6))
@@ -949,7 +966,7 @@ def validate(model, val_loader, criterion, device, device_type='cuda', outputFol
     metrics_labels = ['Validation Loss', 'Accuracy (%)']
     plt.bar(metrics_labels, metrics_values, color=['red', 'green'])
     plt.title(f'Overall Validation Loss and Accuracy - {prefix} - Epoch {epoch}')
-    plt.savefig(os.path.join(epoch_output_folder, f'{prefix}_loss_accuracy_epoch_{epoch}.png'))
+    plt.savefig(os.path.join(epochOutputFolder, f'{prefix}_loss_accuracy_epoch_{epoch}.png'))
 
     # Save metrics and class-specific loss information
     metrics = {
@@ -963,7 +980,7 @@ def validate(model, val_loader, criterion, device, device_type='cuda', outputFol
     }
 
     # Save the metrics to a JSON file with prefix and epoch
-    with open(os.path.join(epoch_output_folder, f'{prefix}_metrics_epoch_{epoch}.json'), 'w') as f:
+    with open(os.path.join(epochOutputFolder, f'{prefix}_metrics_epoch_{epoch}.json'), 'w') as f:
         json.dump(metrics, f, indent=4)
 
     # Print metrics

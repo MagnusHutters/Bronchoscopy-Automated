@@ -464,8 +464,8 @@ def guessBranch2(state, goal, imageSize, doVisualize = False, maxDist = 5000, li
 
 
 
-    #if goalDist > maxDist and limitCount < 10:
-    #    return ""
+    if goalDist > maxDist and limitCount < 10:
+        return ""
 
 
     highRotationLimitVector = np.array([np.cos(rotationLimits[1]), np.sin(rotationLimits[1])])
@@ -488,7 +488,8 @@ def guessBranch2(state, goal, imageSize, doVisualize = False, maxDist = 5000, li
 
     goalBendAngleAbs = [bendDegrees - (goalDist/bendMultiplier), bendDegrees + (goalDist/bendMultiplier), bendDegrees - (goalDist/bendMultiplier), bendDegrees + (goalDist/bendMultiplier)] #pixel -> angle
 
-    print(f"Bend degrees: {bendDegrees}, goalDist: {goalDist}, goalBendAngleAbs: {goalBendAngleAbs}")
+    if doVisualize:
+        print(f"Bend degrees: {bendDegrees}, goalDist: {goalDist}, goalBendAngleAbs: {goalBendAngleAbs}")
 
     #print bend stats
     if doVisualize:
@@ -601,7 +602,9 @@ def guessBranch2(state, goal, imageSize, doVisualize = False, maxDist = 5000, li
 
 
     smallestGoalDist = min(goalDist, centerGoalDist)
-    print(f"GoalBendAngleAbs: {goalBendAngleAbs}")
+
+    if doVisualize:
+        print(f"GoalBendAngleAbs: {goalBendAngleAbs}")
 
     centralRotationLimit = 25
 
@@ -647,8 +650,8 @@ def guessBranch2(state, goal, imageSize, doVisualize = False, maxDist = 5000, li
         else:
             
             action = directions[bestScoreIndex]
-
-        print(f"Action: {actionToName[action]} - target: {target} - direction: {direction} - beacuse of goalVector: {goalVector}, isWithinY: {isWithinY}, bendDirection: {bendDirection}")
+        if doVisualize:
+            print(f"Action: {actionToName[action]} - target: {target} - direction: {direction} - beacuse of goalVector: {goalVector}, isWithinY: {isWithinY}, bendDirection: {bendDirection}")
         
     else: #should not happen, both up and down targets are out of bounds
         action = "b" #go backwards

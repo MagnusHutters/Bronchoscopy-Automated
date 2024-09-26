@@ -23,7 +23,7 @@ def visualize_paths(frame):
     return image
 
 def main():
-    episodeManager = EpisodeManager(mode="read", loadLocation="DatabaseManual")
+    episodeManager = EpisodeManager(mode="read", loadLocation="DatabaseManualBendOffset")
 
     episodeManager.currentIndex=0
     doQuit = False

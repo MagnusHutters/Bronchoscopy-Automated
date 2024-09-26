@@ -104,11 +104,13 @@ def labelFrame(episode, index, useGuess = False, doVisualize = True, maxDist = 5
         #guessInput = Input.fromInt(axis, relativeChangeGuess[axis])
         #print(f"Guess: {guessInput}")
 
-        actionGuess = guessBranch(state, targetCenter, imageSize, currentJoints, doVisualize, maxDist, limitCount)
+        actionGuess = guessBranch2(state, targetCenter, imageSize, doVisualize, maxDist, limitCount, bendMultiplier=bendDegreesToPixelsConstant, doKeepScores=False)
 
         if actionGuess == "" and useGuess:
             limitCount+=1
             continue
+        else:
+            limitCount = 0
 
 
         
@@ -212,55 +214,80 @@ def main():
     actionCounts = {"f": 0, "b": 0, "l": 0, "r": 0, "u": 0, "d": 0}
 
 
-    for i in range(10):
+    for i in range(1):
         episodeNumber = 0
         episodeIndexes = list(range(len(episodeReader)))
 
         random.shuffle(episodeIndexes)
 
         for episodeIndex in episodeIndexes:
-
+            print("")
             episode = episodeReader.nextEpisode(episodeIndex)
 
             print(f"Epsiode {episodeIndex}")
 
             
-            randomFrames = sorted(random.sample(range(len(episode)), 100))
+            #randomFrames = sorted(random.sample(range(len(episode)), 100))
 
 
-            for index in randomFrames:
+            for index in range(len(episode)):
                 
-                Timer.point("Start")
-                curentEpisodeName = episode.name
+                isNew=5
+                actions = set()
 
-                doContinue, frame = labelFrame(episode, index, useGuess = True, doVisualize = False, maxDist = 400)
-                Timer.point("Labelled")
-                if not doContinue:
+                #targets = set()
 
-                    break
+                while isNew>0:
+                    Timer.point("Start")
+                    curentEpisodeName = episode.name
 
-                if frame is not None:
+
+                    doContinue, frame = labelFrame(episode, index, useGuess = True, doVisualize = False, maxDist = 400)
+
 
                     action = frame.action["char_value"]
-                    actionCounts[action] += 1
-                    frame.data["originalEpisodeName"] = curentEpisodeName
-                    frame.data["origninalFrameIndex"] = index
-                    episodeCreator.append(frame)
-                    Timer.point("Saved to episode")
-                    lenght += 1
-                    framesCreated += 1
+                    if action in actions:
+                        #print(f"Action {action} already in episode")
+                        isNew -= 1
+                        continue
+                    else:
+                        isNew +=1
+                    actions.add(action)
 
-                    if lenght >= episodeLenght:
-                        episodeCreator.nextEpisode()
-                        lenght = 0
 
-                    print(f"\rRun: {i} - Episode: {episodeNumber}/{len(episodeIndexes)} - Actions: {actionCounts}, Frames created: {framesCreated}, episodesCreated: {epsiodesCreated}", end="")
-                Timer.point("End")
-                report = Timer.reset()
-                #print(report)
+                    Timer.point("Labelled")
+                    if not doContinue:
+
+                        break
+
+                    if frame is not None:
+
+                        action = frame.action["char_value"]
+                        actionCounts[action] += 1
+                        frame.data["originalEpisodeName"] = curentEpisodeName
+                        frame.data["origninalFrameIndex"] = index
+                        episodeCreator.append(frame)
+                        Timer.point("Saved to episode")
+                        lenght += 1
+                        framesCreated += 1
+
+                        
+                        print(f"\rRun: {i} - Episode: {episodeNumber}/{len(episodeIndexes)-1}, Frame {index}/{len(episode)-1}, Samples: {len(actions)}, Frames created: {framesCreated}, Actions: {actionCounts}", end="")
+                    Timer.point("End")
+                    #print("")
+                    report = Timer.reset()
+
+
+                    #print(report)
+
+            
+            print("")
+            episodeCreator.nextEpisode()
+            lenght = 0
                 
                     
             print("")
+            
                     
             episodeNumber += 1
             if not doContinue:
@@ -268,6 +295,8 @@ def main():
 
         if not doContinue:
             break
+
+        break
 
 
 
