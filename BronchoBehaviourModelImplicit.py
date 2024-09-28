@@ -694,11 +694,11 @@ def main(epochs = 50, learningRate = 0.0001, modelSavePath = "modelImplicit.pth"
     # Create the custom dataset and DataLoader
     dataset = BronchosopyDataset("DatabaseLabelled", transform=transform, blurSigma=0, maxEpisodes=100, shuffle=False)
 
-    dataset = FilteredUpsampledDataset(dataset, doUpsample=True, maxOversamlingFactor=12)
+    dataset = FilteredUpsampledDataset(dataset, doUpsample=False, maxOversamlingFactor=12)
 
-    dataset = DataAugmentationDataset(dataset, grayscale=False, augmentation_factor=8)
+    #dataset = DataAugmentationDataset(dataset, grayscale=False, augmentation_factor=8)
 
-    doManual = True
+    doManual = False
     if doManual:
         print(f"Loading Manual Dataset")
 
@@ -708,7 +708,7 @@ def main(epochs = 50, learningRate = 0.0001, modelSavePath = "modelImplicit.pth"
 
 
     datasetSize = len(dataset)
-    valSize = int(0.1 * datasetSize)
+    valSize = int(0.05 * datasetSize)
     trainSize = datasetSize - valSize
 
     trainSubset = torch.utils.data.Subset(dataset, range(trainSize))
@@ -739,8 +739,8 @@ def main(epochs = 50, learningRate = 0.0001, modelSavePath = "modelImplicit.pth"
     model = MultiInputModel(numStates=numStates, numGoal=numGoal, imageSize=imageSize, channels=channels, classes=classes)
 
     # Loss and optimizer
-    #criterion = nn.KLDivLoss(reduction='batchmean')
-    criterion = nn.CrossEntropyLoss()
+    criterion = nn.KLDivLoss(reduction='batchmean')
+    #criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=0.0001)
     scaler = GradScaler()
     device_type = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -870,6 +870,9 @@ def main(epochs = 50, learningRate = 0.0001, modelSavePath = "modelImplicit.pth"
         #print(f"Memory Summary at the end of epoch {epoch + 1}:")
         #print(torch.cuda.memory_summary())
 
+        torch.cuda.empty_cache()
+        print(torch.cuda.memory_summary())
+
     # Save final loss plot
     plot_and_save_loss_curve(train_loss_values, random_val_loss_values, seq_val_loss_values, output_folder)
 
@@ -943,6 +946,7 @@ def validate(model, val_loader, criterion, device, device_type='cuda', epochOutp
     plt.ylabel('True Actions')
     plt.title(f'Confusion Matrix - {prefix} - Epoch {epoch}')
     plt.savefig(os.path.join(epochOutputFolder, f'{prefix}_confusion_matrix_epoch_{epoch}.png'))
+    plt.close()
 
     # --- Visualization 2: Class-specific Loss ---
     plt.figure(figsize=(10, 6))
@@ -951,6 +955,7 @@ def validate(model, val_loader, criterion, device, device_type='cuda', epochOutp
     plt.ylabel('Average Loss')
     plt.title(f'Class-Specific Loss - {prefix} - Epoch {epoch}')
     plt.savefig(os.path.join(epochOutputFolder, f'{prefix}_class_specific_loss_epoch_{epoch}.png'))
+    plt.close()
 
     # --- Visualization 3: Confidence Distribution ---
     plt.figure(figsize=(10, 6))
@@ -959,6 +964,7 @@ def validate(model, val_loader, criterion, device, device_type='cuda', epochOutp
     plt.ylabel('Frequency')
     plt.title(f'Confidence Score Distribution - {prefix} - Epoch {epoch}')
     plt.savefig(os.path.join(epochOutputFolder, f'{prefix}_confidence_distribution_epoch_{epoch}.png'))
+    plt.close()
 
     # --- Visualization 4: Loss and Accuracy ---
     plt.figure(figsize=(8, 6))
@@ -967,6 +973,7 @@ def validate(model, val_loader, criterion, device, device_type='cuda', epochOutp
     plt.bar(metrics_labels, metrics_values, color=['red', 'green'])
     plt.title(f'Overall Validation Loss and Accuracy - {prefix} - Epoch {epoch}')
     plt.savefig(os.path.join(epochOutputFolder, f'{prefix}_loss_accuracy_epoch_{epoch}.png'))
+    plt.close()
 
     # Save metrics and class-specific loss information
     metrics = {
