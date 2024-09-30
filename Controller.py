@@ -43,7 +43,7 @@ class Controller:
         
         self.interface.updateInput(input, doStart, doStop)
 
-    def run(self, interval =0.05):
+    def run(self, interval =0.25):
 
 
 
@@ -74,8 +74,10 @@ class Controller:
                     time.sleep(sleep_time)  # Sleep for the remaining time of the interval
                 else:
                     # Processing took longer than the interval
-                    #print("Warning: Processing time exceeded the interval.")
+                    print(f"\rWarning: Processing time exceeded the interval. by: {-sleep_time:.3f} seconds    ", end="")
                     pass
+                    if start_time < time.time(): #if the time has already passed, then just reset the time
+                        start_time = time.time()
                 
                 Timer.point("End")
                 report=Timer.reset()

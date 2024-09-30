@@ -135,6 +135,22 @@ class Episode:
         self.timeEnd = None
 
 
+        #video rendering
+        self.GuiVideoWriter = None
+        self.FrameVideoWriter = None
+
+
+
+
+    def addScreenImage(self, image):
+        self.screenImage = image
+
+        if self.GuiVideoWriter is None:
+            self.GuiVideoWriter = cv2.VideoWriter(os.path.join(self.path, "00_guiVideo.mp4"), cv2.VideoWriter_fourcc(*'mp4v'), 20, (image.shape[1], image.shape[0]))
+
+        self.GuiVideoWriter.write(image)
+
+
 
     def get_frame(self, index, getImage=True):
         #print(f"Getting frame at index {index}")
@@ -437,7 +453,24 @@ class Episode:
 
         self._data.append(frame.data.copy())
 
-        
+        #stack the images horizontally
+
+        image = frame.image
+        topImage = frame.topImage
+
+        #resize the images to 400x400 if they are not already
+        if image.shape[0] != 400 or image.shape[1] != 400:
+            image = cv2.resize(image, (400, 400), interpolation=cv2.INTER_LINEAR)
+        if topImage is not None and (topImage.shape[0] != 400 or topImage.shape[1] != 400):
+            topImage = cv2.resize(topImage, (400, 400), interpolation=cv2.INTER_LINEAR)
+
+        videoImage = np.hstack([image, topImage])
+        if self.FrameVideoWriter is None:
+            self.FrameVideoWriter = cv2.VideoWriter(os.path.join(self.path, "00_frameVideo.mp4"), cv2.VideoWriter_fourcc(*'mp4v'), 20, (videoImage.shape[1], videoImage.shape[0]))
+
+        self.FrameVideoWriter.write(videoImage)
+
+
 
         Index = len(self._images) - 1
         self.saveImage(frame.image,Index, prefix="broncho", overwrite=overwrite)
@@ -555,6 +588,14 @@ class Episode:
             return
         
 
+        if self.GuiVideoWriter is not None:
+            self.GuiVideoWriter.release()
+            self.GuiVideoWriter = None
+
+        if self.FrameVideoWriter is not None:
+            self.FrameVideoWriter.release()
+            self.FrameVideoWriter = None
+
         #construct the dictionary to save
 
         episodeData = {}
@@ -570,6 +611,11 @@ class Episode:
         header["duration"] = self.timeEnd - self.timeStart
         header["timeStartReadable"] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(self.timeStart))+f".{str(self.timeStart%1)[2:5]}"
         header["timeEndReadable"] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(self.timeEnd))+f".{str(self.timeEnd%1)[2:5]}"
+        
+
+
+        timeLenghtSeconds = self.timeEnd - self.timeStart
+
         
         
         
@@ -656,6 +702,8 @@ class Episode:
 
 
         #compileVideo.create_videos_from_folder(name, create_combined=True)
+
+        print(f"Time Lenght: {timeLenghtSeconds:.2f} seconds")
         #name = name + ".zip"
         #render the video in a new process using pool
         #self.pool.apply_async(compileVideo.create_videos_from_folder, args=(name, True))
@@ -773,6 +821,10 @@ class EpisodeManager:
 
         self.defaultSaveLocation = saveLocation
         self.defaultLoadLocation = loadLocation
+
+        #ensure save location exists
+        if not os.path.exists(saveLocation):
+            os.makedirs(saveLocation)
         
         self.multiProcessing = multiProcessing
         if self.multiProcessing:

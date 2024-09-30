@@ -582,12 +582,15 @@ class BronchoBehaviourModelImplicit:
         self.model.to(self.device)
         self.model.eval()
 
-        # Define the image transform used during inference
+        
+
         self.transform = T.Compose([
-            T.Resize((40, 40)),
-            T.ToTensor(),
-            T.Normalize((0.5,), (0.5,))
+            #transforms.Grayscale(),                     # Convert images to grayscale
+            T.Resize((40, 40)),                # Resize images to 50x50 pixels
+            T.ToTensor(),                      # Convert images to PyTorch tensors
+            T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])         # Normalize images
         ])
+
 
         # Action to index mapping
         self.action_to_index = {"u": 0, "d": 1, "l": 2, "r": 3, "f": 4, "b": 5}
@@ -643,7 +646,8 @@ class BronchoBehaviourModelImplicit:
         goal_size[1] = goal_size[1] / 200  # Normalize height
 
         # Combine the center and size as the goal tensor
-        goal_tensor = torch.tensor(goal_center + goal_size, dtype=torch.float32)
+        #goal_tensor = torch.tensor(goal_center + goal_size, dtype=torch.float32)
+        goal_tensor = torch.tensor(goal_center, dtype=torch.float32)
         return goal_tensor
 
     def _sample_action(self, probabilities):

@@ -5,7 +5,7 @@ from Camera import Camera
 from CameraTop import CameraTop
 from DataHandling.Episode import *
 from Timer import Timer
-from Trakstar import Trakstar
+
 
 
 class Interface:
@@ -33,6 +33,7 @@ class Interface:
         self.doTrackstar=False
 
         if self.doTrackstar:
+            from Trakstar import Trakstar
             self.Trakstar=Trakstar()
         self.trackstarData={}
         
@@ -45,13 +46,16 @@ class Interface:
         self.currentState= self.broncho.getDict()
         self.currentInput=None
         
-        self.episodeManager=EpisodeManager(multiProcessing=True)
+        self.episodeManager=EpisodeManager(multiProcessing=True, saveLocation="DatabaseFullRunServoing/")
         
         self.oldDoStart=False
         self.oldDoStop=False
         #self.startEpisode()
         
         
+    def updateScreenImage(self, image):
+        if self.episodeManager.hasEpisode():
+            self.episodeManager.currentEpisode.addScreenImage(image)
     
     
     def getImage(self):

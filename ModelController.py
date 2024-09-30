@@ -20,13 +20,15 @@ from branchModelTracker import BranchModelTracker
 from BronchoBehaviourModelImplicit import BronchoBehaviourModelImplicit
 
 
-from pathLabelNewActions import guessBranch
+#from pathLabelNewActions import guessBranch
 from VisualServoing import doVisualServoing
 
 
 class ModelController(Controller):
     
     def __init__(self):
+
+        cv2.namedWindow("Visual servoing", cv2.WINDOW_NORMAL)
         
         #super init
         super().__init__()
@@ -46,14 +48,24 @@ class ModelController(Controller):
         
 
         print("Loading behaviour model")
-        self.model = BronchoBehaviourModelImplicit(model_path="C:/Users/magnu/OneDrive/Misc/Ny mappe/Bronchoscopy-Automated/runs/implictTraining_42/modelImplicit.pth")
+        self.model = BronchoBehaviourModelImplicit(model_path="C:/Users/magnu/OneDrive/Misc/Ny mappe/Bronchoscopy-Automated/runs/implictTraining_63/epoch/8/epochModel.pth")
+        #C:\Users\magnu\OneDrive\Misc\Ny mappe\Bronchoscopy-Automated\runs\implictTraining_63\epoch\8\epochModel.pth
         
         self.override_active=False
         #self.manual=True
 
         self.mode = 1 #0: Manual #1: visual servoing, 2: behaviour model
+        self.oldMode = 0
+
+
+        self.currentKey = -1
+        self.oldKey = -1
+
+        self.oldVisualKey = -1
         
         
+        
+    
         
         
         
@@ -67,12 +79,17 @@ class ModelController(Controller):
         
         doStart = False
         doStop = False
+
+        if self.mode != self.oldMode:
+            print(f"Mode changed to {self.mode}")
+            self.oldMode = self.mode
+            self.branchModelTracker.reset()
         
         
         #_, doExit, objects = self.pathInterface.predictAndTrack(image,image)
         
         activeTracking = False if self.mode==0 else True
-        branchPoints, branchPredictions = self.branchModelTracker.predict(image, active = activeTracking)
+        branchPoints, branchPredictions = self.branchModelTracker.predict(image, active = activeTracking, currentKey = self.currentKey)
 
         #print(f"BranchPoints: {branchPoints}")
         
@@ -100,11 +117,17 @@ class ModelController(Controller):
         
         
         Timer.point("beforeGUIUpdate")
-        currentKey, doExit, joystick, mode=self.gui.update(image,(branchPoints, branchPredictions),state, recording, currentFrame, topImage)
+        currentKey, doExit, joystick, mode, screenImage=self.gui.update(image,(branchPoints, branchPredictions),state, recording, currentFrame, topImage)
+
+        self.interface.updateScreenImage(screenImage)
+        self.oldKey = self.currentKey
+        self.currentKey = currentKey
         self.mode = mode
         Timer.point("afterGUIUpdate")
         #print(f"Current Key: {currentKey}, keys: {objects.keys()}")
         
+
+        newKey = self.currentKey != self.oldKey
         
         doStart = joystick.start
         doStop = joystick.select
@@ -132,13 +155,14 @@ class ModelController(Controller):
         #    self.override_type = 'rotation'
         
 
-        
+        if joystick.l2: #reset the broncho to the home position
+            self.interface.broncho.home()
+            self.branchModelTracker.reset()
 
         if mode==0:
             input=Input.fromJoystick(joystick)
 
-            if joystick.l2:
-                self.interface.broncho.home() # Reset the broncho to the home position
+             # Reset the broncho to the home position
             #print(f"Manual: {input}")
             
         elif mode==1: #visual servoing
@@ -160,7 +184,7 @@ class ModelController(Controller):
 
                 #currentJoints = None #not used - also redundant with state
 
-                doVisualize = True
+                doVisualize = False
                 maxDist = 99999
                 bendMultiplier = 1.5
 
@@ -168,11 +192,15 @@ class ModelController(Controller):
                 #print(f"Goal: {goal}")½½
                 #print(f"imageSize: {imageSize}")
                 #print(f"GoalAbs: {goalAbs}")
+
+                newVisualKey = currentKey != self.oldVisualKey
                 
                 print(f"Rotation: {rotationDegrees}, Bend: {bendDegrees}, Extension: {extensionMM}")
-                action = doVisualServoing(image, state, detectionDict, imageSize, doVisualize, maxDist, bendMultiplier)
+                action = doVisualServoing(image, state, detectionDict, imageSize, doVisualize, maxDist, bendMultiplier, resetAcumulator = newVisualKey)
                 input = Input.fromChar(action)
                 
+
+                self.oldVisualKey = currentKey
             
             elif joystick.forwards < -0.5:
                 

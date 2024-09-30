@@ -438,13 +438,26 @@ class GUI:
                     pX = detections[key].polygon.centroid.x
                     pY = detections[key].polygon.centroid.y
 
+                    centroid = np.array([pX, pY])
+                    imageCenter = np.array([200, 200])
+
+                    vector = centroid - imageCenter
+                    normVector = vector / np.linalg.norm(vector)
+
+                    edgePoint = imageCenter + normVector * 190
+
+                    eX, eY = edgePoint
+                    
+
                     #line from point to centroid
-                    pygame.draw.line(self.screen, color, (x*2, y*2), (pX*2, pY*2), 2)
+                    pygame.draw.line(self.screen, color, (eX*2, eY*2), (pX*2, pY*2), 2)
                     #draw text with distance at point
 
-                    distance = np.sqrt((x-pX)**2 + (y-pY)**2)
+                    distance = np.sqrt((eX-pX)**2 + (eY-pY)**2)
                     text = self.font.render(f'{distance:.2f}', True, color)
-                    self.screen.blit(text, (x*2+5, y*2+5))
+                    self.screen.blit(text, (eX*2+5, eY*2+5))
+
+                
 
 
                 polygon = detections[key].polygon #shapely polygon
@@ -463,6 +476,14 @@ class GUI:
         self.drawRecording(recording, currentFrame)
         Timer.point("drawnRecording")
         
+
+        #extract screen image
+        screenImage = pygame.surfarray.array3d(self.screen)
+        screenImage = np.transpose(screenImage, (1, 0, 2))
+        screenImage = cv2.cvtColor(screenImage, cv2.COLOR_RGB2BGR)
+        
+
+
         
         pygame.display.flip()
         
@@ -472,7 +493,7 @@ class GUI:
         if doQuit:
             pygame.quit()
         
-        return self.current_index, doQuit, joystick, self.mode
+        return self.current_index, doQuit, joystick, self.mode, screenImage
     
             
         #time.sleep(0.1)

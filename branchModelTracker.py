@@ -681,7 +681,7 @@ class Detection:
         
 
 
-    def apply_match(self, matched_detection, interpolation_factor=0.8):
+    def apply_match(self, matched_detection, interpolation_factor=0.8, currentKey=-1):
         """
         Applies the result of a match to this detection, updating the polygon and confidence.
 
@@ -795,7 +795,9 @@ class Detection:
             #    self.polygon = self.polygon.simplify(1)
 
             self.bbox = self.polygon.bounds
-            self.confidence *= 0.99
+
+            if self.id != currentKey:
+                self.confidence *= 0.99
 
 
 
@@ -815,13 +817,14 @@ class Detection:
             children = self.children
             anyChildrenHasMatch= False
 
-            for child in children:
-                if child.isMatched:
-                    anyChildrenHasMatch = True
-                    #print("Child has match")
-                    
-                    #found alive child - decrease confidence greatly
-                    self.confidence *= 0.8
+            if self.id != currentKey:
+                for child in children:
+                    if child.isMatched:
+                        anyChildrenHasMatch = True
+                        #print("Child has match")
+                        
+                        #found alive child - decrease confidence greatly
+                        self.confidence *= 0.8
 
             
                 
@@ -831,9 +834,21 @@ class Detection:
 
 
             
-            
+            viewArea = self.viewPolygon.area
+            detectionArea = self.polygon.area
 
-            
+            detectionToViewRatio = detectionArea/viewArea
+
+
+            detectionHeight = self.polygon.bounds[3] - self.polygon.bounds[1]
+            detectionWidth = self.polygon.bounds[2] - self.polygon.bounds[0]
+
+            maxDetectionSide = max(detectionHeight, detectionWidth)
+            maxDetectionSideRation = maxDetectionSide / 400.0
+
+            rectangleRatio = detectionHeight/detectionWidth
+            if rectangleRatio < 1:
+                rectangleRatio = 1/rectangleRatio
 
             
 
@@ -846,43 +861,49 @@ class Detection:
 
                     self.confidence = 0
 
-                viewArea = self.viewPolygon.area
-                detectionArea = self.polygon.area
-
-                detectionToViewRatio = detectionArea/viewArea
-
-
-                detectionHeight = self.polygon.bounds[3] - self.polygon.bounds[1]
-                detectionWidth = self.polygon.bounds[2] - self.polygon.bounds[0]
-
-                maxDetectionSide = max(detectionHeight, detectionWidth)
-                maxDetectionSideRation = maxDetectionSide / 400.0
-
-                rectangleRatio = detectionHeight/detectionWidth
-                if rectangleRatio < 1:
-                    rectangleRatio = 1/rectangleRatio
+                
 
                 #rectangleRatioLimit = 2 #if more than twice as high as wide, or opposite, decrease confidence
                 #if rectangleRatio > rectangleRatioLimit:
                 #    decay = 0.02 * (rectangleRatio-rectangleRatioLimit)
                 #    self.confidence *= 1-decay
+                if self.id != currentKey:
+                    if detectionToViewRatio > 0.25:
+                        decay = 0.01 * detectionToViewRatio
+                        self.confidence *= 1-decay
 
-                if detectionToViewRatio > 0.25:
-                    decay = 0.01 * detectionToViewRatio
-                    self.confidence *= 1-decay
+                    if detectionToViewRatio > 0.75:
+                        
+                        self.confidence *= 0.8
 
-                if maxDetectionSideRation > 0.5:
-                    decay = 0.005 * maxDetectionSideRation
-                    self.confidence *= 1-decay
+                    if detectionToViewRatio < 0.001:
+                        self.confidence *= 0.8
+
+                    if maxDetectionSideRation > 0.5:
+                        decay = 0.005 * maxDetectionSideRation
+                        self.confidence *= 1-decay
 
 
             else:
-                self.confidence *= 0.98
 
-                if self.confidence < 0.1:
-                    #remove the detection
+                if self.id != currentKey:
+                    self.confidence *= 0.98
 
-                    self.confidence = 0
+                    distance = self.polygon.centroid.distance(self.viewPolygon.centroid)
+
+                    if distance > 1200:
+                        self.confidence *= 0.9
+
+                    if detectionToViewRatio > 1.5:
+                        
+                        self.confidence *= 0.9
+                
+
+
+                    if self.confidence < 0.1:
+                        #remove the detection
+
+                        self.confidence = 0
 
 
 
@@ -1010,14 +1031,23 @@ class BranchModelTracker:
         self.oldKeypoints = None
     
 
-    def detectionsToPoints(self, detections):
+    def reset(self):
+        self.trackedDetections = None
+        self.oldSescriptors = None
+        self.oldKeypoints = None
+        self.newId = 0
+        self.oldImage = None
+
+    def detectionsToPoints(self, detections, currentKey = -1):
         #takes the center of the bounding box of the detections and returns them as a list of points
 
-        #buildHierachy(detections)
+        buildHierachy(detections)
 
 
 
         finalDetections={}
+
+        #certaintyCutoff = 0.1
         points = {}
         if detections is not None:
             
@@ -1026,6 +1056,7 @@ class BranchModelTracker:
                 # the detection has exactly one child
                 # the detection has not parent or children
 
+            
 
             for detection in detections:
 
@@ -1043,7 +1074,18 @@ class BranchModelTracker:
                 elif detection.parent is None and numChildren == 0:
                     doAdd=True
 
-                doAdd=True
+                #if has grandchild, don't add
+                for child in detection.children:
+                    if len(child.children) > 0:
+                        doAdd = False
+
+                #if detection is the current key, add it - always show the currently selected detection, if it exists
+                if detection.id == currentKey:
+                    doAdd=True
+
+                
+
+                #doAdd=True
 
                 
                 if doAdd:
@@ -1084,7 +1126,7 @@ class BranchModelTracker:
 
         return results
 
-    def apply_matches(self,matches, trackedDetections):
+    def apply_matches(self,matches, trackedDetections, currentKey = -1):
         """
         Applies matches to a list of detections.
 
@@ -1105,7 +1147,7 @@ class BranchModelTracker:
 
         for det1, det2 in matches:
             if det1 is not None:
-                det1.apply_match(det2)
+                det1.apply_match(det2, currentKey= currentKey)
 
                 det1.squareify()
             else:
@@ -1122,7 +1164,7 @@ class BranchModelTracker:
 
         return trackedDetections
 
-    def predict(self, image, doDebug=False, doVideo=False, videoWriter=None, active = True):
+    def predict(self, image, doDebug=False, doVideo=False, videoWriter=None, active = True, currentKey = -1):
 
 
         def filter_corner_detections(detections, image_width, image_height, corner_margin=5, area_threshold=0.02):
@@ -1195,6 +1237,7 @@ class BranchModelTracker:
         time1 = time.time()
         newPredictions = self.getPredictions(newImage)
 
+        Timer.point("Got Yolo Predictions")
         newPredictions = newPredictions.pred[0]
 
         newPredictions = filter_corner_detections(newPredictions, newImage.shape[1], newImage.shape[0], corner_margin=2, area_threshold=0.05)
@@ -1276,7 +1319,7 @@ class BranchModelTracker:
         matchedPairs = match_detections(self.trackedDetections, newDetections)
 
         Timer.point("applyMatches")
-        self.trackedDetections=self.apply_matches(matchedPairs,self.trackedDetections)
+        self.trackedDetections=self.apply_matches(matchedPairs,self.trackedDetections, currentKey = currentKey)
 
 
         
@@ -1330,7 +1373,7 @@ class BranchModelTracker:
         buildHierachy(self.trackedDetections)
 
 
-        return self.detectionsToPoints(self.trackedDetections)
+        return self.detectionsToPoints(self.trackedDetections, currentKey = currentKey)
 
 
 

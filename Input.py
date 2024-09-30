@@ -9,7 +9,7 @@ class Input:
     
     
     numStepsFast = [
-        4, #Bend
+        8, #Bend
         16, #Rotation
         12  #Extension
     ] 

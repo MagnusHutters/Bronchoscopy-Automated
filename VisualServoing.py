@@ -138,7 +138,7 @@ def showBranch(image, pathData, currentBend = 0, bendMultiplier = 1):
 
 
 
-def doVisualServoing(image, state, goal, imageSize, doVisualize = False, maxDist = 5000, bendMultiplier = 1):
+def doVisualServoing(image, state, goal, imageSize, doVisualize = False, maxDist = 5000, bendMultiplier = 1, resetAcumulator = False):
     if len(goal) == 0:
         return ""
 
@@ -170,229 +170,11 @@ def doVisualServoing(image, state, goal, imageSize, doVisualize = False, maxDist
 
 
 
-    return guessBranch2(state, targetCenter, imageSize, doVisualize, maxDist, 10, bendMultiplier, bbox = bbox, doKeepScores=True)
+    return guessBranch2(state, targetCenter, imageSize, doVisualize, maxDist, 10, bendMultiplier, bbox = bbox, doKeepScores=True, newTarget=resetAcumulator)
 
 
 accumulatedScore =  0
 
-def guessBranch(state, goal, imageSize, doVisualize = False, maxDist = 5000, limitCount = 0, bendMultiplier = 1, bbox = None):
-
-    global accumulatedScore
-
-    rotationDegrees = state["rotationReal_deg"]
-    bendDegrees = state["bendReal_deg"]
-    extensionMM = state["extensionReal_mm"]
-
-    imageSize = np.array(imageSize)
-
-    bendOffset = int(bendDegrees*bendMultiplier) #angle -> pixels
-
-    rotationCenter = (imageSize[0]//2, imageSize[1]//2-bendOffset)
-    actualImageCenter = (imageSize[0]//2, imageSize[1]//2)
-
-
-    goal = np.array(goal)
-
-    
-
-
-
-
-    rotationLimits = np.array((-170, 170))
-    rotationLimits = np.radians(rotationLimits)
-
-
-    lowDist = 50
-    highDist = 300
-
-    goalVector = goal - rotationCenter #vector from approximate point of rotation to goal
-    goalDist = np.linalg.norm(goalVector)
-
-    centerGoalVector = goal - actualImageCenter #vector from center of image to goal
-    centerGoalDist = np.linalg.norm(centerGoalVector)
-
-    if bbox is not None:
-
-        minx, miny, maxx, maxy = bbox
-
-
-        if minx < actualImageCenter[0] < maxx and miny < actualImageCenter[1] < maxy:
-            centerGoalDist = 0
-        else:
-
-
-            dx = max(minx-actualImageCenter[0], 0, actualImageCenter[0]-maxx)
-            dy = max(miny-actualImageCenter[1], 0, actualImageCenter[1]-maxy)
-
-            centerGoalDist = np.sqrt(dx**2 + dy**2)
-
-
-        #print(f"CenterGoalDist: {centerGoalDist}, bbox: {bbox}, imageCenter: {actualImageCenter}")
-        
-
-
-        
-
-
-
-
-
-    #if goalDist > maxDist and limitCount < 10:
-    #    return ""
-
-
-    highRotationLimitVector = np.array([np.cos(rotationLimits[1]), np.sin(rotationLimits[1])])
-    goalOppositeVector = -goalVector
-
-
-    goalAngle = np.arctan2(goalVector[1], goalVector[0])+np.pi/2
-    goalAngleOpposite = np.arctan2(goalOppositeVector[1], goalOppositeVector[0])+np.pi/2
-
-    goalAnglesRelative = [goalAngle, goalAngleOpposite]
-    goalAnglesRelative = [(angle+np.pi) % (2*np.pi) - np.pi for angle in goalAnglesRelative]
-
-    goalAnglesAbs = [goalAngle+np.radians(rotationDegrees), goalAngleOpposite+np.radians(rotationDegrees)]
-    #use circle angles from -pi to pi
-    goalAnglesAbs = [(angle+np.pi) % (2*np.pi) - np.pi for angle in goalAnglesAbs]
-
-
-    bendLimits = 170
-    bendLimitPixels = bendLimits*bendMultiplier #angle -> pixels
-
-    goalBendAngleAbs = [bendDegrees - (goalDist/bendMultiplier), bendDegrees + (goalDist/bendMultiplier)] #pixel -> angle
-
-    print(f"Bend degrees: {bendDegrees}, goalDist: {goalDist}, goalBendAngleAbs: {goalBendAngleAbs}")
-
-    #print bend stats
-    if doVisualize:
-        pass
-        #print(f"Goal: {goalDist}, bend: {bendDegrees}, goalBend: {goalBendAngleAbs}")
-
-    #remove those that are outside of the rotation limits
-    newGoalAnglesAbs = []
-    newGoalAnglesRel = []
-    for index in range(len(goalAnglesAbs)): #check both bend angles
-        angle = goalAnglesAbs[index]
-        if rotationLimits[0] <= angle <= rotationLimits[1] or rotationLimits[0] <= angle+2*np.pi <= rotationLimits[1] or rotationLimits[0] <= angle-2*np.pi <= rotationLimits[1]: #check if bend angle is within rotation limits
-            if abs(goalBendAngleAbs[index]) < bendLimits+lowDist: #check if bend angle is within bending limits plus the radius of the center region
-
-                newGoalAnglesAbs.append(angle)
-                newGoalAnglesRel.append(goalAnglesRelative[index])
-    goalAnglesAbs = newGoalAnglesAbs
-    goalAnglesRel = newGoalAnglesRel
-
-
-
-    bestScore = -999999
-    rotationDirection = 0
-    rotationDistance = 0
-
-
-
-    
-
-    if doVisualize:
-        pass
-        #print("")
-
-    for index in range(len(goalAnglesAbs)):
-        angle = goalAnglesAbs[index]
-        angleRel = goalAnglesRel[index]
-
-        angleToNearestLimit = min(abs(angle-rotationLimits[0]), abs(angle-rotationLimits[1]))
-        angleToCurrent = abs(angleRel)
-
-        score = np.sqrt(angleToNearestLimit)-(angleToCurrent)
-
-
-        accScore = accumulatedScore if dir == "R" else -accumulatedScore
-        combinedScore = score+accScore
-
-
-        if combinedScore > bestScore:
-            bestScore = combinedScore
-            rotationDirection = np.sign(angleRel)
-            rotationDistance = np.abs(angleToCurrent)
-
-        if doVisualize:
-            dir = "R" if angleRel > 0 else "L"
-
-            
-            #print(f"Direction: {dir}, absAngle: {np.degrees(angleRel):.2f}, relAngle: {np.degrees(angle):.2f}, combinedScore: {combinedScore:.2f}, score: {score:.2f}, accumulatedScore: {accScore:.2f}")
-
-    bendDirection = np.sign(goalVector[1])
-    bendDistance = np.abs(goalVector[1])
-
-
-    action=""
-
-    #check if goal is within center region
-    #it is so i f its within:
-        #a circle with radius lowDist from the center of the image
-        #a circle with radius lowDist from the rotation center
-        #a rectangle with the center of the image and the rotation center as the top and bottom. The width is twice lowDist centered around the center of the image
-
-
-    #isWithinCenterRegion = (\
-    #    goalDist < lowDist or \
-    #    centerGoalDist < lowDist or \
-    #    (actualImageCenter[0]-lowDist < goal[0] < actualImageCenter[0]+lowDist\
-    #    and actualImageCenter[1] < goal[1] < rotationCenter[1]))
-    
-
-
-
-    smallestGoalDist = min(goalDist, centerGoalDist)
-    print(f"GoalBendAngleAbs: {goalBendAngleAbs}")
-
-    if centerGoalDist < lowDist:
-        action = "f"
-
-        if doVisualize:
-            #explain why we are going forwards
-            print(f"Action: Forward, centerGoalDist:{centerGoalDist:.1f} < lowDist:{lowDist:.1f}")
-    elif centerGoalDist > highDist:
-        action = "b"
-        if doVisualize:
-            print(f"Action: Backwards, centerGoalDist:{centerGoalDist:.1f} > highDist:{highDist:.1f}")
-
-    elif np.degrees(rotationDistance) < 35 or np.degrees(rotationDistance) > (180-35):
-        if bendDirection < 0 and abs(goalBendAngleAbs[0]) < bendLimitPixels + lowDist: #if goal is within bending limits plus the radius of the center region
-            action = "u"
-            if doVisualize:
-
-                print(f"Action: Up - rotationDistance:{np.degrees(rotationDistance):.1f} within bending axis and goalBendAngle: {abs(goalBendAngleAbs[0]):.1f} < bendLimits:{bendLimitPixels+lowDist:.1f} with down bendDirection:{bendDirection:.1f}")
-        elif bendDirection > 0 and abs(goalBendAngleAbs[1]) < bendLimitPixels + lowDist: #if goal is within bending limits plus the radius of the center region
-            action = "d"
-            if doVisualize:
-                print(f"Action: Down - rotationDistance:{np.degrees(rotationDistance):.1f}½ and goalBendAngle: {abs(goalBendAngleAbs[1]):.1f} < bendLimits:{bendLimitPixels+lowDist:.1f} with up bendDirection:{bendDirection:.1f}")
-   
-        else: #Bending is outside limits - go backwards
-            action = "b"
-
-            if doVisualize:
-                print(f"Action: Backwards - rotationDistance:{np.degrees(rotationDistance):.1f}  within bending axis and goalBendAngle: {abs(goalBendAngleAbs[0]):.1f} > bendLimits:{bendLimitPixels+lowDist:.1f}")
-    else:
-        if rotationDirection < 0:
-            action = "l"
-            accumulatedScore -= 0.1
-            print(f"Action: Left - rotationDistance:{np.degrees(rotationDistance):.1f} outside bending axis and rotationDirection:{rotationDirection:.1f} < 0")
-
-        elif rotationDirection > 0:
-            action = "r"
-            accumulatedScore += 0.1
-            print(f"Action: Right - rotationDistance:{np.degrees(rotationDistance):.1f} outside bending axis and rotationDirection:{rotationDirection:.1f} > 0")
-        else:
-            action = "b" #if no rotation, go backwards - this will only happen if both goals are outside bending limits
-
-            print(f"Action: Backwards - rotationDistance:{np.degrees(rotationDistance):.1f} outside bending axis and rotationDirection:{rotationDirection:.1f} = 0")
-
-    accumulatedScore *= 0.9
-
-    if doVisualize:
-        pass
-        #print(f"Guess: {action}, distance: {centerGoalDist}, rotation: {np.degrees(rotationDirection*rotationDistance):.2f}, bend: {np.degrees(bendDirection*bendDistance):.2f}")
-    return action
 
 
 accumulatedScores =  [0,0,0,0]
@@ -402,6 +184,7 @@ def guessBranch2(state, goal, imageSize, doVisualize = False, maxDist = 5000, li
     global accumulatedScore, accumulatedScores
     if newTarget: #reset accumulated scores
         accumulatedScores = [0,0,0,0]
+        print("Resetting accumulated scores")
 
     rotationDegrees = state["rotationReal_deg"]
     bendDegrees = state["bendReal_deg"]
@@ -429,7 +212,7 @@ def guessBranch2(state, goal, imageSize, doVisualize = False, maxDist = 5000, li
     rotationLimits = np.radians(rotationLimits)
 
 
-    lowDist = 50
+    lowDist = 65
     highDist = 300
 
     goalVector = goal - rotationCenter #vector from approximate point of rotation to goal
@@ -499,6 +282,8 @@ def guessBranch2(state, goal, imageSize, doVisualize = False, maxDist = 5000, li
     #remove those that are outside of the rotation limits
     newGoalAnglesAbs = [None, None, None, None]
     newGoalAnglesRel = [None, None, None, None]
+
+    
 
     for index in range(len(goalAnglesAbs)): #check both bend angles
         angle = goalAnglesAbs[index]
@@ -571,6 +356,7 @@ def guessBranch2(state, goal, imageSize, doVisualize = False, maxDist = 5000, li
                 #accScore = accumulatedScore if dir == "r" else -accumulatedScore
                 target = "Goal" if index%2 == 0 else "Opposite"
                 direction = "Upwards" if index < 2 else "Downwards"
+
                 print(f"Target: {target}, Direction: {direction}, angleToCurrent: {np.degrees(angleToCurrent):.2f}, angleToLimit: {np.degrees(angleToNearestLimit):.2f}, combinedScore: {combinedScore:.2f}, score: {score:.2f}, accumulatedScore: {accScore:.2f}")
 
     bendDirection = np.sign(goalVector[1])
@@ -613,18 +399,33 @@ def guessBranch2(state, goal, imageSize, doVisualize = False, maxDist = 5000, li
     
 
     bestScoreIndex = np.argmax(scores)
+
+
+    #bendForwardRect  = (xmin, ymin, xmax, ymax)
+    
+    
+    yminOffset = -(1+(bendRatioComparedToMax*1))*lowDist    + bendOffset*0.6
+    ymaxOffset = (1+(bendRatioComparedToMax*1))*lowDist     + bendOffset*0.6
+    yForwardCenter = (imageSize[1]//2, imageSize[1]//2      + bendOffset*0.6)
+
+    if doVisualize:
+        print(f"yminOffset: {yminOffset}, ymaxOffset: {ymaxOffset}, centerYForwards: {yForwardCenter}")
     
 
-    if centerGoalDist < lowDist or (-lowDist*1.5<centerGoalVector[0]<lowDist*1.5 and -(1+(bendRatioComparedToMax*2))*lowDist<centerGoalVector[1]<lowDist*(1+(bendRatioComparedToMax*2))):
+    if (-lowDist*1.5<centerGoalVector[0]<lowDist*1.5 and yminOffset<centerGoalVector[1]<ymaxOffset):
         action = "f"
 
         if doVisualize:
             #explain why we are going forwards
             print(f"Action: Forward, centerGoalDist:{centerGoalDist:.1f} < lowDist:{lowDist:.1f}")
+        else:
+            print(f"Action: Forwards")
     elif centerGoalDist > highDist:
         action = "b"
         if doVisualize:
             print(f"Action: Backwards, centerGoalDist:{centerGoalDist:.1f} > highDist:{highDist:.1f}")
+        else:
+            print(f"Action: Backwards")
 
     #First check if using the upwards or downwards bending target
     elif scores[bestScoreIndex]>-1000: #upwards bending target
@@ -642,17 +443,27 @@ def guessBranch2(state, goal, imageSize, doVisualize = False, maxDist = 5000, li
         accumulatedScores[index] += 0.1
         if -lowDist< goalVector[0] < lowDist and not abs(diffs[index]) > 45:
             
-            if bendDirection < 0:
+            if goal[1] < yForwardCenter[1]:
                 action = "u"
 
             else:
                 action = "d"
+        #the difference in angle is larger than 90 degrees and bend is larger than 45 degrees
+        elif abs(diffs[index]) > 90 and abs(bendDegrees) > 25:
+            #bend towards 0 bend
+            if bendDegrees < 0:
+                action = "d"
+            else:
+                action = "u"
+        
+
         else:
             
             action = directions[bestScoreIndex]
         if doVisualize:
             print(f"Action: {actionToName[action]} - target: {target} - direction: {direction} - beacuse of goalVector: {goalVector}, isWithinY: {isWithinY}, bendDirection: {bendDirection}")
-        
+        else:
+            print(f"Action: {actionToName[action]}")
     else: #should not happen, both up and down targets are out of bounds
         action = "b" #go backwards
     
