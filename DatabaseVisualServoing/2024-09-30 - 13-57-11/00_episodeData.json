@@ -1,0 +1,3082 @@
+{
+    "header": {
+        "timeStart": 1727697431.2113063,
+        "timeEnd": 1727697454.425178,
+        "duration": 23.213871717453003,
+        "timeStartReadable": "2024-09-30 13:57:11.211",
+        "timeEndReadable": "2024-09-30 13:57:34.425",
+        "Section": null,
+        "Branch": null
+    },
+    "frames": {
+        "0": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1472,
+                "extension_steps": 0,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 0.0,
+                "extensionReal_mm": 0.0
+            },
+            "action": {
+                "axis": null,
+                "change": 0,
+                "char_value": "",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 0,
+                "Timestamp": "0.000",
+                "Raw_Timestamp": 1727697431.2113063,
+                "timeReadable": "2024-09-30 13:57:11.211",
+                "timeDelta": 0
+            },
+            "imagePath": "broncho00000.png",
+            "topImagePath": "top00000.png"
+        },
+        "1": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1472,
+                "extension_steps": 0,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 0.0,
+                "extensionReal_mm": 0.0
+            },
+            "action": {
+                "axis": null,
+                "change": 0,
+                "char_value": "",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 1,
+                "Timestamp": "0.262",
+                "Raw_Timestamp": 1727697431.4733882,
+                "timeReadable": "2024-09-30 13:57:11.473",
+                "timeDelta": 0.2620818614959717
+            },
+            "imagePath": "broncho00001.png",
+            "topImagePath": "top00001.png"
+        },
+        "2": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1472,
+                "extension_steps": 0,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 0.0,
+                "extensionReal_mm": 0.0
+            },
+            "action": {
+                "axis": null,
+                "change": 0,
+                "char_value": "",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 2,
+                "Timestamp": "0.508",
+                "Raw_Timestamp": 1727697431.719214,
+                "timeReadable": "2024-09-30 13:57:11.719",
+                "timeDelta": 0.24582576751708984
+            },
+            "imagePath": "broncho00002.png",
+            "topImagePath": "top00002.png"
+        },
+        "3": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1472,
+                "extension_steps": 0,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 0.0,
+                "extensionReal_mm": 0.0
+            },
+            "action": {
+                "axis": 1,
+                "change": 16,
+                "char_value": "r",
+                "model_value": [
+                    0,
+                    0,
+                    1,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 3,
+                "Timestamp": "0.785",
+                "Raw_Timestamp": 1727697431.9958436,
+                "timeReadable": "2024-09-30 13:57:11.995",
+                "timeDelta": 0.2766296863555908
+            },
+            "imagePath": "broncho00003.png",
+            "topImagePath": "top00003.png"
+        },
+        "4": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1488,
+                "extension_steps": 0,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 2.931034482758605,
+                "extensionReal_mm": 0.0
+            },
+            "action": {
+                "axis": 1,
+                "change": 16,
+                "char_value": "r",
+                "model_value": [
+                    0,
+                    0,
+                    1,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 4,
+                "Timestamp": "1.020",
+                "Raw_Timestamp": 1727697432.2308934,
+                "timeReadable": "2024-09-30 13:57:12.230",
+                "timeDelta": 0.23504972457885742
+            },
+            "imagePath": "broncho00004.png",
+            "topImagePath": "top00004.png"
+        },
+        "5": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1504,
+                "extension_steps": 0,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 5.862068965517267,
+                "extensionReal_mm": 0.0
+            },
+            "action": {
+                "axis": 1,
+                "change": 16,
+                "char_value": "r",
+                "model_value": [
+                    0,
+                    0,
+                    1,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 5,
+                "Timestamp": "1.274",
+                "Raw_Timestamp": 1727697432.4855683,
+                "timeReadable": "2024-09-30 13:57:12.485",
+                "timeDelta": 0.25467491149902344
+            },
+            "imagePath": "broncho00005.png",
+            "topImagePath": "top00005.png"
+        },
+        "6": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1520,
+                "extension_steps": 0,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 8.793103448275872,
+                "extensionReal_mm": 0.0
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 6,
+                "Timestamp": "1.514",
+                "Raw_Timestamp": 1727697432.725776,
+                "timeReadable": "2024-09-30 13:57:12.725",
+                "timeDelta": 0.24020767211914062
+            },
+            "imagePath": "broncho00006.png",
+            "topImagePath": "top00006.png"
+        },
+        "7": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1520,
+                "extension_steps": 12,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 8.793103448275872,
+                "extensionReal_mm": 0.8333333333333334
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 7,
+                "Timestamp": "1.777",
+                "Raw_Timestamp": 1727697432.9878774,
+                "timeReadable": "2024-09-30 13:57:12.987",
+                "timeDelta": 0.262101411819458
+            },
+            "imagePath": "broncho00007.png",
+            "topImagePath": "top00007.png"
+        },
+        "8": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1520,
+                "extension_steps": 24,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 8.793103448275872,
+                "extensionReal_mm": 1.6666666666666667
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 8,
+                "Timestamp": "2.039",
+                "Raw_Timestamp": 1727697433.2498305,
+                "timeReadable": "2024-09-30 13:57:13.249",
+                "timeDelta": 0.26195311546325684
+            },
+            "imagePath": "broncho00008.png",
+            "topImagePath": "top00008.png"
+        },
+        "9": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1520,
+                "extension_steps": 36,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 8.793103448275872,
+                "extensionReal_mm": 2.5
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 9,
+                "Timestamp": "2.287",
+                "Raw_Timestamp": 1727697433.4981878,
+                "timeReadable": "2024-09-30 13:57:13.498",
+                "timeDelta": 0.24835729598999023
+            },
+            "imagePath": "broncho00009.png",
+            "topImagePath": "top00009.png"
+        },
+        "10": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1520,
+                "extension_steps": 48,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 8.793103448275872,
+                "extensionReal_mm": 3.3333333333333335
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 10,
+                "Timestamp": "2.539",
+                "Raw_Timestamp": 1727697433.7502458,
+                "timeReadable": "2024-09-30 13:57:13.750",
+                "timeDelta": 0.2520580291748047
+            },
+            "imagePath": "broncho00010.png",
+            "topImagePath": "top00010.png"
+        },
+        "11": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1520,
+                "extension_steps": 60,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 8.793103448275872,
+                "extensionReal_mm": 4.166666666666667
+            },
+            "action": {
+                "axis": 1,
+                "change": 16,
+                "char_value": "r",
+                "model_value": [
+                    0,
+                    0,
+                    1,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 11,
+                "Timestamp": "2.791",
+                "Raw_Timestamp": 1727697434.002382,
+                "timeReadable": "2024-09-30 13:57:14.002",
+                "timeDelta": 0.25213623046875
+            },
+            "imagePath": "broncho00011.png",
+            "topImagePath": "top00011.png"
+        },
+        "12": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1536,
+                "extension_steps": 60,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 11.724137931034477,
+                "extensionReal_mm": 4.166666666666667
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 12,
+                "Timestamp": "3.046",
+                "Raw_Timestamp": 1727697434.2577903,
+                "timeReadable": "2024-09-30 13:57:14.257",
+                "timeDelta": 0.25540828704833984
+            },
+            "imagePath": "broncho00012.png",
+            "topImagePath": "top00012.png"
+        },
+        "13": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1536,
+                "extension_steps": 72,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 11.724137931034477,
+                "extensionReal_mm": 5.0
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 13,
+                "Timestamp": "3.308",
+                "Raw_Timestamp": 1727697434.5190358,
+                "timeReadable": "2024-09-30 13:57:14.519",
+                "timeDelta": 0.2612454891204834
+            },
+            "imagePath": "broncho00013.png",
+            "topImagePath": "top00013.png"
+        },
+        "14": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1536,
+                "extension_steps": 84,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 11.724137931034477,
+                "extensionReal_mm": 5.833333333333334
+            },
+            "action": {
+                "axis": 1,
+                "change": 16,
+                "char_value": "r",
+                "model_value": [
+                    0,
+                    0,
+                    1,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 14,
+                "Timestamp": "3.553",
+                "Raw_Timestamp": 1727697434.7644205,
+                "timeReadable": "2024-09-30 13:57:14.764",
+                "timeDelta": 0.24538469314575195
+            },
+            "imagePath": "broncho00014.png",
+            "topImagePath": "top00014.png"
+        },
+        "15": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1552,
+                "extension_steps": 84,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 14.65517241379311,
+                "extensionReal_mm": 5.833333333333334
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 15,
+                "Timestamp": "3.793",
+                "Raw_Timestamp": 1727697435.0047016,
+                "timeReadable": "2024-09-30 13:57:15.004",
+                "timeDelta": 0.2402811050415039
+            },
+            "imagePath": "broncho00015.png",
+            "topImagePath": "top00015.png"
+        },
+        "16": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1552,
+                "extension_steps": 96,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 14.65517241379311,
+                "extensionReal_mm": 6.666666666666667
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 16,
+                "Timestamp": "4.047",
+                "Raw_Timestamp": 1727697435.2584896,
+                "timeReadable": "2024-09-30 13:57:15.258",
+                "timeDelta": 0.2537879943847656
+            },
+            "imagePath": "broncho00016.png",
+            "topImagePath": "top00016.png"
+        },
+        "17": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1552,
+                "extension_steps": 108,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 14.65517241379311,
+                "extensionReal_mm": 7.5
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 17,
+                "Timestamp": "4.306",
+                "Raw_Timestamp": 1727697435.5171392,
+                "timeReadable": "2024-09-30 13:57:15.517",
+                "timeDelta": 0.2586495876312256
+            },
+            "imagePath": "broncho00017.png",
+            "topImagePath": "top00017.png"
+        },
+        "18": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1552,
+                "extension_steps": 120,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 14.65517241379311,
+                "extensionReal_mm": 8.333333333333334
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 18,
+                "Timestamp": "4.594",
+                "Raw_Timestamp": 1727697435.8053763,
+                "timeReadable": "2024-09-30 13:57:15.805",
+                "timeDelta": 0.2882370948791504
+            },
+            "imagePath": "broncho00018.png",
+            "topImagePath": "top00018.png"
+        },
+        "19": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1552,
+                "extension_steps": 132,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 14.65517241379311,
+                "extensionReal_mm": 9.166666666666666
+            },
+            "action": {
+                "axis": 1,
+                "change": 16,
+                "char_value": "r",
+                "model_value": [
+                    0,
+                    0,
+                    1,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 19,
+                "Timestamp": "4.904",
+                "Raw_Timestamp": 1727697436.1154907,
+                "timeReadable": "2024-09-30 13:57:16.115",
+                "timeDelta": 0.31011438369750977
+            },
+            "imagePath": "broncho00019.png",
+            "topImagePath": "top00019.png"
+        },
+        "20": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1568,
+                "extension_steps": 132,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 17.586206896551715,
+                "extensionReal_mm": 9.166666666666666
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 20,
+                "Timestamp": "5.152",
+                "Raw_Timestamp": 1727697436.3633826,
+                "timeReadable": "2024-09-30 13:57:16.363",
+                "timeDelta": 0.24789190292358398
+            },
+            "imagePath": "broncho00020.png",
+            "topImagePath": "top00020.png"
+        },
+        "21": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1568,
+                "extension_steps": 144,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 17.586206896551715,
+                "extensionReal_mm": 10.0
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 21,
+                "Timestamp": "5.398",
+                "Raw_Timestamp": 1727697436.6096718,
+                "timeReadable": "2024-09-30 13:57:16.609",
+                "timeDelta": 0.24628925323486328
+            },
+            "imagePath": "broncho00021.png",
+            "topImagePath": "top00021.png"
+        },
+        "22": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1568,
+                "extension_steps": 156,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 17.586206896551715,
+                "extensionReal_mm": 10.833333333333334
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 22,
+                "Timestamp": "5.652",
+                "Raw_Timestamp": 1727697436.8631575,
+                "timeReadable": "2024-09-30 13:57:16.863",
+                "timeDelta": 0.25348567962646484
+            },
+            "imagePath": "broncho00022.png",
+            "topImagePath": "top00022.png"
+        },
+        "23": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1568,
+                "extension_steps": 168,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 17.586206896551715,
+                "extensionReal_mm": 11.666666666666668
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 23,
+                "Timestamp": "5.899",
+                "Raw_Timestamp": 1727697437.1098287,
+                "timeReadable": "2024-09-30 13:57:17.109",
+                "timeDelta": 0.24667119979858398
+            },
+            "imagePath": "broncho00023.png",
+            "topImagePath": "top00023.png"
+        },
+        "24": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1568,
+                "extension_steps": 180,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 17.586206896551715,
+                "extensionReal_mm": 12.5
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 24,
+                "Timestamp": "6.164",
+                "Raw_Timestamp": 1727697437.3751051,
+                "timeReadable": "2024-09-30 13:57:17.375",
+                "timeDelta": 0.2652764320373535
+            },
+            "imagePath": "broncho00024.png",
+            "topImagePath": "top00024.png"
+        },
+        "25": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1568,
+                "extension_steps": 192,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 17.586206896551715,
+                "extensionReal_mm": 13.333333333333334
+            },
+            "action": {
+                "axis": 1,
+                "change": 16,
+                "char_value": "r",
+                "model_value": [
+                    0,
+                    0,
+                    1,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 25,
+                "Timestamp": "6.409",
+                "Raw_Timestamp": 1727697437.6206195,
+                "timeReadable": "2024-09-30 13:57:17.620",
+                "timeDelta": 0.2455143928527832
+            },
+            "imagePath": "broncho00025.png",
+            "topImagePath": "top00025.png"
+        },
+        "26": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1584,
+                "extension_steps": 192,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 20.51724137931032,
+                "extensionReal_mm": 13.333333333333334
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 26,
+                "Timestamp": "6.649",
+                "Raw_Timestamp": 1727697437.860476,
+                "timeReadable": "2024-09-30 13:57:17.860",
+                "timeDelta": 0.23985648155212402
+            },
+            "imagePath": "broncho00026.png",
+            "topImagePath": "top00026.png"
+        },
+        "27": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1584,
+                "extension_steps": 204,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 20.51724137931032,
+                "extensionReal_mm": 14.166666666666666
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 27,
+                "Timestamp": "6.929",
+                "Raw_Timestamp": 1727697438.1407099,
+                "timeReadable": "2024-09-30 13:57:18.140",
+                "timeDelta": 0.28023386001586914
+            },
+            "imagePath": "broncho00027.png",
+            "topImagePath": "top00027.png"
+        },
+        "28": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1584,
+                "extension_steps": 216,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 20.51724137931032,
+                "extensionReal_mm": 15.0
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 28,
+                "Timestamp": "7.180",
+                "Raw_Timestamp": 1727697438.3912704,
+                "timeReadable": "2024-09-30 13:57:18.391",
+                "timeDelta": 0.2505605220794678
+            },
+            "imagePath": "broncho00028.png",
+            "topImagePath": "top00028.png"
+        },
+        "29": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1584,
+                "extension_steps": 228,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 20.51724137931032,
+                "extensionReal_mm": 15.833333333333334
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 29,
+                "Timestamp": "7.431",
+                "Raw_Timestamp": 1727697438.642742,
+                "timeReadable": "2024-09-30 13:57:18.642",
+                "timeDelta": 0.25147151947021484
+            },
+            "imagePath": "broncho00029.png",
+            "topImagePath": "top00029.png"
+        },
+        "30": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1584,
+                "extension_steps": 240,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 20.51724137931032,
+                "extensionReal_mm": 16.666666666666668
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 30,
+                "Timestamp": "7.668",
+                "Raw_Timestamp": 1727697438.8791275,
+                "timeReadable": "2024-09-30 13:57:18.879",
+                "timeDelta": 0.23638558387756348
+            },
+            "imagePath": "broncho00030.png",
+            "topImagePath": "top00030.png"
+        },
+        "31": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1584,
+                "extension_steps": 252,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 20.51724137931032,
+                "extensionReal_mm": 17.5
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 31,
+                "Timestamp": "7.917",
+                "Raw_Timestamp": 1727697439.1279645,
+                "timeReadable": "2024-09-30 13:57:19.127",
+                "timeDelta": 0.24883699417114258
+            },
+            "imagePath": "broncho00031.png",
+            "topImagePath": "top00031.png"
+        },
+        "32": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1584,
+                "extension_steps": 264,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 20.51724137931032,
+                "extensionReal_mm": 18.333333333333332
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 32,
+                "Timestamp": "8.164",
+                "Raw_Timestamp": 1727697439.3756664,
+                "timeReadable": "2024-09-30 13:57:19.375",
+                "timeDelta": 0.24770188331604004
+            },
+            "imagePath": "broncho00032.png",
+            "topImagePath": "top00032.png"
+        },
+        "33": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1584,
+                "extension_steps": 276,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 20.51724137931032,
+                "extensionReal_mm": 19.166666666666664
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 33,
+                "Timestamp": "8.420",
+                "Raw_Timestamp": 1727697439.631327,
+                "timeReadable": "2024-09-30 13:57:19.631",
+                "timeDelta": 0.2556605339050293
+            },
+            "imagePath": "broncho00033.png",
+            "topImagePath": "top00033.png"
+        },
+        "34": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1584,
+                "extension_steps": 288,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 20.51724137931032,
+                "extensionReal_mm": 20.0
+            },
+            "action": {
+                "axis": 1,
+                "change": 16,
+                "char_value": "r",
+                "model_value": [
+                    0,
+                    0,
+                    1,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 34,
+                "Timestamp": "8.683",
+                "Raw_Timestamp": 1727697439.8945587,
+                "timeReadable": "2024-09-30 13:57:19.894",
+                "timeDelta": 0.2632317543029785
+            },
+            "imagePath": "broncho00034.png",
+            "topImagePath": "top00034.png"
+        },
+        "35": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1600,
+                "extension_steps": 288,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 23.448275862068982,
+                "extensionReal_mm": 20.0
+            },
+            "action": {
+                "axis": 1,
+                "change": 16,
+                "char_value": "r",
+                "model_value": [
+                    0,
+                    0,
+                    1,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 35,
+                "Timestamp": "8.941",
+                "Raw_Timestamp": 1727697440.1523294,
+                "timeReadable": "2024-09-30 13:57:20.152",
+                "timeDelta": 0.2577707767486572
+            },
+            "imagePath": "broncho00035.png",
+            "topImagePath": "top00035.png"
+        },
+        "36": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1616,
+                "extension_steps": 288,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 26.379310344827587,
+                "extensionReal_mm": 20.0
+            },
+            "action": {
+                "axis": 1,
+                "change": 16,
+                "char_value": "r",
+                "model_value": [
+                    0,
+                    0,
+                    1,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 36,
+                "Timestamp": "9.183",
+                "Raw_Timestamp": 1727697440.393963,
+                "timeReadable": "2024-09-30 13:57:20.393",
+                "timeDelta": 0.24163365364074707
+            },
+            "imagePath": "broncho00036.png",
+            "topImagePath": "top00036.png"
+        },
+        "37": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1632,
+                "extension_steps": 288,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 29.310344827586192,
+                "extensionReal_mm": 20.0
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 37,
+                "Timestamp": "9.430",
+                "Raw_Timestamp": 1727697440.6413028,
+                "timeReadable": "2024-09-30 13:57:20.641",
+                "timeDelta": 0.24733972549438477
+            },
+            "imagePath": "broncho00037.png",
+            "topImagePath": "top00037.png"
+        },
+        "38": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1632,
+                "extension_steps": 300,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 29.310344827586192,
+                "extensionReal_mm": 20.833333333333332
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 38,
+                "Timestamp": "9.683",
+                "Raw_Timestamp": 1727697440.8938239,
+                "timeReadable": "2024-09-30 13:57:20.893",
+                "timeDelta": 0.2525210380554199
+            },
+            "imagePath": "broncho00038.png",
+            "topImagePath": "top00038.png"
+        },
+        "39": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1632,
+                "extension_steps": 312,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 29.310344827586192,
+                "extensionReal_mm": 21.666666666666668
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 39,
+                "Timestamp": "9.939",
+                "Raw_Timestamp": 1727697441.1504557,
+                "timeReadable": "2024-09-30 13:57:21.150",
+                "timeDelta": 0.25663185119628906
+            },
+            "imagePath": "broncho00039.png",
+            "topImagePath": "top00039.png"
+        },
+        "40": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1632,
+                "extension_steps": 324,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 29.310344827586192,
+                "extensionReal_mm": 22.5
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 40,
+                "Timestamp": "10.177",
+                "Raw_Timestamp": 1727697441.3881023,
+                "timeReadable": "2024-09-30 13:57:21.388",
+                "timeDelta": 0.23764657974243164
+            },
+            "imagePath": "broncho00040.png",
+            "topImagePath": "top00040.png"
+        },
+        "41": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1632,
+                "extension_steps": 336,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 29.310344827586192,
+                "extensionReal_mm": 23.333333333333336
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 41,
+                "Timestamp": "10.442",
+                "Raw_Timestamp": 1727697441.6534634,
+                "timeReadable": "2024-09-30 13:57:21.653",
+                "timeDelta": 0.26536107063293457
+            },
+            "imagePath": "broncho00041.png",
+            "topImagePath": "top00041.png"
+        },
+        "42": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1632,
+                "extension_steps": 348,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 29.310344827586192,
+                "extensionReal_mm": 24.166666666666668
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 42,
+                "Timestamp": "10.679",
+                "Raw_Timestamp": 1727697441.890512,
+                "timeReadable": "2024-09-30 13:57:21.890",
+                "timeDelta": 0.23704862594604492
+            },
+            "imagePath": "broncho00042.png",
+            "topImagePath": "top00042.png"
+        },
+        "43": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1632,
+                "extension_steps": 360,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 29.310344827586192,
+                "extensionReal_mm": 25.0
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 43,
+                "Timestamp": "10.938",
+                "Raw_Timestamp": 1727697442.1491702,
+                "timeReadable": "2024-09-30 13:57:22.149",
+                "timeDelta": 0.25865817070007324
+            },
+            "imagePath": "broncho00043.png",
+            "topImagePath": "top00043.png"
+        },
+        "44": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1632,
+                "extension_steps": 372,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 29.310344827586192,
+                "extensionReal_mm": 25.833333333333332
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 44,
+                "Timestamp": "11.193",
+                "Raw_Timestamp": 1727697442.4043736,
+                "timeReadable": "2024-09-30 13:57:22.404",
+                "timeDelta": 0.2552034854888916
+            },
+            "imagePath": "broncho00044.png",
+            "topImagePath": "top00044.png"
+        },
+        "45": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1632,
+                "extension_steps": 384,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 29.310344827586192,
+                "extensionReal_mm": 26.666666666666668
+            },
+            "action": {
+                "axis": 1,
+                "change": 16,
+                "char_value": "r",
+                "model_value": [
+                    0,
+                    0,
+                    1,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 45,
+                "Timestamp": "11.451",
+                "Raw_Timestamp": 1727697442.662165,
+                "timeReadable": "2024-09-30 13:57:22.662",
+                "timeDelta": 0.25779128074645996
+            },
+            "imagePath": "broncho00045.png",
+            "topImagePath": "top00045.png"
+        },
+        "46": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1648,
+                "extension_steps": 384,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 32.241379310344826,
+                "extensionReal_mm": 26.666666666666668
+            },
+            "action": {
+                "axis": 1,
+                "change": 16,
+                "char_value": "r",
+                "model_value": [
+                    0,
+                    0,
+                    1,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 46,
+                "Timestamp": "11.690",
+                "Raw_Timestamp": 1727697442.9014153,
+                "timeReadable": "2024-09-30 13:57:22.901",
+                "timeDelta": 0.23925042152404785
+            },
+            "imagePath": "broncho00046.png",
+            "topImagePath": "top00046.png"
+        },
+        "47": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1664,
+                "extension_steps": 384,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 35.17241379310343,
+                "extensionReal_mm": 26.666666666666668
+            },
+            "action": {
+                "axis": 1,
+                "change": 16,
+                "char_value": "r",
+                "model_value": [
+                    0,
+                    0,
+                    1,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 47,
+                "Timestamp": "11.944",
+                "Raw_Timestamp": 1727697443.154898,
+                "timeReadable": "2024-09-30 13:57:23.154",
+                "timeDelta": 0.2534825801849365
+            },
+            "imagePath": "broncho00047.png",
+            "topImagePath": "top00047.png"
+        },
+        "48": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1680,
+                "extension_steps": 384,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 38.103448275862064,
+                "extensionReal_mm": 26.666666666666668
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 48,
+                "Timestamp": "12.200",
+                "Raw_Timestamp": 1727697443.4116101,
+                "timeReadable": "2024-09-30 13:57:23.411",
+                "timeDelta": 0.2567121982574463
+            },
+            "imagePath": "broncho00048.png",
+            "topImagePath": "top00048.png"
+        },
+        "49": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1680,
+                "extension_steps": 396,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 38.103448275862064,
+                "extensionReal_mm": 27.5
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 49,
+                "Timestamp": "12.443",
+                "Raw_Timestamp": 1727697443.654596,
+                "timeReadable": "2024-09-30 13:57:23.654",
+                "timeDelta": 0.24298596382141113
+            },
+            "imagePath": "broncho00049.png",
+            "topImagePath": "top00049.png"
+        },
+        "50": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1680,
+                "extension_steps": 408,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 38.103448275862064,
+                "extensionReal_mm": 28.333333333333332
+            },
+            "action": {
+                "axis": null,
+                "change": 0,
+                "char_value": "",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 50,
+                "Timestamp": "12.701",
+                "Raw_Timestamp": 1727697443.9123206,
+                "timeReadable": "2024-09-30 13:57:23.912",
+                "timeDelta": 0.2577245235443115
+            },
+            "imagePath": "broncho00050.png",
+            "topImagePath": "top00050.png"
+        },
+        "51": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1680,
+                "extension_steps": 408,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 38.103448275862064,
+                "extensionReal_mm": 28.333333333333332
+            },
+            "action": {
+                "axis": null,
+                "change": 0,
+                "char_value": "",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 51,
+                "Timestamp": "12.959",
+                "Raw_Timestamp": 1727697444.1700044,
+                "timeReadable": "2024-09-30 13:57:24.170",
+                "timeDelta": 0.25768375396728516
+            },
+            "imagePath": "broncho00051.png",
+            "topImagePath": "top00051.png"
+        },
+        "52": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1680,
+                "extension_steps": 408,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 38.103448275862064,
+                "extensionReal_mm": 28.333333333333332
+            },
+            "action": {
+                "axis": null,
+                "change": 0,
+                "char_value": "",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 52,
+                "Timestamp": "13.197",
+                "Raw_Timestamp": 1727697444.4082522,
+                "timeReadable": "2024-09-30 13:57:24.408",
+                "timeDelta": 0.23824787139892578
+            },
+            "imagePath": "broncho00052.png",
+            "topImagePath": "top00052.png"
+        },
+        "53": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1680,
+                "extension_steps": 408,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 38.103448275862064,
+                "extensionReal_mm": 28.333333333333332
+            },
+            "action": {
+                "axis": null,
+                "change": 0,
+                "char_value": "",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 53,
+                "Timestamp": "13.450",
+                "Raw_Timestamp": 1727697444.6613169,
+                "timeReadable": "2024-09-30 13:57:24.661",
+                "timeDelta": 0.2530646324157715
+            },
+            "imagePath": "broncho00053.png",
+            "topImagePath": "top00053.png"
+        },
+        "54": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1680,
+                "extension_steps": 408,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 38.103448275862064,
+                "extensionReal_mm": 28.333333333333332
+            },
+            "action": {
+                "axis": null,
+                "change": 0,
+                "char_value": "",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 54,
+                "Timestamp": "13.700",
+                "Raw_Timestamp": 1727697444.9112523,
+                "timeReadable": "2024-09-30 13:57:24.911",
+                "timeDelta": 0.24993538856506348
+            },
+            "imagePath": "broncho00054.png",
+            "topImagePath": "top00054.png"
+        },
+        "55": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1680,
+                "extension_steps": 408,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 38.103448275862064,
+                "extensionReal_mm": 28.333333333333332
+            },
+            "action": {
+                "axis": null,
+                "change": 0,
+                "char_value": "",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 55,
+                "Timestamp": "13.953",
+                "Raw_Timestamp": 1727697445.1640074,
+                "timeReadable": "2024-09-30 13:57:25.164",
+                "timeDelta": 0.25275516510009766
+            },
+            "imagePath": "broncho00055.png",
+            "topImagePath": "top00055.png"
+        },
+        "56": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1680,
+                "extension_steps": 408,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 38.103448275862064,
+                "extensionReal_mm": 28.333333333333332
+            },
+            "action": {
+                "axis": null,
+                "change": 0,
+                "char_value": "",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 56,
+                "Timestamp": "14.216",
+                "Raw_Timestamp": 1727697445.4273143,
+                "timeReadable": "2024-09-30 13:57:25.427",
+                "timeDelta": 0.2633068561553955
+            },
+            "imagePath": "broncho00056.png",
+            "topImagePath": "top00056.png"
+        },
+        "57": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1680,
+                "extension_steps": 408,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 38.103448275862064,
+                "extensionReal_mm": 28.333333333333332
+            },
+            "action": {
+                "axis": 1,
+                "change": -16,
+                "char_value": "l",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    1,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 57,
+                "Timestamp": "14.473",
+                "Raw_Timestamp": 1727697445.684708,
+                "timeReadable": "2024-09-30 13:57:25.684",
+                "timeDelta": 0.25739383697509766
+            },
+            "imagePath": "broncho00057.png",
+            "topImagePath": "top00057.png"
+        },
+        "58": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1664,
+                "extension_steps": 408,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 35.17241379310343,
+                "extensionReal_mm": 28.333333333333332
+            },
+            "action": {
+                "axis": 1,
+                "change": -16,
+                "char_value": "l",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    1,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 58,
+                "Timestamp": "14.722",
+                "Raw_Timestamp": 1727697445.93331,
+                "timeReadable": "2024-09-30 13:57:25.933",
+                "timeDelta": 0.24860191345214844
+            },
+            "imagePath": "broncho00058.png",
+            "topImagePath": "top00058.png"
+        },
+        "59": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1648,
+                "extension_steps": 408,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 32.241379310344826,
+                "extensionReal_mm": 28.333333333333332
+            },
+            "action": {
+                "axis": 1,
+                "change": -16,
+                "char_value": "l",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    1,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 59,
+                "Timestamp": "14.977",
+                "Raw_Timestamp": 1727697446.1885092,
+                "timeReadable": "2024-09-30 13:57:26.188",
+                "timeDelta": 0.2551991939544678
+            },
+            "imagePath": "broncho00059.png",
+            "topImagePath": "top00059.png"
+        },
+        "60": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1632,
+                "extension_steps": 408,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 29.310344827586192,
+                "extensionReal_mm": 28.333333333333332
+            },
+            "action": {
+                "axis": null,
+                "change": 0,
+                "char_value": "",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 60,
+                "Timestamp": "15.215",
+                "Raw_Timestamp": 1727697446.4260285,
+                "timeReadable": "2024-09-30 13:57:26.426",
+                "timeDelta": 0.2375192642211914
+            },
+            "imagePath": "broncho00060.png",
+            "topImagePath": "top00060.png"
+        },
+        "61": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1632,
+                "extension_steps": 408,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 29.310344827586192,
+                "extensionReal_mm": 28.333333333333332
+            },
+            "action": {
+                "axis": null,
+                "change": 0,
+                "char_value": "",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 61,
+                "Timestamp": "15.476",
+                "Raw_Timestamp": 1727697446.6872115,
+                "timeReadable": "2024-09-30 13:57:26.687",
+                "timeDelta": 0.2611830234527588
+            },
+            "imagePath": "broncho00061.png",
+            "topImagePath": "top00061.png"
+        },
+        "62": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1632,
+                "extension_steps": 408,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 29.310344827586192,
+                "extensionReal_mm": 28.333333333333332
+            },
+            "action": {
+                "axis": null,
+                "change": 0,
+                "char_value": "",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 62,
+                "Timestamp": "15.717",
+                "Raw_Timestamp": 1727697446.9280565,
+                "timeReadable": "2024-09-30 13:57:26.928",
+                "timeDelta": 0.2408449649810791
+            },
+            "imagePath": "broncho00062.png",
+            "topImagePath": "top00062.png"
+        },
+        "63": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1632,
+                "extension_steps": 408,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 29.310344827586192,
+                "extensionReal_mm": 28.333333333333332
+            },
+            "action": {
+                "axis": null,
+                "change": 0,
+                "char_value": "",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 63,
+                "Timestamp": "15.968",
+                "Raw_Timestamp": 1727697447.179313,
+                "timeReadable": "2024-09-30 13:57:27.179",
+                "timeDelta": 0.25125646591186523
+            },
+            "imagePath": "broncho00063.png",
+            "topImagePath": "top00063.png"
+        },
+        "64": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1632,
+                "extension_steps": 408,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 29.310344827586192,
+                "extensionReal_mm": 28.333333333333332
+            },
+            "action": {
+                "axis": null,
+                "change": 0,
+                "char_value": "",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 64,
+                "Timestamp": "16.222",
+                "Raw_Timestamp": 1727697447.4328222,
+                "timeReadable": "2024-09-30 13:57:27.432",
+                "timeDelta": 0.2535092830657959
+            },
+            "imagePath": "broncho00064.png",
+            "topImagePath": "top00064.png"
+        },
+        "65": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1632,
+                "extension_steps": 408,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 29.310344827586192,
+                "extensionReal_mm": 28.333333333333332
+            },
+            "action": {
+                "axis": null,
+                "change": 0,
+                "char_value": "",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 65,
+                "Timestamp": "16.474",
+                "Raw_Timestamp": 1727697447.685455,
+                "timeReadable": "2024-09-30 13:57:27.685",
+                "timeDelta": 0.25263285636901855
+            },
+            "imagePath": "broncho00065.png",
+            "topImagePath": "top00065.png"
+        },
+        "66": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1632,
+                "extension_steps": 408,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 29.310344827586192,
+                "extensionReal_mm": 28.333333333333332
+            },
+            "action": {
+                "axis": null,
+                "change": 0,
+                "char_value": "",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 66,
+                "Timestamp": "16.713",
+                "Raw_Timestamp": 1727697447.9245691,
+                "timeReadable": "2024-09-30 13:57:27.924",
+                "timeDelta": 0.23911404609680176
+            },
+            "imagePath": "broncho00066.png",
+            "topImagePath": "top00066.png"
+        },
+        "67": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1632,
+                "extension_steps": 408,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 29.310344827586192,
+                "extensionReal_mm": 28.333333333333332
+            },
+            "action": {
+                "axis": 1,
+                "change": 16,
+                "char_value": "r",
+                "model_value": [
+                    0,
+                    0,
+                    1,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 67,
+                "Timestamp": "16.975",
+                "Raw_Timestamp": 1727697448.1859515,
+                "timeReadable": "2024-09-30 13:57:28.185",
+                "timeDelta": 0.2613823413848877
+            },
+            "imagePath": "broncho00067.png",
+            "topImagePath": "top00067.png"
+        },
+        "68": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1648,
+                "extension_steps": 408,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 32.241379310344826,
+                "extensionReal_mm": 28.333333333333332
+            },
+            "action": {
+                "axis": 1,
+                "change": 16,
+                "char_value": "r",
+                "model_value": [
+                    0,
+                    0,
+                    1,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 68,
+                "Timestamp": "17.218",
+                "Raw_Timestamp": 1727697448.4289765,
+                "timeReadable": "2024-09-30 13:57:28.428",
+                "timeDelta": 0.2430250644683838
+            },
+            "imagePath": "broncho00068.png",
+            "topImagePath": "top00068.png"
+        },
+        "69": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1664,
+                "extension_steps": 408,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 35.17241379310343,
+                "extensionReal_mm": 28.333333333333332
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 69,
+                "Timestamp": "17.465",
+                "Raw_Timestamp": 1727697448.6764631,
+                "timeReadable": "2024-09-30 13:57:28.676",
+                "timeDelta": 0.24748659133911133
+            },
+            "imagePath": "broncho00069.png",
+            "topImagePath": "top00069.png"
+        },
+        "70": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1664,
+                "extension_steps": 420,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 35.17241379310343,
+                "extensionReal_mm": 29.166666666666668
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 70,
+                "Timestamp": "17.728",
+                "Raw_Timestamp": 1727697448.938984,
+                "timeReadable": "2024-09-30 13:57:28.938",
+                "timeDelta": 0.26252079010009766
+            },
+            "imagePath": "broncho00070.png",
+            "topImagePath": "top00070.png"
+        },
+        "71": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1664,
+                "extension_steps": 432,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 35.17241379310343,
+                "extensionReal_mm": 30.0
+            },
+            "action": {
+                "axis": 1,
+                "change": 16,
+                "char_value": "r",
+                "model_value": [
+                    0,
+                    0,
+                    1,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 71,
+                "Timestamp": "17.970",
+                "Raw_Timestamp": 1727697449.1814804,
+                "timeReadable": "2024-09-30 13:57:29.181",
+                "timeDelta": 0.24249649047851562
+            },
+            "imagePath": "broncho00071.png",
+            "topImagePath": "top00071.png"
+        },
+        "72": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1680,
+                "extension_steps": 432,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 38.103448275862064,
+                "extensionReal_mm": 30.0
+            },
+            "action": {
+                "axis": 1,
+                "change": 16,
+                "char_value": "r",
+                "model_value": [
+                    0,
+                    0,
+                    1,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 72,
+                "Timestamp": "18.220",
+                "Raw_Timestamp": 1727697449.4310126,
+                "timeReadable": "2024-09-30 13:57:29.431",
+                "timeDelta": 0.24953222274780273
+            },
+            "imagePath": "broncho00072.png",
+            "topImagePath": "top00072.png"
+        },
+        "73": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1696,
+                "extension_steps": 432,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 41.0344827586207,
+                "extensionReal_mm": 30.0
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 73,
+                "Timestamp": "18.474",
+                "Raw_Timestamp": 1727697449.6856601,
+                "timeReadable": "2024-09-30 13:57:29.685",
+                "timeDelta": 0.25464749336242676
+            },
+            "imagePath": "broncho00073.png",
+            "topImagePath": "top00073.png"
+        },
+        "74": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1696,
+                "extension_steps": 444,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 41.0344827586207,
+                "extensionReal_mm": 30.833333333333336
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 74,
+                "Timestamp": "18.718",
+                "Raw_Timestamp": 1727697449.9297745,
+                "timeReadable": "2024-09-30 13:57:29.929",
+                "timeDelta": 0.24411439895629883
+            },
+            "imagePath": "broncho00074.png",
+            "topImagePath": "top00074.png"
+        },
+        "75": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1696,
+                "extension_steps": 456,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 41.0344827586207,
+                "extensionReal_mm": 31.666666666666668
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 75,
+                "Timestamp": "18.965",
+                "Raw_Timestamp": 1727697450.176484,
+                "timeReadable": "2024-09-30 13:57:30.176",
+                "timeDelta": 0.24670958518981934
+            },
+            "imagePath": "broncho00075.png",
+            "topImagePath": "top00075.png"
+        },
+        "76": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1696,
+                "extension_steps": 468,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 41.0344827586207,
+                "extensionReal_mm": 32.5
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 76,
+                "Timestamp": "19.215",
+                "Raw_Timestamp": 1727697450.4264941,
+                "timeReadable": "2024-09-30 13:57:30.426",
+                "timeDelta": 0.25001001358032227
+            },
+            "imagePath": "broncho00076.png",
+            "topImagePath": "top00076.png"
+        },
+        "77": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1696,
+                "extension_steps": 480,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 41.0344827586207,
+                "extensionReal_mm": 33.333333333333336
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 77,
+                "Timestamp": "19.465",
+                "Raw_Timestamp": 1727697450.676315,
+                "timeReadable": "2024-09-30 13:57:30.676",
+                "timeDelta": 0.24982094764709473
+            },
+            "imagePath": "broncho00077.png",
+            "topImagePath": "top00077.png"
+        },
+        "78": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1696,
+                "extension_steps": 492,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 41.0344827586207,
+                "extensionReal_mm": 34.166666666666664
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 78,
+                "Timestamp": "19.720",
+                "Raw_Timestamp": 1727697450.9313128,
+                "timeReadable": "2024-09-30 13:57:30.931",
+                "timeDelta": 0.25499773025512695
+            },
+            "imagePath": "broncho00078.png",
+            "topImagePath": "top00078.png"
+        },
+        "79": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1696,
+                "extension_steps": 504,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 41.0344827586207,
+                "extensionReal_mm": 35.0
+            },
+            "action": {
+                "axis": 1,
+                "change": 16,
+                "char_value": "r",
+                "model_value": [
+                    0,
+                    0,
+                    1,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 79,
+                "Timestamp": "19.968",
+                "Raw_Timestamp": 1727697451.1790028,
+                "timeReadable": "2024-09-30 13:57:31.179",
+                "timeDelta": 0.24768996238708496
+            },
+            "imagePath": "broncho00079.png",
+            "topImagePath": "top00079.png"
+        },
+        "80": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1712,
+                "extension_steps": 504,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 43.9655172413793,
+                "extensionReal_mm": 35.0
+            },
+            "action": {
+                "axis": 1,
+                "change": 16,
+                "char_value": "r",
+                "model_value": [
+                    0,
+                    0,
+                    1,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 80,
+                "Timestamp": "20.218",
+                "Raw_Timestamp": 1727697451.4290159,
+                "timeReadable": "2024-09-30 13:57:31.429",
+                "timeDelta": 0.2500131130218506
+            },
+            "imagePath": "broncho00080.png",
+            "topImagePath": "top00080.png"
+        },
+        "81": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1728,
+                "extension_steps": 504,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 46.896551724137936,
+                "extensionReal_mm": 35.0
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 81,
+                "Timestamp": "20.462",
+                "Raw_Timestamp": 1727697451.6735537,
+                "timeReadable": "2024-09-30 13:57:31.673",
+                "timeDelta": 0.2445378303527832
+            },
+            "imagePath": "broncho00081.png",
+            "topImagePath": "top00081.png"
+        },
+        "82": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1728,
+                "extension_steps": 516,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 46.896551724137936,
+                "extensionReal_mm": 35.833333333333336
+            },
+            "action": {
+                "axis": 2,
+                "change": 12,
+                "char_value": "f",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 82,
+                "Timestamp": "20.708",
+                "Raw_Timestamp": 1727697451.919082,
+                "timeReadable": "2024-09-30 13:57:31.919",
+                "timeDelta": 0.2455282211303711
+            },
+            "imagePath": "broncho00082.png",
+            "topImagePath": "top00082.png"
+        },
+        "83": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1728,
+                "extension_steps": 528,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 46.896551724137936,
+                "extensionReal_mm": 36.666666666666664
+            },
+            "action": {
+                "axis": null,
+                "change": 0,
+                "char_value": "",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 83,
+                "Timestamp": "20.963",
+                "Raw_Timestamp": 1727697452.1738496,
+                "timeReadable": "2024-09-30 13:57:32.173",
+                "timeDelta": 0.25476765632629395
+            },
+            "imagePath": "broncho00083.png",
+            "topImagePath": "top00083.png"
+        },
+        "84": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1728,
+                "extension_steps": 528,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 46.896551724137936,
+                "extensionReal_mm": 36.666666666666664
+            },
+            "action": {
+                "axis": null,
+                "change": 0,
+                "char_value": "",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 84,
+                "Timestamp": "21.211",
+                "Raw_Timestamp": 1727697452.4225006,
+                "timeReadable": "2024-09-30 13:57:32.422",
+                "timeDelta": 0.24865102767944336
+            },
+            "imagePath": "broncho00084.png",
+            "topImagePath": "top00084.png"
+        },
+        "85": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1728,
+                "extension_steps": 528,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 46.896551724137936,
+                "extensionReal_mm": 36.666666666666664
+            },
+            "action": {
+                "axis": null,
+                "change": 0,
+                "char_value": "",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 85,
+                "Timestamp": "21.465",
+                "Raw_Timestamp": 1727697452.6761336,
+                "timeReadable": "2024-09-30 13:57:32.676",
+                "timeDelta": 0.2536330223083496
+            },
+            "imagePath": "broncho00085.png",
+            "topImagePath": "top00085.png"
+        },
+        "86": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1728,
+                "extension_steps": 528,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 46.896551724137936,
+                "extensionReal_mm": 36.666666666666664
+            },
+            "action": {
+                "axis": null,
+                "change": 0,
+                "char_value": "",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 86,
+                "Timestamp": "21.719",
+                "Raw_Timestamp": 1727697452.9303498,
+                "timeReadable": "2024-09-30 13:57:32.930",
+                "timeDelta": 0.25421619415283203
+            },
+            "imagePath": "broncho00086.png",
+            "topImagePath": "top00086.png"
+        },
+        "87": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1728,
+                "extension_steps": 528,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 46.896551724137936,
+                "extensionReal_mm": 36.666666666666664
+            },
+            "action": {
+                "axis": null,
+                "change": 0,
+                "char_value": "",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 87,
+                "Timestamp": "21.965",
+                "Raw_Timestamp": 1727697453.175991,
+                "timeReadable": "2024-09-30 13:57:33.175",
+                "timeDelta": 0.24564123153686523
+            },
+            "imagePath": "broncho00087.png",
+            "topImagePath": "top00087.png"
+        },
+        "88": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1728,
+                "extension_steps": 528,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 46.896551724137936,
+                "extensionReal_mm": 36.666666666666664
+            },
+            "action": {
+                "axis": null,
+                "change": 0,
+                "char_value": "",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 88,
+                "Timestamp": "22.219",
+                "Raw_Timestamp": 1727697453.4306548,
+                "timeReadable": "2024-09-30 13:57:33.430",
+                "timeDelta": 0.25466370582580566
+            },
+            "imagePath": "broncho00088.png",
+            "topImagePath": "top00088.png"
+        },
+        "89": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1728,
+                "extension_steps": 528,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 46.896551724137936,
+                "extensionReal_mm": 36.666666666666664
+            },
+            "action": {
+                "axis": null,
+                "change": 0,
+                "char_value": "",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 89,
+                "Timestamp": "22.479",
+                "Raw_Timestamp": 1727697453.6906981,
+                "timeReadable": "2024-09-30 13:57:33.690",
+                "timeDelta": 0.2600433826446533
+            },
+            "imagePath": "broncho00089.png",
+            "topImagePath": "top00089.png"
+        },
+        "90": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1728,
+                "extension_steps": 528,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 46.896551724137936,
+                "extensionReal_mm": 36.666666666666664
+            },
+            "action": {
+                "axis": null,
+                "change": 0,
+                "char_value": "",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 90,
+                "Timestamp": "22.714",
+                "Raw_Timestamp": 1727697453.9255278,
+                "timeReadable": "2024-09-30 13:57:33.925",
+                "timeDelta": 0.23482966423034668
+            },
+            "imagePath": "broncho00090.png",
+            "topImagePath": "top00090.png"
+        },
+        "91": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1728,
+                "extension_steps": 528,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 46.896551724137936,
+                "extensionReal_mm": 36.666666666666664
+            },
+            "action": {
+                "axis": null,
+                "change": 0,
+                "char_value": "",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 91,
+                "Timestamp": "22.975",
+                "Raw_Timestamp": 1727697454.1863532,
+                "timeReadable": "2024-09-30 13:57:34.186",
+                "timeDelta": 0.26082539558410645
+            },
+            "imagePath": "broncho00091.png",
+            "topImagePath": "top00091.png"
+        },
+        "92": {
+            "state": {
+                "bend_steps": 1255,
+                "rotation_steps": 1728,
+                "extension_steps": 528,
+                "bendReal_deg": -17.0,
+                "rotationReal_deg": 46.896551724137936,
+                "extensionReal_mm": 36.666666666666664
+            },
+            "action": {
+                "axis": null,
+                "change": 0,
+                "char_value": "",
+                "model_value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "data": {
+                "trakstar": {},
+                "index": 92,
+                "Timestamp": "23.214",
+                "Raw_Timestamp": 1727697454.425178,
+                "timeReadable": "2024-09-30 13:57:34.425",
+                "timeDelta": 0.23882484436035156
+            },
+            "imagePath": "broncho00092.png",
+            "topImagePath": "top00092.png"
+        }
+    }
+}
