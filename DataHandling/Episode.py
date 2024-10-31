@@ -753,10 +753,10 @@ class Episode:
             imagePath = os.path.join(episode.path, frameData["imagePath"])
             topImagePath = os.path.join(episode.path, frameData["topImagePath"])
             #load the image
-            #image = cv2.imread(imagePath)
-            #topImage = cv2.imread(topImagePath)
-            image = imagePath
-            topImage = topImagePath
+            image = cv2.imread(imagePath)
+            topImage = cv2.imread(topImagePath)
+            #image = imagePath
+            #topImage = topImagePath
 
             #make sure both images exists
             if not os.path.exists(imagePath) or not os.path.exists(topImagePath):
